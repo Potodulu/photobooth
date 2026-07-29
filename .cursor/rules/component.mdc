@@ -146,6 +146,72 @@ Rules:
 
 ---
 
+## Naming Convention
+
+- Use **PascalCase** for component folders and component files.
+- One component = one folder.
+- Folder name, component name, and exported component name must always match.
+- Use `index.tsx` only as the public entry point.
+- Keep related files inside the same component folder.
+
+Example:
+
+Button/
+├── Button.tsx
+├── index.ts
+└── **tests**/
+└── Button.test.tsx
+
+Usage:
+
+import { Button } from "@/ui/Button";
+
+---
+
+## Folder Structure
+
+Every component should live inside its own folder.
+
+Small components:
+
+Button/
+├── Button.tsx
+└── index.ts
+
+---
+
+## File Naming
+
+Components:
+
+- PascalCase.tsx
+
+Hooks:
+
+- useCamera.ts
+
+Types:
+
+- Component.types.ts
+
+Utilities:
+
+- Component.utils.ts
+
+Constants:
+
+- Component.constants.ts
+
+Styles:
+
+- Component.styles.ts
+
+Tests:
+
+- **tests**/Component.test.tsx
+
+---
+
 # Dependency Rule
 
 Allowed:
