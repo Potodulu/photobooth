@@ -4,7 +4,11 @@ import {
   type DownloadManifest,
   type GeneratedResult,
 } from "@/features/photobooth/domain";
-import { getDefaultOutputGenerator } from "@/features/photobooth/engine";
+import {
+  GifOutputGenerator,
+  LivePhotoOutputGenerator,
+  PngOutputGenerator,
+} from "@/features/photobooth/engine";
 import {
   buildResultZip,
   triggerBrowserDownload,
@@ -19,6 +23,7 @@ import {
   useGeneratorStore,
   useLayoutStore,
 } from "@/features/photobooth/stores";
+import { purgeAfterDownloadOrCancel } from "./retention";
 
 async function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -26,6 +31,18 @@ async function loadImage(url: string): Promise<HTMLImageElement> {
     image.onload = () => resolve(image);
     image.onerror = () => reject(new Error("Failed to load image"));
     image.src = url;
+  });
+}
+
+async function loadVideo(url: string): Promise<HTMLVideoElement> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement("video");
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.onloadeddata = () => resolve(video);
+    video.onerror = () => reject(new Error("Failed to load video"));
+    video.src = url;
   });
 }
 
@@ -50,7 +67,7 @@ export async function generatePreview() {
   try {
     const slotImages = await Promise.all(
       generatorStore.slotAssignments.map(async (assignment) => {
-        const url = captureStore.objectUrls[assignment.captureId];
+        let url = captureStore.objectUrls[assignment.captureId];
         if (!url) {
           const capture = captureStore.captures.find(
             (item) => item.id === assignment.captureId,
@@ -58,40 +75,77 @@ export async function generatePreview() {
           if (!capture) throw new Error("Capture missing");
           const blob = await captureService.getCaptureBlob(capture.blobKey);
           if (!blob) throw new Error("Capture blob missing");
-          const objectUrl = URL.createObjectURL(blob);
-          return {
-            slotId: assignment.slotId,
-            image: await loadImage(objectUrl),
-            objectUrl,
-          };
+          url = URL.createObjectURL(blob);
         }
         return { slotId: assignment.slotId, image: await loadImage(url) };
       }),
     );
 
-    const generator = getDefaultOutputGenerator();
-    const output = await generator.generate({
+    const slotVideos = await Promise.all(
+      generatorStore.slotAssignments.map(async (assignment) => {
+        let url = captureStore.videoUrls[assignment.captureId];
+        if (!url) {
+          const capture = captureStore.captures.find(
+            (item) => item.id === assignment.captureId,
+          );
+          if (capture?.videoBlobKey) {
+            const blob = await captureService.getCaptureBlob(
+              capture.videoBlobKey,
+            );
+            if (blob) url = URL.createObjectURL(blob);
+          }
+        }
+        if (!url) return { slotId: assignment.slotId, video: null };
+        try {
+          return {
+            slotId: assignment.slotId,
+            video: await loadVideo(url),
+          };
+        } catch {
+          return { slotId: assignment.slotId, video: null };
+        }
+      }),
+    );
+
+    const compositeBase = {
       layout,
       frame,
-      slotImages: slotImages.map(({ slotId, image }) => ({ slotId, image })),
-    });
+      slotImages,
+      filterId: captureStore.filterId,
+    };
 
-    const outputKey = `output-${createId()}`;
+    const pngGen = new PngOutputGenerator();
+    const gifGen = new GifOutputGenerator();
+    const liveGen = new LivePhotoOutputGenerator();
+
+    const [png, gif, live] = await Promise.all([
+      pngGen.generate(compositeBase),
+      gifGen.generate({ ...compositeBase, filterId: "none" }),
+      liveGen.generate({
+        ...compositeBase,
+        filterId: "none",
+        slotVideos,
+      }),
+    ]);
+
+    const resultId = createId();
+    const keys = [`png-${resultId}`, `gif-${resultId}`, `live-${resultId}`];
     const result: GeneratedResult = {
-      id: createId(),
+      id: resultId,
       layoutId: layout.id,
       frameId: frame?.id ?? null,
+      filterId: captureStore.filterId,
       slotAssignments: generatorStore.slotAssignments,
-      outputKeys: [outputKey],
+      outputKeys: keys,
       createdAt: new Date().toISOString(),
       version: PHOTOBOOTH_MANIFEST_VERSION,
     };
 
-    await generatorService.saveResult(result, [output.blob]);
-    const previewUrl = URL.createObjectURL(output.blob);
+    await generatorService.saveResult(result, [png.blob, gif.blob, live.blob]);
     generatorStore.setResult(result);
-    generatorStore.setPreviewUrl(previewUrl);
-    return { result, output };
+    generatorStore.setOutputs({ png, gif, live });
+    generatorStore.setPreviewGifUrl(URL.createObjectURL(gif.blob));
+    return { result, png, gif, live };
   } catch (error) {
     generatorStore.setError(
       error instanceof Error ? error.message : "Generation failed",
@@ -104,40 +158,54 @@ export async function generatePreview() {
 
 export async function downloadResultZip() {
   const generatorStore = useGeneratorStore.getState();
+  const captureStore = useCaptureStore.getState();
   const result = generatorStore.result;
-  if (!result) throw new Error("No result to download");
+  const { pngOutput, gifOutput, liveOutput } = generatorStore;
+  if (!result || !pngOutput || !gifOutput || !liveOutput) {
+    throw new Error("No result to download");
+  }
 
   generatorStore.setDownloadProgress(10);
 
-  const blobs = await Promise.all(
-    result.outputKeys.map(async (key) => {
-      const blob = await generatorService.getResultBlob(key);
-      if (!blob) throw new Error("Result blob missing");
-      return blob;
+  const rawPhotos = await Promise.all(
+    captureStore.captures.map(async (capture, index) => {
+      const blob =
+        (await captureService.getCaptureBlob(capture.blobKey)) ??
+        (captureStore.objectUrls[capture.id]
+          ? await fetch(captureStore.objectUrls[capture.id]).then((r) =>
+              r.blob(),
+            )
+          : null);
+      if (!blob) throw new Error("Raw photo missing");
+      const ext = capture.mimeType.includes("png") ? "png" : "jpg";
+      return {
+        blob,
+        fileName: `photo-${String(index + 1).padStart(2, "0")}.${ext}`,
+      };
     }),
   );
 
-  generatorStore.setDownloadProgress(50);
+  generatorStore.setDownloadProgress(45);
 
   const manifest: DownloadManifest = {
     layoutId: result.layoutId,
     frameId: result.frameId,
+    filterId: result.filterId,
+    formats: ["png", "gif", "mp4"],
     createdAt: result.createdAt,
     version: result.version,
+    retentionNote:
+      "Browser temporary storage. Cleared after download and when revisiting /try.",
   };
 
   const zipBlob = await buildResultZip({
-    outputs: blobs.map((blob) => ({
-      blob,
-      mimeType: blob.type || "image/png",
-      extension: "png",
-      format: "png" as const,
-    })),
+    outputs: [pngOutput, gifOutput, liveOutput],
+    rawPhotos,
     manifest,
-    baseName: "potodulu-photobooth",
   });
 
   generatorStore.setDownloadProgress(90);
   triggerBrowserDownload(zipBlob, `potodulu-${result.id.slice(0, 8)}.zip`);
   generatorStore.setDownloadProgress(100);
+  await purgeAfterDownloadOrCancel();
 }

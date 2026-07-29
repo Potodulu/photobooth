@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/Badge";
 import { Spinner } from "@/components/ui/Spinner";
 
 type ResultPreviewProps = {
-  previewUrl: string | null;
+  previewGifUrl: string | null;
   layoutName: string;
   frameName: string;
+  filterName: string;
   isGenerating: boolean;
   downloadProgress: number;
   onGenerate: () => void;
@@ -16,9 +17,10 @@ type ResultPreviewProps = {
 };
 
 export function ResultPreview({
-  previewUrl,
+  previewGifUrl,
   layoutName,
   frameName,
+  filterName,
   isGenerating,
   downloadProgress,
   onGenerate,
@@ -29,10 +31,10 @@ export function ResultPreview({
   return (
     <div className="flex flex-col gap-6">
       <div className="border-border bg-card shadow-neo-md overflow-hidden rounded-[var(--radius-xl)] border-2">
-        {previewUrl ? (
+        {previewGifUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={previewUrl}
+            src={previewGifUrl}
             alt={t("previewAlt")}
             className="mx-auto max-h-[70vh] w-auto"
           />
@@ -57,10 +59,16 @@ export function ResultPreview({
         <Badge variant="soft" color="secondary" radius="full">
           {t("frameLabel", { name: frameName })}
         </Badge>
+        <Badge variant="soft" color="accent" radius="full">
+          {t("filterLabel", { name: filterName })}
+        </Badge>
+        <Badge variant="outline" color="neutral" radius="full">
+          {t("gifPreviewBadge")}
+        </Badge>
       </div>
 
       <div className="flex flex-wrap gap-3">
-        {!previewUrl ? (
+        {!previewGifUrl ? (
           <Button
             variant="solid"
             color="primary"

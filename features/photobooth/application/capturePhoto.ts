@@ -1,6 +1,7 @@
 import {
   createId,
   MAX_CAPTURE_TAKES,
+  RECORD_DURATION_MS,
   type CaptureSet,
 } from "@/features/photobooth/domain";
 import { captureService } from "@/features/photobooth/services/api";
@@ -18,10 +19,34 @@ export async function takePhoto(video: HTMLVideoElement) {
 
   captureStore.setCapturing(true);
   try {
-    const { capture, blob } = await captureService.captureFromVideo(video);
-    const objectUrl = URL.createObjectURL(blob);
-    captureStore.addCapture(capture, objectUrl);
-    return capture;
+    // Still first, then 10s video — update recording countdown while recording
+    const durationMs = RECORD_DURATION_MS;
+    captureStore.setRecording(true, Math.ceil(durationMs / 1000));
+
+    const countdownTimer = window.setInterval(() => {
+      const current = useCaptureStore.getState().recordingRemaining;
+      if (current === null) return;
+      if (current <= 1) {
+        useCaptureStore.getState().setRecording(true, 0);
+        return;
+      }
+      useCaptureStore.getState().setRecording(true, current - 1);
+    }, 1000);
+
+    try {
+      const { capture, blob, videoBlob } =
+        await captureService.captureFromVideo(video, {
+          recordVideo: true,
+          durationMs,
+        });
+      const objectUrl = URL.createObjectURL(blob);
+      const videoUrl = videoBlob ? URL.createObjectURL(videoBlob) : null;
+      captureStore.addCapture(capture, objectUrl, videoUrl);
+      return capture;
+    } finally {
+      window.clearInterval(countdownTimer);
+      captureStore.setRecording(false, null);
+    }
   } finally {
     captureStore.setCapturing(false);
   }

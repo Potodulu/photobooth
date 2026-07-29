@@ -63,9 +63,9 @@
   },
   "TryWarning": {
     "pageTitle": "Sebelum mulai",
-    "pageSubtitle": "Demo tamu ini sepenuhnya berjalan di browser.",
+    "pageSubtitle": "Demo tamu ini sepenuhnya di browser. Membuka halaman ini membersihkan storage demo sebelumnya.",
     "title": "Penyimpanan browser sementara",
-    "description": "Demo ini menyimpan hasilmu sementara di dalam browser. Cache atau pembersihan storage browser bisa menghapus hasilmu kapan saja.",
+    "description": "Demo ini menyimpan hasilmu sementara di browser. Membuka /try menghapus data demo lama. Storage juga dibersihkan setelah unduh atau batal. Pembersihan browser bisa menghapus data kapan saja.",
     "continue": "Lanjut",
     "cancel": "Batal"
   },
@@ -76,13 +76,27 @@
   },
   "TryCamera": {
     "title": "Capture",
-    "subtitle": "Ambil hingga 10 foto. Minimal sesuai jumlah slot layout.",
+    "subtitle": "Countdown 10 detik, flash, lalu still + video 10 detik tiap take. Filter hanya untuk PNG photobooth.",
     "permissionHint": "Izinkan akses kamera untuk memulai preview live.",
     "enableCamera": "Aktifkan kamera",
     "capture": "Ambil foto",
     "retake": "Ulangi terakhir",
     "continue": "Lanjut",
-    "count": "{current} / {max}"
+    "count": "{current} / {max}",
+    "recording": "Merekam {seconds}d",
+    "filters": "Filter foto (hanya PNG)",
+    "filter": {
+      "none": "Tanpa",
+      "grayscale": "Abu",
+      "sepia": "Sepia",
+      "contrast": "Kontras",
+      "brightness": "Terang",
+      "saturate": "Vivid",
+      "warm": "Hangat",
+      "cool": "Dingin",
+      "fade": "Fade",
+      "mono-high": "Mono+"
+    }
   },
   "TryFrame": {
     "title": "Pilih frame",
@@ -91,23 +105,26 @@
   },
   "TrySelect": {
     "title": "Pilih foto",
-    "subtitle": "Isi setiap slot layout dengan hasil capture.",
+    "subtitle": "Klik slot lalu foto, atau drag foto ke slot kosong. Foto boleh dipakai ulang.",
     "progress": "{current} / {total} slot",
     "autoFill": "Isi otomatis",
     "continue": "Buat preview",
     "clear": "Hapus",
-    "emptySlot": "Kosong",
-    "pickHint": "Ketuk foto untuk mengisi slot kosong berikutnya.",
+    "emptySlot": "Kosong — drop di sini",
+    "pickHint": "Ketuk foto untuk isi slot aktif, atau drag ke slot kosong.",
+    "slotOccupied": "Kosongkan slot dulu sebelum drop foto lain.",
     "missingLayout": "Layout belum dipilih. Kembali dan pilih dulu."
   },
   "TryPreview": {
     "title": "Preview",
-    "subtitle": "Cek hasil sebelum mengunduh.",
-    "previewAlt": "Preview hasil photobooth",
-    "generating": "Sedang menyusun fotomu…",
+    "subtitle": "Preview GIF hasil ber-frame. ZIP berisi PNG, GIF, live-photo MP4, dan raw photos.",
+    "previewAlt": "Preview GIF hasil photobooth",
+    "generating": "Menyusun PNG, GIF, dan live-photo…",
     "empty": "Belum ada preview.",
     "layoutLabel": "Layout: {name}",
     "frameLabel": "Frame: {name}",
+    "filterLabel": "Filter: {name}",
+    "gifPreviewBadge": "Preview GIF",
     "generate": "Buat preview",
     "download": "Unduh ZIP"
   },

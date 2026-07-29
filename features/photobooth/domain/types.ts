@@ -51,13 +51,27 @@ export type Frame = {
   borderWidth?: number;
 };
 
+export type PhotoFilterId =
+  | "none"
+  | "grayscale"
+  | "sepia"
+  | "contrast"
+  | "brightness"
+  | "saturate"
+  | "warm"
+  | "cool"
+  | "fade"
+  | "mono-high";
+
 export type Capture = {
   id: string;
   blobKey: string;
+  videoBlobKey?: string | null;
   width: number;
   height: number;
   createdAt: string;
   mimeType: string;
+  durationMs?: number;
 };
 
 export type CaptureSet = {
@@ -78,6 +92,7 @@ export type GeneratedResult = {
   id: string;
   layoutId: string;
   frameId: string | null;
+  filterId: PhotoFilterId;
   slotAssignments: SlotAssignment[];
   outputKeys: string[];
   createdAt: string;
@@ -91,20 +106,48 @@ export type GeneratedBlob = {
   mimeType: string;
   extension: string;
   format: OutputFormat;
+  fileName?: string;
 };
 
 export type CompositeInput = {
   layout: Layout;
   frame: Frame | null;
   slotImages: Array<{ slotId: string; image: CanvasImageSource }>;
+  filterId?: PhotoFilterId;
 };
 
 export type DownloadManifest = {
   layoutId: string;
   frameId: string | null;
+  filterId: PhotoFilterId;
+  formats: Array<"png" | "gif" | "mp4">;
   createdAt: string;
   version: string;
+  retentionNote: string;
 };
 
-export const PHOTOBOOTH_MANIFEST_VERSION = "1.0.0";
+export const PHOTOBOOTH_MANIFEST_VERSION = "1.1.0";
 export const MAX_CAPTURE_TAKES = 10;
+export const COUNTDOWN_SECONDS = 10;
+export const RECORD_DURATION_MS = 10_000;
+export const STORAGE_TTL_MS = 24 * 60 * 60 * 1000;
+
+export const PHOTO_FILTERS: Array<{
+  id: PhotoFilterId;
+  css: string;
+}> = [
+  { id: "none", css: "none" },
+  { id: "grayscale", css: "grayscale(1)" },
+  { id: "sepia", css: "sepia(0.85)" },
+  { id: "contrast", css: "contrast(1.35)" },
+  { id: "brightness", css: "brightness(1.2)" },
+  { id: "saturate", css: "saturate(1.6)" },
+  { id: "warm", css: "sepia(0.35) saturate(1.3) brightness(1.05)" },
+  { id: "cool", css: "hue-rotate(195deg) saturate(1.1)" },
+  { id: "fade", css: "contrast(0.85) brightness(1.1) saturate(0.75)" },
+  { id: "mono-high", css: "grayscale(1) contrast(1.4) brightness(1.05)" },
+];
+
+export function getFilterCss(filterId: PhotoFilterId = "none"): string {
+  return PHOTO_FILTERS.find((item) => item.id === filterId)?.css ?? "none";
+}

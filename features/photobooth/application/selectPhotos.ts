@@ -18,14 +18,12 @@ export function autoFillSlots(captureIds: string[]) {
   const layout = useLayoutStore
     .getState()
     .layouts.find((item) => item.id === layoutId);
-  if (!layout) return;
+  if (!layout || captureIds.length === 0) return;
 
-  const assignments: SlotAssignment[] = layout.slots
-    .map((slot, index) => ({
-      slotId: slot.id,
-      captureId: captureIds[index],
-    }))
-    .filter((item) => Boolean(item.captureId));
+  const assignments: SlotAssignment[] = layout.slots.map((slot, index) => ({
+    slotId: slot.id,
+    captureId: captureIds[index % captureIds.length],
+  }));
 
   useGeneratorStore.getState().setSlotAssignments(assignments);
 }

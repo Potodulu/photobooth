@@ -63,9 +63,9 @@
   },
   "TryWarning": {
     "pageTitle": "Before you start",
-    "pageSubtitle": "This guest demo runs entirely in your browser.",
+    "pageSubtitle": "This guest demo runs entirely in your browser. Opening this page clears previous demo storage.",
     "title": "Temporary browser storage",
-    "description": "This demo stores your work temporarily inside your browser. Browser cache or storage cleanup may remove your work at any time.",
+    "description": "This demo stores your work temporarily inside your browser. Opening /try clears old demo data. Storage is also cleared after download or cancel. Browser cleanup may remove work at any time.",
     "continue": "Continue",
     "cancel": "Cancel"
   },
@@ -76,13 +76,27 @@
   },
   "TryCamera": {
     "title": "Capture",
-    "subtitle": "Take up to 10 photos. You need at least enough shots to fill the layout.",
+    "subtitle": "10s countdown, flash, then still + 10s video per take. Pick a filter for the final photobooth PNG.",
     "permissionHint": "Allow camera access to start the live preview.",
     "enableCamera": "Enable camera",
     "capture": "Capture",
     "retake": "Retake last",
     "continue": "Continue",
-    "count": "{current} / {max}"
+    "count": "{current} / {max}",
+    "recording": "Recording {seconds}s",
+    "filters": "Photo filter (PNG only)",
+    "filter": {
+      "none": "None",
+      "grayscale": "Grayscale",
+      "sepia": "Sepia",
+      "contrast": "Contrast",
+      "brightness": "Bright",
+      "saturate": "Vivid",
+      "warm": "Warm",
+      "cool": "Cool",
+      "fade": "Fade",
+      "mono-high": "Mono+"
+    }
   },
   "TryFrame": {
     "title": "Choose frame",
@@ -91,23 +105,26 @@
   },
   "TrySelect": {
     "title": "Choose photos",
-    "subtitle": "Assign a capture to each layout slot.",
+    "subtitle": "Click a slot then a photo, or drag a photo onto an empty slot. Photos can be reused.",
     "progress": "{current} / {total} slots",
     "autoFill": "Auto-fill",
     "continue": "Generate preview",
     "clear": "Clear",
-    "emptySlot": "Empty",
-    "pickHint": "Tap a photo to fill the next empty slot.",
+    "emptySlot": "Empty — drop here",
+    "pickHint": "Tap a photo to fill the selected slot, or drag onto an empty slot.",
+    "slotOccupied": "Clear the slot before dropping another photo.",
     "missingLayout": "Layout missing. Go back and select one."
   },
   "TryPreview": {
     "title": "Preview",
-    "subtitle": "Review your result before downloading.",
-    "previewAlt": "Generated photobooth preview",
-    "generating": "Compositing your photos…",
+    "subtitle": "GIF preview of your framed result. Download includes PNG, GIF, MP4 live-photo, and raw photos.",
+    "previewAlt": "Generated photobooth GIF preview",
+    "generating": "Compositing PNG, GIF, and live-photo…",
     "empty": "No preview yet.",
     "layoutLabel": "Layout: {name}",
     "frameLabel": "Frame: {name}",
+    "filterLabel": "Filter: {name}",
+    "gifPreviewBadge": "GIF preview",
     "generate": "Generate preview",
     "download": "Download ZIP"
   },

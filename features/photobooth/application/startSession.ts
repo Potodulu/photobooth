@@ -1,5 +1,6 @@
 import { experienceService } from "@/features/photobooth/services/api";
 import { useSessionStore } from "@/features/photobooth/stores";
+import { purgeAfterDownloadOrCancel } from "./retention";
 
 export async function startGuestSession() {
   const experience = await experienceService.getBySlug("online-guest-demo");
@@ -13,6 +14,6 @@ export async function startGuestSession() {
   return experience;
 }
 
-export function cancelGuestSession() {
-  useSessionStore.getState().resetSession();
+export async function cancelGuestSession() {
+  await purgeAfterDownloadOrCancel();
 }

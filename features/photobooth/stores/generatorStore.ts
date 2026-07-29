@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type {
+  GeneratedBlob,
   GeneratedResult,
   SlotAssignment,
 } from "@/features/photobooth/domain";
@@ -7,6 +8,10 @@ import type {
 type GeneratorState = {
   slotAssignments: SlotAssignment[];
   previewUrl: string | null;
+  previewGifUrl: string | null;
+  pngOutput: GeneratedBlob | null;
+  gifOutput: GeneratedBlob | null;
+  liveOutput: GeneratedBlob | null;
   result: GeneratedResult | null;
   isGenerating: boolean;
   downloadProgress: number;
@@ -14,7 +19,12 @@ type GeneratorState = {
   setSlotAssignments: (slotAssignments: SlotAssignment[]) => void;
   assignSlot: (slotId: string, captureId: string) => void;
   clearSlot: (slotId: string) => void;
-  setPreviewUrl: (previewUrl: string | null) => void;
+  setPreviewGifUrl: (previewGifUrl: string | null) => void;
+  setOutputs: (outputs: {
+    png: GeneratedBlob;
+    gif: GeneratedBlob;
+    live: GeneratedBlob;
+  }) => void;
   setResult: (result: GeneratedResult | null) => void;
   setGenerating: (isGenerating: boolean) => void;
   setDownloadProgress: (downloadProgress: number) => void;
@@ -25,6 +35,10 @@ type GeneratorState = {
 export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   slotAssignments: [],
   previewUrl: null,
+  previewGifUrl: null,
+  pngOutput: null,
+  gifOutput: null,
+  liveOutput: null,
   result: null,
   isGenerating: false,
   downloadProgress: 0,
@@ -40,21 +54,27 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
         (item) => item.slotId !== slotId,
       ),
     }),
-  setPreviewUrl: (previewUrl) => {
-    const prev = get().previewUrl;
-    if (prev && prev !== previewUrl) URL.revokeObjectURL(prev);
-    set({ previewUrl });
+  setPreviewGifUrl: (previewGifUrl) => {
+    const prev = get().previewGifUrl;
+    if (prev && prev !== previewGifUrl) URL.revokeObjectURL(prev);
+    set({ previewGifUrl, previewUrl: previewGifUrl });
   },
+  setOutputs: ({ png, gif, live }) =>
+    set({ pngOutput: png, gifOutput: gif, liveOutput: live }),
   setResult: (result) => set({ result }),
   setGenerating: (isGenerating) => set({ isGenerating }),
   setDownloadProgress: (downloadProgress) => set({ downloadProgress }),
   setError: (error) => set({ error }),
   reset: () => {
-    const prev = get().previewUrl;
+    const prev = get().previewGifUrl;
     if (prev) URL.revokeObjectURL(prev);
     set({
       slotAssignments: [],
       previewUrl: null,
+      previewGifUrl: null,
+      pngOutput: null,
+      gifOutput: null,
+      liveOutput: null,
       result: null,
       isGenerating: false,
       downloadProgress: 0,

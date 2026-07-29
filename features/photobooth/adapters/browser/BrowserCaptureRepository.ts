@@ -10,23 +10,38 @@ import {
   localStorageSet,
 } from "./storage";
 
+async function blobToDataUrl(blob: Blob): Promise<string> {
+  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
 export class BrowserCaptureRepository implements CaptureRepository {
-  async saveCapture(capture: Capture, blob: Blob): Promise<Capture> {
+  async saveCapture(
+    capture: Capture,
+    blob: Blob,
+    videoBlob?: Blob | null,
+  ): Promise<Capture> {
     if (await isIndexedDbAvailable()) {
       await idbPut(STORES.captures, capture);
       await idbPut(STORES.blobs, blob, capture.blobKey);
+      if (videoBlob && capture.videoBlobKey) {
+        await idbPut(STORES.blobs, videoBlob, capture.videoBlobKey);
+      }
       return capture;
     }
 
-    // ponytail: localStorage fallback loses binary fidelity via base64; upgrade = IDB only
-    const reader = new FileReader();
-    const dataUrl = await new Promise<string>((resolve, reject) => {
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(reader.error);
-      reader.readAsDataURL(blob);
-    });
     localStorageSet(`capture:${capture.id}`, capture);
-    localStorageSet(`blob:${capture.blobKey}`, dataUrl);
+    localStorageSet(`blob:${capture.blobKey}`, await blobToDataUrl(blob));
+    if (videoBlob && capture.videoBlobKey) {
+      localStorageSet(
+        `blob:${capture.videoBlobKey}`,
+        await blobToDataUrl(videoBlob),
+      );
+    }
     return capture;
   }
 
@@ -61,12 +76,18 @@ export class BrowserCaptureRepository implements CaptureRepository {
     if (await isIndexedDbAvailable()) {
       await idbDelete(STORES.captures, id);
       await idbDelete(STORES.blobs, capture.blobKey);
+      if (capture.videoBlobKey) {
+        await idbDelete(STORES.blobs, capture.videoBlobKey);
+      }
       return;
     }
 
     try {
       localStorage.removeItem(`photobooth-demo:capture:${id}`);
       localStorage.removeItem(`photobooth-demo:blob:${capture.blobKey}`);
+      if (capture.videoBlobKey) {
+        localStorage.removeItem(`photobooth-demo:blob:${capture.videoBlobKey}`);
+      }
     } catch {
       // ignore
     }

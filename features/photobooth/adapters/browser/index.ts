@@ -1,6 +1,7 @@
 import {
   BrowserCameraAdapter,
   captureFrameFromVideo,
+  recordClip,
 } from "./BrowserCameraAdapter";
 import { BrowserCaptureRepository } from "./BrowserCaptureRepository";
 import { BrowserExperienceRepository } from "./BrowserExperienceRepository";
@@ -23,4 +24,5 @@ export {
   BrowserGeneratorRepository,
   BrowserLayoutRepository,
   captureFrameFromVideo,
+  recordClip,
 };

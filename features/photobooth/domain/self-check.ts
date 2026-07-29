@@ -20,7 +20,7 @@ assert.ok(frames.every((frame) => frame.supportedLayoutIds.length > 0));
 assert.equal(experiences.length, 1);
 assert.equal(experiences[0]?.slug, "online-guest-demo");
 assert.equal(MAX_CAPTURE_TAKES, 10);
-assert.equal(PHOTOBOOTH_MANIFEST_VERSION, "1.0.0");
+assert.equal(PHOTOBOOTH_MANIFEST_VERSION, "1.1.0");
 
 const id = createId();
 assert.ok(id.length > 8);

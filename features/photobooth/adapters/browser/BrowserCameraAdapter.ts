@@ -62,3 +62,53 @@ export function captureFrameFromVideo(
     );
   });
 }
+
+function pickRecorderMime(): string | undefined {
+  const candidates = [
+    "video/mp4;codecs=avc1",
+    "video/mp4",
+    "video/webm;codecs=vp9",
+    "video/webm;codecs=vp8",
+    "video/webm",
+  ];
+  if (typeof MediaRecorder === "undefined") return undefined;
+  return candidates.find((mime) => MediaRecorder.isTypeSupported(mime));
+}
+
+export function recordClip(
+  stream: MediaStream,
+  durationMs: number,
+): Promise<{ blob: Blob; mimeType: string; durationMs: number }> {
+  const mimeType = pickRecorderMime();
+  const chunks: BlobPart[] = [];
+
+  return new Promise((resolve, reject) => {
+    try {
+      const recorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) chunks.push(event.data);
+      };
+      recorder.onerror = () => reject(new Error("Recording failed"));
+      recorder.onstop = () => {
+        const type = recorder.mimeType || mimeType || "video/webm";
+        resolve({
+          blob: new Blob(chunks, { type }),
+          mimeType: type,
+          durationMs,
+        });
+      };
+
+      recorder.start(250);
+      window.setTimeout(() => {
+        if (recorder.state !== "inactive") recorder.stop();
+      }, durationMs);
+    } catch (error) {
+      reject(
+        error instanceof Error ? error : new Error("Recording unsupported"),
+      );
+    }
+  });
+}

@@ -4,14 +4,16 @@ import type {
   GeneratedBlob,
   Layout,
   OutputFormat,
+  PhotoFilterId,
 } from "@/features/photobooth/domain";
+import { getFilterCss } from "@/features/photobooth/domain";
 
 export interface OutputGenerator {
   readonly format: OutputFormat;
   generate(input: CompositeInput): Promise<GeneratedBlob>;
 }
 
-function drawCover(
+export function drawCover(
   ctx: CanvasRenderingContext2D,
   image: CanvasImageSource,
   dx: number,
@@ -34,6 +36,8 @@ function drawCover(
           (image as HTMLImageElement).height
         : (image as HTMLCanvasElement).height;
 
+  if (!iw || !ih) return;
+
   const scale = Math.max(dw / iw, dh / ih);
   const sw = dw / scale;
   const sh = dh / scale;
@@ -43,28 +47,7 @@ function drawCover(
   ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
 }
 
-export function composeToCanvas(input: CompositeInput): HTMLCanvasElement {
-  const { layout, frame, slotImages } = input;
-  const { width, height } = layout.outputSize;
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    throw new Error("Canvas unsupported");
-  }
-
-  drawBackground(ctx, layout, frame);
-  for (const slot of layout.slots) {
-    const entry = slotImages.find((item) => item.slotId === slot.id);
-    if (!entry) continue;
-    drawCover(ctx, entry.image, slot.x, slot.y, slot.width, slot.height);
-  }
-  drawFrameOverlay(ctx, width, height, frame);
-  return canvas;
-}
-
-function drawBackground(
+export function drawBackground(
   ctx: CanvasRenderingContext2D,
   layout: Layout,
   frame: Frame | null,
@@ -74,7 +57,7 @@ function drawBackground(
   ctx.fillRect(0, 0, width, height);
 }
 
-function drawFrameOverlay(
+export function drawFrameOverlay(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
@@ -93,15 +76,44 @@ function drawFrameOverlay(
       height - borderWidth,
     );
   }
+}
 
-  // Future: load frame.overlay image when assets exist
+export function composeToCanvas(
+  input: CompositeInput,
+  options?: { applyFilter?: boolean },
+): HTMLCanvasElement {
+  const { layout, frame, slotImages, filterId } = input;
+  const { width, height } = layout.outputSize;
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Canvas unsupported");
+  }
+
+  drawBackground(ctx, layout, frame);
+
+  const useFilter =
+    options?.applyFilter !== false && filterId && filterId !== "none";
+  if (useFilter) {
+    ctx.filter = getFilterCss(filterId as PhotoFilterId);
+  }
+  for (const slot of layout.slots) {
+    const entry = slotImages.find((item) => item.slotId === slot.id);
+    if (!entry) continue;
+    drawCover(ctx, entry.image, slot.x, slot.y, slot.width, slot.height);
+  }
+  ctx.filter = "none";
+  drawFrameOverlay(ctx, width, height, frame);
+  return canvas;
 }
 
 export class PngOutputGenerator implements OutputGenerator {
   readonly format: OutputFormat = "png";
 
   async generate(input: CompositeInput): Promise<GeneratedBlob> {
-    const canvas = composeToCanvas(input);
+    const canvas = composeToCanvas(input, { applyFilter: true });
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((result) => {
         if (!result) {
@@ -117,6 +129,7 @@ export class PngOutputGenerator implements OutputGenerator {
       mimeType: "image/png",
       extension: "png",
       format: this.format,
+      fileName: "photobooth.png",
     };
   }
 }

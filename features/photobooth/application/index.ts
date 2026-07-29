@@ -13,3 +13,4 @@ export {
   confirmPhotoSelection,
 } from "./selectPhotos";
 export { generatePreview, downloadResultZip } from "./generateOutput";
+export { prepareTryEntry, purgeAfterDownloadOrCancel } from "./retention";

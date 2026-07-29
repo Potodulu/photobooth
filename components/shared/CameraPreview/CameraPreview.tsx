@@ -5,18 +5,20 @@ import { cn } from "@/libs/cn";
 type CameraPreviewProps = {
   videoRef: React.RefObject<HTMLVideoElement | null>;
   mirrored?: boolean;
+  filterCss?: string;
   className?: string;
 };
 
 export function CameraPreview({
   videoRef,
   mirrored = true,
+  filterCss = "none",
   className,
 }: CameraPreviewProps) {
   return (
     <div
       className={cn(
-        "border-border bg-foreground/5 shadow-neo-md relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-xl)] border-2",
+        "border-border bg-foreground/10 shadow-neo-md relative mx-auto aspect-video max-h-[60vh] w-full overflow-hidden rounded-[var(--radius-xl)] border-2",
         className,
       )}
     >
@@ -25,7 +27,8 @@ export function CameraPreview({
         autoPlay
         playsInline
         muted
-        className={cn("size-full object-cover", mirrored && "-scale-x-100")}
+        style={{ filter: filterCss }}
+        className={cn("size-full object-contain", mirrored && "-scale-x-100")}
       />
     </div>
   );

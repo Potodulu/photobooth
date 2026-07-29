@@ -25,7 +25,11 @@ export interface FrameRepository {
 }
 
 export interface CaptureRepository {
-  saveCapture(capture: Capture, blob: Blob): Promise<Capture>;
+  saveCapture(
+    capture: Capture,
+    blob: Blob,
+    videoBlob?: Blob | null,
+  ): Promise<Capture>;
   getCapture(id: string): Promise<Capture | null>;
   getCaptureBlob(blobKey: string): Promise<Blob | null>;
   listCaptures(ids: string[]): Promise<Capture[]>;

@@ -22,6 +22,10 @@ export function TryCameraPage() {
   const objectUrls = useCaptureStore((s) => s.objectUrls);
   const maxTakes = useCaptureStore((s) => s.maxTakes);
   const isCapturing = useCaptureStore((s) => s.isCapturing);
+  const isRecording = useCaptureStore((s) => s.isRecording);
+  const recordingRemaining = useCaptureStore((s) => s.recordingRemaining);
+  const filterId = useCaptureStore((s) => s.filterId);
+  const setFilterId = useCaptureStore((s) => s.setFilterId);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
   const layout = layouts.find((item) => item.id === selectedLayoutId);
@@ -41,6 +45,10 @@ export function TryCameraPage() {
         maxTakes={maxTakes}
         requiredSlots={requiredSlots}
         isCapturing={isCapturing || busy}
+        isRecording={isRecording}
+        recordingRemaining={recordingRemaining}
+        filterId={filterId}
+        onFilterChange={setFilterId}
         onStartCamera={start}
         onCapture={async () => {
           if (!videoRef.current) return;

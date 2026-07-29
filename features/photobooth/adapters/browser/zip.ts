@@ -6,19 +6,22 @@ import type {
 
 export async function buildResultZip(params: {
   outputs: GeneratedBlob[];
+  rawPhotos?: Array<{ blob: Blob; fileName: string }>;
   manifest: DownloadManifest;
-  baseName?: string;
 }): Promise<Blob> {
   const zip = new JSZip();
-  const baseName = params.baseName ?? "potodulu-result";
 
-  params.outputs.forEach((output, index) => {
-    const name =
-      params.outputs.length === 1
-        ? `${baseName}.${output.extension}`
-        : `${baseName}-${index + 1}.${output.extension}`;
+  for (const output of params.outputs) {
+    const name = output.fileName ?? `output.${output.extension}`;
     zip.file(name, output.blob);
-  });
+  }
+
+  if (params.rawPhotos?.length) {
+    const rawFolder = zip.folder("raw");
+    params.rawPhotos.forEach((photo) => {
+      rawFolder?.file(photo.fileName, photo.blob);
+    });
+  }
 
   zip.file("manifest.json", JSON.stringify(params.manifest, null, 2));
   return zip.generateAsync({ type: "blob" });
