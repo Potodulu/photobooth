@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Potodulu Photobooth
 
-## Getting Started
+Frontend MVP for the Potodulu photobooth experience — Next.js App Router, Soft Neobrutalism design system, feature-first architecture.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + React 19 + TypeScript
+- Tailwind CSS v4
+- shadcn/ui primitives (restyled) + Radix UI + CVA
+- next-intl (default locale: `id`)
+- TanStack Query, Zustand, nuqs
+- Framer Motion, Sonner, next-themes
+- ESLint, Prettier, Husky, lint-staged
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) (`id` is default; English at `/en`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script        | Description             |
+| ------------- | ----------------------- |
+| `pnpm dev`    | Dev server              |
+| `pnpm build`  | Production build        |
+| `pnpm start`  | Start production server |
+| `pnpm lint`   | ESLint                  |
+| `pnpm format` | Prettier write          |
 
-## Learn More
+## Architecture
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/[locale]/          # routes only — compose pages
+components/
+  ui/                  # design-system primitives (CVA)
+  shared/              # feature-agnostic compositions
+  layout/              # app layouts
+  hoc/                 # providers
+  page/                # page compositions
+  module/              # feature modules (auth, session, …)
+i18n/                  # next-intl routing + messages
+libs/                  # cn, utils, constants, configs
+config/ services/ stores/ types/ hooks/ assets/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Dependency direction: `ui` → `shared` → `module` → `page` → `app`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design system
 
-## Deploy on Vercel
+Soft Neobrutalism tokens live in `app/globals.css` (semantic colors, radius, hard shadows).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+UI components expose variants via CVA:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```tsx
+import { Button } from "@/components/ui/Button";
+
+<Button variant="solid" color="primary" size="md" radius="lg" elevation="md" />;
+```
+
+Prefer props over ad-hoc `className` in pages.
+
+## i18n
+
+- Config: `i18n/routing.ts`, `i18n/request.ts`, `i18n/navigation.ts`
+- Messages: `i18n/messages/id.json`, `i18n/messages/en.json`
+- Default locale: `id` (`localePrefix: "as-needed"`)
+
+Use `Link` / `useRouter` from `@/i18n/navigation`.
+
+## Adding a UI component
+
+1. Create `components/ui/Name/Name.tsx` + `index.ts`
+2. Define CVA variants (`variant`, `color`, `size`, `radius`, `elevation`, …)
+3. Use `cn()` from `@/libs/cn`
+4. Support `forwardRef` + `className` override

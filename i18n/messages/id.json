@@ -1,0 +1,54 @@
+{
+  "Metadata": {
+    "title": "Potodulu — Photobooth Experience",
+    "description": "Pengalaman photobooth online & offline yang cepat, playful, dan siap dipamerkan."
+  },
+  "Nav": {
+    "cta": "Mulai sesi"
+  },
+  "Footer": {
+    "tagline": "Photo experience untuk booth online, offline, dan remote group."
+  },
+  "Hero": {
+    "brand": "Potodulu",
+    "headline": "Abadikan momen. Frame-nya biar kami yang urus.",
+    "supporting": "Photobooth modern dengan alur cepat: capture, process, output — online atau offline.",
+    "primaryCta": "Coba sekarang",
+    "secondaryCta": "Lihat fitur"
+  },
+  "Features": {
+    "title": "Semua yang dibutuhkan sesi foto",
+    "subtitle": "Dari countdown sampai hasil siap share — tanpa ribet.",
+    "items": {
+      "capture": {
+        "title": "Capture cepat",
+        "description": "Preview live, countdown mulus, dan trigger yang responsif di layar sentuh."
+      },
+      "frame": {
+        "title": "Frame & layout",
+        "description": "Komposisi frame yang fleksibel untuk pengalaman brand yang konsisten."
+      },
+      "share": {
+        "title": "Output siap share",
+        "description": "Hasil langsung siap unduh, print, atau dikirim ke galeri sesi."
+      }
+    }
+  },
+  "Experience": {
+    "title": "Online & Offline, satu experience",
+    "subtitle": "Arsitektur experience-driven — mode berubah, rasa produk tetap sama.",
+    "online": {
+      "title": "Online Booth",
+      "description": "Sesi jarak jauh lewat browser. Kamera perangkat jadi booth, tanpa instalasi berat."
+    },
+    "offline": {
+      "title": "Offline Booth",
+      "description": "Siap untuk perangkat booth fisik. Alur lokal tetap cepat meski jaringan goyah."
+    }
+  },
+  "Cta": {
+    "title": "Siap bikin sesi berikutnya?",
+    "subtitle": "Bangun photobooth yang playful, cepat, dan scalable dari hari pertama.",
+    "button": "Mulai dengan Potodulu"
+  }
+}
