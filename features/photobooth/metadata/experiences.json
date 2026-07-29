@@ -1,0 +1,10 @@
+[
+  {
+    "id": "exp-online-guest-demo",
+    "slug": "online-guest-demo",
+    "name": "Online Photobooth Guest Demo",
+    "defaultLayoutId": "single-1",
+    "storagePolicy": "browser-temporary",
+    "description": "Browser-only guest demo. Work is stored temporarily and may be cleared with browser storage."
+  }
+]

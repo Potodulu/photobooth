@@ -28,6 +28,7 @@ export function HomePage() {
   const tFeatures = useTranslations("Features");
   const tExperience = useTranslations("Experience");
   const tCta = useTranslations("Cta");
+  const tDemo = useTranslations("Demo");
 
   const features = [
     {
@@ -47,9 +48,11 @@ export function HomePage() {
     },
   ];
 
+  const demoBadges = ["guest", "browser", "noAccount", "temporary"] as const;
+
   return (
     <MarketingLayout>
-      <SiteHeader ctaLabel={tNav("cta")} />
+      <SiteHeader ctaLabel={tNav("cta")} ctaHref="/try" />
 
       <main>
         <section className="border-border relative overflow-hidden border-b-2">
@@ -87,6 +90,19 @@ export function HomePage() {
               >
                 {tHero("supporting")}
               </motion.p>
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
+                {demoBadges.map((key) => (
+                  <Badge
+                    key={key}
+                    variant="soft"
+                    color={key === "guest" ? "primary" : "neutral"}
+                    radius="full"
+                    size="sm"
+                  >
+                    {tDemo(`badges.${key}`)}
+                  </Badge>
+                ))}
+              </motion.div>
               <motion.div
                 variants={fadeUp}
                 className="flex flex-wrap items-center gap-3 pt-2"
@@ -99,7 +115,7 @@ export function HomePage() {
                   radius="xl"
                   elevation="lg"
                 >
-                  <Link href="#cta">{tHero("primaryCta")}</Link>
+                  <Link href="/try">{tHero("primaryCta")}</Link>
                 </Button>
                 <Button
                   asChild
@@ -128,7 +144,7 @@ export function HomePage() {
                     size="md"
                     radius="full"
                   >
-                    Live preview
+                    {tDemo("title")}
                   </Badge>
                   <div className="space-y-3">
                     <div className="border-border bg-background/70 h-3 w-24 rounded-full border-2" />
@@ -283,13 +299,14 @@ export function HomePage() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Button
+                  asChild
                   variant="solid"
                   color="accent"
                   size="xl"
                   radius="xl"
                   elevation="lg"
                 >
-                  {tCta("button")}
+                  <Link href="/try">{tCta("button")}</Link>
                 </Button>
               </motion.div>
             </div>

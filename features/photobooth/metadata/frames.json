@@ -1,0 +1,38 @@
+[
+  {
+    "id": "classic",
+    "name": "Classic",
+    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
+    "preview": "",
+    "overlay": null,
+    "mask": null,
+    "thumbnail": "",
+    "backgroundColor": "#1a1a1a",
+    "borderColor": "#1a1a1a",
+    "borderWidth": 24
+  },
+  {
+    "id": "minimal",
+    "name": "Minimal",
+    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
+    "preview": "",
+    "overlay": null,
+    "mask": null,
+    "thumbnail": "",
+    "backgroundColor": "#f7f4ef",
+    "borderColor": "#1a1a1a",
+    "borderWidth": 8
+  },
+  {
+    "id": "birthday",
+    "name": "Birthday",
+    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
+    "preview": "",
+    "overlay": null,
+    "mask": null,
+    "thumbnail": "",
+    "backgroundColor": "#f5d76e",
+    "borderColor": "#f07167",
+    "borderWidth": 32
+  }
+]

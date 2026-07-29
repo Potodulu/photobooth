@@ -5,9 +5,11 @@ import { cn } from "@/libs/cn";
 
 export function SiteHeader({
   ctaLabel,
+  ctaHref = "/try",
   className,
 }: {
   ctaLabel: string;
+  ctaHref?: string;
   className?: string;
 }) {
   return (
@@ -25,7 +27,7 @@ export function SiteHeader({
           {siteConfig.name}
         </Link>
         <Button asChild variant="solid" color="primary" size="sm" radius="lg">
-          <Link href="#cta">{ctaLabel}</Link>
+          <Link href={ctaHref}>{ctaLabel}</Link>
         </Button>
       </div>
     </header>

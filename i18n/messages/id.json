@@ -4,16 +4,16 @@
     "description": "Pengalaman photobooth online & offline yang cepat, playful, dan siap dipamerkan."
   },
   "Nav": {
-    "cta": "Mulai sesi"
+    "cta": "Coba Sekarang"
   },
   "Footer": {
     "tagline": "Photo experience untuk booth online, offline, dan remote group."
   },
   "Hero": {
     "brand": "Potodulu",
-    "headline": "Abadikan momen. Frame-nya biar kami yang urus.",
-    "supporting": "Photobooth modern dengan alur cepat: capture, process, output — online atau offline.",
-    "primaryCta": "Coba sekarang",
+    "headline": "Coba Online Photobooth",
+    "supporting": "Demo tamu di browser. Tanpa akun. Penyimpanan sementara di browser saja.",
+    "primaryCta": "Coba Sekarang",
     "secondaryCta": "Lihat fitur"
   },
   "Features": {
@@ -47,8 +47,88 @@
     }
   },
   "Cta": {
-    "title": "Siap bikin sesi berikutnya?",
-    "subtitle": "Bangun photobooth yang playful, cepat, dan scalable dari hari pertama.",
-    "button": "Mulai dengan Potodulu"
+    "title": "Siap coba demo tamu?",
+    "subtitle": "Hanya di browser. Tanpa akun. Penyimpanan sementara di perangkatmu.",
+    "button": "Coba Sekarang"
+  },
+  "Demo": {
+    "title": "Demo Tamu",
+    "subtitle": "Validasi alur online photobooth lengkap tanpa backend.",
+    "badges": {
+      "guest": "Demo Tamu",
+      "browser": "Browser Only",
+      "noAccount": "Tanpa Akun",
+      "temporary": "Penyimpanan Sementara"
+    }
+  },
+  "TryWarning": {
+    "pageTitle": "Sebelum mulai",
+    "pageSubtitle": "Demo tamu ini sepenuhnya berjalan di browser.",
+    "title": "Penyimpanan browser sementara",
+    "description": "Demo ini menyimpan hasilmu sementara di dalam browser. Cache atau pembersihan storage browser bisa menghapus hasilmu kapan saja.",
+    "continue": "Lanjut",
+    "cancel": "Batal"
+  },
+  "TryLayout": {
+    "title": "Pilih layout",
+    "subtitle": "Tentukan bagaimana fotomu akan disusun.",
+    "continue": "Lanjut"
+  },
+  "TryCamera": {
+    "title": "Capture",
+    "subtitle": "Ambil hingga 10 foto. Minimal sesuai jumlah slot layout.",
+    "permissionHint": "Izinkan akses kamera untuk memulai preview live.",
+    "enableCamera": "Aktifkan kamera",
+    "capture": "Ambil foto",
+    "retake": "Ulangi terakhir",
+    "continue": "Lanjut",
+    "count": "{current} / {max}"
+  },
+  "TryFrame": {
+    "title": "Pilih frame",
+    "subtitle": "Frame berbasis metadata. Aset visual bisa ditambahkan nanti.",
+    "continue": "Lanjut"
+  },
+  "TrySelect": {
+    "title": "Pilih foto",
+    "subtitle": "Isi setiap slot layout dengan hasil capture.",
+    "progress": "{current} / {total} slot",
+    "autoFill": "Isi otomatis",
+    "continue": "Buat preview",
+    "clear": "Hapus",
+    "emptySlot": "Kosong",
+    "pickHint": "Ketuk foto untuk mengisi slot kosong berikutnya.",
+    "missingLayout": "Layout belum dipilih. Kembali dan pilih dulu."
+  },
+  "TryPreview": {
+    "title": "Preview",
+    "subtitle": "Cek hasil sebelum mengunduh.",
+    "previewAlt": "Preview hasil photobooth",
+    "generating": "Sedang menyusun fotomu…",
+    "empty": "Belum ada preview.",
+    "layoutLabel": "Layout: {name}",
+    "frameLabel": "Frame: {name}",
+    "generate": "Buat preview",
+    "download": "Unduh ZIP"
+  },
+  "Errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Halaman tidak ditemukan",
+      "description": "Rute ini nyasar dari booth. Yuk balik ke beranda.",
+      "action": "Kembali"
+    },
+    "server": {
+      "code": "500",
+      "title": "Ada yang rusak",
+      "description": "Booth tersandung kabel. Coba lagi sebentar.",
+      "action": "Coba lagi"
+    },
+    "maintenance": {
+      "code": "Soon",
+      "title": "Sedang maintenance",
+      "description": "Kami sedang poles booth. Cek lagi nanti.",
+      "action": "Kembali"
+    }
   }
 }

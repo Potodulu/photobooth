@@ -4,16 +4,16 @@
     "description": "A fast, playful photobooth experience built for online and offline booths."
   },
   "Nav": {
-    "cta": "Start session"
+    "cta": "Try Now"
   },
   "Footer": {
     "tagline": "Photo experiences for online, offline, and remote group booths."
   },
   "Hero": {
     "brand": "Potodulu",
-    "headline": "Capture the moment. We’ll handle the frame.",
-    "supporting": "A modern photobooth flow: capture, process, output — online or offline.",
-    "primaryCta": "Try it now",
+    "headline": "Try Online Photobooth",
+    "supporting": "Guest demo in your browser. No account required. Temporary browser storage only.",
+    "primaryCta": "Try Now",
     "secondaryCta": "See features"
   },
   "Features": {
@@ -47,8 +47,88 @@
     }
   },
   "Cta": {
-    "title": "Ready for the next session?",
-    "subtitle": "Build a playful, fast, scalable photobooth from day one.",
-    "button": "Start with Potodulu"
+    "title": "Ready to try the guest demo?",
+    "subtitle": "Browser only. No account. Temporary storage inside your device.",
+    "button": "Try Now"
+  },
+  "Demo": {
+    "title": "Guest Demo",
+    "subtitle": "Validate the full online photobooth flow without a backend.",
+    "badges": {
+      "guest": "Guest Demo",
+      "browser": "Browser Only",
+      "noAccount": "No Account Required",
+      "temporary": "Temporary Browser Storage"
+    }
+  },
+  "TryWarning": {
+    "pageTitle": "Before you start",
+    "pageSubtitle": "This guest demo runs entirely in your browser.",
+    "title": "Temporary browser storage",
+    "description": "This demo stores your work temporarily inside your browser. Browser cache or storage cleanup may remove your work at any time.",
+    "continue": "Continue",
+    "cancel": "Cancel"
+  },
+  "TryLayout": {
+    "title": "Select layout",
+    "subtitle": "Choose how your photos will be arranged.",
+    "continue": "Continue"
+  },
+  "TryCamera": {
+    "title": "Capture",
+    "subtitle": "Take up to 10 photos. You need at least enough shots to fill the layout.",
+    "permissionHint": "Allow camera access to start the live preview.",
+    "enableCamera": "Enable camera",
+    "capture": "Capture",
+    "retake": "Retake last",
+    "continue": "Continue",
+    "count": "{current} / {max}"
+  },
+  "TryFrame": {
+    "title": "Choose frame",
+    "subtitle": "Frames are metadata-driven. Assets can be added later.",
+    "continue": "Continue"
+  },
+  "TrySelect": {
+    "title": "Choose photos",
+    "subtitle": "Assign a capture to each layout slot.",
+    "progress": "{current} / {total} slots",
+    "autoFill": "Auto-fill",
+    "continue": "Generate preview",
+    "clear": "Clear",
+    "emptySlot": "Empty",
+    "pickHint": "Tap a photo to fill the next empty slot.",
+    "missingLayout": "Layout missing. Go back and select one."
+  },
+  "TryPreview": {
+    "title": "Preview",
+    "subtitle": "Review your result before downloading.",
+    "previewAlt": "Generated photobooth preview",
+    "generating": "Compositing your photos…",
+    "empty": "No preview yet.",
+    "layoutLabel": "Layout: {name}",
+    "frameLabel": "Frame: {name}",
+    "generate": "Generate preview",
+    "download": "Download ZIP"
+  },
+  "Errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Page not found",
+      "description": "This route wandered off the booth. Let’s get you back.",
+      "action": "Back home"
+    },
+    "server": {
+      "code": "500",
+      "title": "Something broke",
+      "description": "The booth tripped over a cable. Try again in a moment.",
+      "action": "Try again"
+    },
+    "maintenance": {
+      "code": "Soon",
+      "title": "Under maintenance",
+      "description": "We’re polishing the booth. Check back shortly.",
+      "action": "Back home"
+    }
   }
 }

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "single-1",
+    "name": "1 Photo",
+    "preview": "/photobooth/layouts/single-1.svg",
+    "canvasSize": { "width": 1080, "height": 1440 },
+    "slots": [
+      { "id": "slot-1", "x": 60, "y": 60, "width": 960, "height": 1320 }
+    ],
+    "aspectRatio": "3:4",
+    "outputSize": { "width": 1080, "height": 1440 },
+    "padding": 60,
+    "background": "#ffffff",
+    "compatibleFrameIds": ["classic", "minimal", "birthday"]
+  },
+  {
+    "id": "strip-2",
+    "name": "2 Vertical",
+    "preview": "/photobooth/layouts/strip-2.svg",
+    "canvasSize": { "width": 1080, "height": 1600 },
+    "slots": [
+      { "id": "slot-1", "x": 60, "y": 60, "width": 960, "height": 720 },
+      { "id": "slot-2", "x": 60, "y": 820, "width": 960, "height": 720 }
+    ],
+    "aspectRatio": "27:40",
+    "outputSize": { "width": 1080, "height": 1600 },
+    "padding": 60,
+    "background": "#ffffff",
+    "compatibleFrameIds": ["classic", "minimal", "birthday"]
+  },
+  {
+    "id": "grid-4",
+    "name": "4 Grid",
+    "preview": "/photobooth/layouts/grid-4.svg",
+    "canvasSize": { "width": 1080, "height": 1440 },
+    "slots": [
+      { "id": "slot-1", "x": 48, "y": 48, "width": 480, "height": 648 },
+      { "id": "slot-2", "x": 552, "y": 48, "width": 480, "height": 648 },
+      { "id": "slot-3", "x": 48, "y": 744, "width": 480, "height": 648 },
+      { "id": "slot-4", "x": 552, "y": 744, "width": 480, "height": 648 }
+    ],
+    "aspectRatio": "3:4",
+    "outputSize": { "width": 1080, "height": 1440 },
+    "padding": 48,
+    "background": "#ffffff",
+    "compatibleFrameIds": ["classic", "minimal", "birthday"]
+  }
+]

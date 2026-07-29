@@ -1,0 +1,1 @@
+export { PhotoboothLayout } from "./PhotoboothLayout";
