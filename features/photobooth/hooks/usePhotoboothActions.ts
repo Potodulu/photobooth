@@ -19,6 +19,7 @@ import {
   assignCaptureToSlot,
   clearSlotAssignment,
   autoFillSlots,
+  type TakePhotoHooks,
 } from "@/features/photobooth/application";
 
 export function usePhotoboothActions() {
@@ -44,7 +45,8 @@ export function usePhotoboothActions() {
   const prepareTryEntryAction = useCallback(() => run(prepareTryEntry), [run]);
   const loadLayoutsAction = useCallback(() => run(loadLayouts), [run]);
   const takePhotoAction = useCallback(
-    (video: HTMLVideoElement) => run(() => takePhoto(video)),
+    (video: HTMLVideoElement, hooks: TakePhotoHooks) =>
+      run(() => takePhoto(video, hooks)),
     [run],
   );
   const retakeLastPhotoAction = useCallback(() => run(retakeLastPhoto), [run]);

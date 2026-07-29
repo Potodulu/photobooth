@@ -24,8 +24,6 @@ export function TryCameraPage() {
   const isCapturing = useCaptureStore((s) => s.isCapturing);
   const isRecording = useCaptureStore((s) => s.isRecording);
   const recordingRemaining = useCaptureStore((s) => s.recordingRemaining);
-  const filterId = useCaptureStore((s) => s.filterId);
-  const setFilterId = useCaptureStore((s) => s.setFilterId);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
   const layout = layouts.find((item) => item.id === selectedLayoutId);
@@ -47,12 +45,10 @@ export function TryCameraPage() {
         isCapturing={isCapturing || busy}
         isRecording={isRecording}
         recordingRemaining={recordingRemaining}
-        filterId={filterId}
-        onFilterChange={setFilterId}
         onStartCamera={start}
-        onCapture={async () => {
+        onCapture={async (hooks) => {
           if (!videoRef.current) return;
-          await takePhoto(videoRef.current);
+          await takePhoto(videoRef.current, hooks);
         }}
         onRetake={retakeLastPhoto}
         onContinue={async () => {

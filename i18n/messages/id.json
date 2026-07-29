@@ -76,15 +76,33 @@
   },
   "TryCamera": {
     "title": "Capture",
-    "subtitle": "Countdown 10 detik, flash, lalu still + video 10 detik tiap take. Filter hanya untuk PNG photobooth.",
+    "subtitle": "Rekaman berjalan selama countdown 10 detik. Flash, lalu still diambil di akhir.",
     "permissionHint": "Izinkan akses kamera untuk memulai preview live.",
     "enableCamera": "Aktifkan kamera",
     "capture": "Ambil foto",
     "retake": "Ulangi terakhir",
     "continue": "Lanjut",
     "count": "{current} / {max}",
-    "recording": "Merekam {seconds}d",
+    "recording": "Merekam {seconds}d"
+  },
+  "TryFrame": {
+    "title": "Pilih frame",
+    "subtitle": "Frame berbasis metadata. Aset visual bisa ditambahkan nanti.",
+    "continue": "Lanjut"
+  },
+  "TrySelect": {
+    "title": "Pilih foto",
+    "subtitle": "Isi slot, lalu pilih satu filter yang dipakai ke semua foto di PNG photobooth.",
+    "progress": "{current} / {total} slot",
+    "autoFill": "Isi otomatis",
+    "continue": "Buat preview",
+    "clear": "Hapus",
+    "emptySlot": "Kosong — drop di sini",
+    "pickHint": "Ketuk foto untuk isi slot aktif, atau drag ke slot kosong.",
+    "slotOccupied": "Kosongkan slot dulu sebelum drop foto lain.",
+    "missingLayout": "Layout belum dipilih. Kembali dan pilih dulu.",
     "filters": "Filter foto (hanya PNG)",
+    "filtersHint": "Satu filter untuk semua foto di hasil photobooth still.",
     "filter": {
       "none": "Tanpa",
       "grayscale": "Abu",
@@ -98,33 +116,16 @@
       "mono-high": "Mono+"
     }
   },
-  "TryFrame": {
-    "title": "Pilih frame",
-    "subtitle": "Frame berbasis metadata. Aset visual bisa ditambahkan nanti.",
-    "continue": "Lanjut"
-  },
-  "TrySelect": {
-    "title": "Pilih foto",
-    "subtitle": "Klik slot lalu foto, atau drag foto ke slot kosong. Foto boleh dipakai ulang.",
-    "progress": "{current} / {total} slot",
-    "autoFill": "Isi otomatis",
-    "continue": "Buat preview",
-    "clear": "Hapus",
-    "emptySlot": "Kosong — drop di sini",
-    "pickHint": "Ketuk foto untuk isi slot aktif, atau drag ke slot kosong.",
-    "slotOccupied": "Kosongkan slot dulu sebelum drop foto lain.",
-    "missingLayout": "Layout belum dipilih. Kembali dan pilih dulu."
-  },
   "TryPreview": {
     "title": "Preview",
-    "subtitle": "Preview GIF hasil ber-frame. ZIP berisi PNG, GIF, live-photo MP4, dan raw photos.",
-    "previewAlt": "Preview GIF hasil photobooth",
+    "subtitle": "Preview live-photo (video + frame). ZIP berisi PNG, GIF, MP4, dan raw photos.",
+    "previewAlt": "Preview live-photo hasil photobooth",
     "generating": "Menyusun PNG, GIF, dan live-photo…",
     "empty": "Belum ada preview.",
     "layoutLabel": "Layout: {name}",
     "frameLabel": "Frame: {name}",
     "filterLabel": "Filter: {name}",
-    "gifPreviewBadge": "Preview GIF",
+    "livePreviewBadge": "Preview live photo",
     "generate": "Buat preview",
     "download": "Unduh ZIP"
   },

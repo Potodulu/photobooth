@@ -7,8 +7,7 @@ import type {
 
 type GeneratorState = {
   slotAssignments: SlotAssignment[];
-  previewUrl: string | null;
-  previewGifUrl: string | null;
+  previewLiveUrl: string | null;
   pngOutput: GeneratedBlob | null;
   gifOutput: GeneratedBlob | null;
   liveOutput: GeneratedBlob | null;
@@ -19,7 +18,7 @@ type GeneratorState = {
   setSlotAssignments: (slotAssignments: SlotAssignment[]) => void;
   assignSlot: (slotId: string, captureId: string) => void;
   clearSlot: (slotId: string) => void;
-  setPreviewGifUrl: (previewGifUrl: string | null) => void;
+  setPreviewLiveUrl: (previewLiveUrl: string | null) => void;
   setOutputs: (outputs: {
     png: GeneratedBlob;
     gif: GeneratedBlob;
@@ -34,8 +33,7 @@ type GeneratorState = {
 
 export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   slotAssignments: [],
-  previewUrl: null,
-  previewGifUrl: null,
+  previewLiveUrl: null,
   pngOutput: null,
   gifOutput: null,
   liveOutput: null,
@@ -54,10 +52,10 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
         (item) => item.slotId !== slotId,
       ),
     }),
-  setPreviewGifUrl: (previewGifUrl) => {
-    const prev = get().previewGifUrl;
-    if (prev && prev !== previewGifUrl) URL.revokeObjectURL(prev);
-    set({ previewGifUrl, previewUrl: previewGifUrl });
+  setPreviewLiveUrl: (previewLiveUrl) => {
+    const prev = get().previewLiveUrl;
+    if (prev && prev !== previewLiveUrl) URL.revokeObjectURL(prev);
+    set({ previewLiveUrl });
   },
   setOutputs: ({ png, gif, live }) =>
     set({ pngOutput: png, gifOutput: gif, liveOutput: live }),
@@ -66,12 +64,11 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   setDownloadProgress: (downloadProgress) => set({ downloadProgress }),
   setError: (error) => set({ error }),
   reset: () => {
-    const prev = get().previewGifUrl;
+    const prev = get().previewLiveUrl;
     if (prev) URL.revokeObjectURL(prev);
     set({
       slotAssignments: [],
-      previewUrl: null,
-      previewGifUrl: null,
+      previewLiveUrl: null,
       pngOutput: null,
       gifOutput: null,
       liveOutput: null,

@@ -40,7 +40,7 @@ async function loadVideo(url: string): Promise<HTMLVideoElement> {
     video.muted = true;
     video.playsInline = true;
     video.preload = "auto";
-    video.onloadeddata = () => resolve(video);
+    video.onloadedmetadata = () => resolve(video);
     video.onerror = () => reject(new Error("Failed to load video"));
     video.src = url;
   });
@@ -118,9 +118,15 @@ export async function generatePreview() {
     const gifGen = new GifOutputGenerator();
     const liveGen = new LivePhotoOutputGenerator();
 
-    const [png, gif, live] = await Promise.all([
+    // GIF needs sequential video seeks — run after loading videos
+    const gif = await gifGen.generate({
+      ...compositeBase,
+      filterId: "none",
+      slotVideos,
+    });
+
+    const [png, live] = await Promise.all([
       pngGen.generate(compositeBase),
-      gifGen.generate({ ...compositeBase, filterId: "none" }),
       liveGen.generate({
         ...compositeBase,
         filterId: "none",
@@ -144,7 +150,7 @@ export async function generatePreview() {
     await generatorService.saveResult(result, [png.blob, gif.blob, live.blob]);
     generatorStore.setResult(result);
     generatorStore.setOutputs({ png, gif, live });
-    generatorStore.setPreviewGifUrl(URL.createObjectURL(gif.blob));
+    generatorStore.setPreviewLiveUrl(URL.createObjectURL(live.blob));
     return { result, png, gif, live };
   } catch (error) {
     generatorStore.setError(

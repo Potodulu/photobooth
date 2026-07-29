@@ -19,10 +19,10 @@ import {
 
 export function TryPreviewPage() {
   const t = useTranslations("TryPreview");
-  const tCamera = useTranslations("TryCamera");
+  const tSelect = useTranslations("TrySelect");
   const router = useRouter();
   const { generatePreview, downloadResultZip, busy } = usePhotoboothActions();
-  const previewGifUrl = useGeneratorStore((s) => s.previewGifUrl);
+  const previewLiveUrl = useGeneratorStore((s) => s.previewLiveUrl);
   const isGenerating = useGeneratorStore((s) => s.isGenerating);
   const downloadProgress = useGeneratorStore((s) => s.downloadProgress);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
@@ -38,7 +38,7 @@ export function TryPreviewPage() {
   useTryStepSync("preview");
 
   useEffect(() => {
-    if (!previewGifUrl && !isGenerating) {
+    if (!previewLiveUrl && !isGenerating) {
       void generatePreview();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,10 +47,10 @@ export function TryPreviewPage() {
   return (
     <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
       <ResultPreview
-        previewGifUrl={previewGifUrl}
+        previewLiveUrl={previewLiveUrl}
         layoutName={layout?.name ?? "—"}
         frameName={frame?.name ?? "—"}
-        filterName={tCamera(`filter.${filterId}`)}
+        filterName={tSelect(`filter.${filterId}`)}
         isGenerating={isGenerating || busy}
         downloadProgress={downloadProgress}
         onGenerate={() => void generatePreview()}

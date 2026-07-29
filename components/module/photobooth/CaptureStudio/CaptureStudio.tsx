@@ -7,13 +7,8 @@ import { Countdown } from "@/components/shared/Countdown";
 import { FlashOverlay } from "@/components/shared/FlashOverlay";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import {
-  COUNTDOWN_SECONDS,
-  PHOTO_FILTERS,
-  getFilterCss,
-  type Capture,
-  type PhotoFilterId,
-} from "@/features/photobooth/domain";
+import type { Capture } from "@/features/photobooth/domain";
+import type { TakePhotoHooks } from "@/features/photobooth/application/capturePhoto";
 import { cn } from "@/libs/cn";
 
 type CaptureStudioProps = {
@@ -27,10 +22,8 @@ type CaptureStudioProps = {
   isCapturing: boolean;
   isRecording: boolean;
   recordingRemaining: number | null;
-  filterId: PhotoFilterId;
-  onFilterChange: (id: PhotoFilterId) => void;
   onStartCamera: () => void;
-  onCapture: () => Promise<void>;
+  onCapture: (hooks: TakePhotoHooks) => Promise<void>;
   onRetake: () => Promise<void>;
   onContinue: () => Promise<void>;
 };
@@ -46,8 +39,6 @@ export function CaptureStudio({
   isCapturing,
   isRecording,
   recordingRemaining,
-  filterId,
-  onFilterChange,
   onStartCamera,
   onCapture,
   onRetake,
@@ -57,17 +48,12 @@ export function CaptureStudio({
   const [count, setCount] = useState<number | null>(null);
   const [flash, setFlash] = useState(false);
 
-  const runCountdown = async () => {
+  const runCapture = async () => {
     if (isCapturing || captures.length >= maxTakes || count !== null) return;
-    for (let value = COUNTDOWN_SECONDS; value >= 1; value -= 1) {
-      setCount(value);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-    setCount(null);
-    setFlash(true);
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    setFlash(false);
-    await onCapture();
+    await onCapture({
+      onCountdown: setCount,
+      onFlash: setFlash,
+    });
   };
 
   const canContinue = captures.length >= requiredSlots;
@@ -79,10 +65,7 @@ export function CaptureStudio({
       <div className="relative">
         {permission === "granted" ? (
           <>
-            <CameraPreview
-              videoRef={videoRef}
-              filterCss={getFilterCss(filterId)}
-            />
+            <CameraPreview videoRef={videoRef} />
             <Countdown value={count} />
             {isRecording && recordingRemaining !== null ? (
               <div className="bg-destructive text-destructive-foreground absolute top-3 right-3 rounded-[var(--radius-md)] px-3 py-1 text-sm font-bold">
@@ -108,25 +91,6 @@ export function CaptureStudio({
         )}
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-semibold">{t("filters")}</p>
-        <div className="flex flex-wrap gap-2">
-          {PHOTO_FILTERS.map((filter) => (
-            <Button
-              key={filter.id}
-              type="button"
-              size="sm"
-              radius="full"
-              variant={filterId === filter.id ? "solid" : "outline"}
-              color={filterId === filter.id ? "primary" : "neutral"}
-              onClick={() => onFilterChange(filter.id)}
-            >
-              {t(`filter.${filter.id}`)}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Badge variant="soft" color="neutral" radius="full">
           {t("count", { current: captures.length, max: maxTakes })}
@@ -139,7 +103,7 @@ export function CaptureStudio({
             disabled={
               permission !== "granted" || busy || captures.length >= maxTakes
             }
-            onClick={runCountdown}
+            onClick={runCapture}
           >
             {t("capture")}
           </Button>
@@ -178,7 +142,6 @@ export function CaptureStudio({
                 src={objectUrls[capture.id]}
                 alt=""
                 className="size-full object-cover"
-                style={{ filter: getFilterCss(filterId) }}
               />
             </div>
           ))}

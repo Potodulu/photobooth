@@ -29,6 +29,8 @@ export function TrySelectPage() {
   const layout = layouts.find((item) => item.id === selectedLayoutId);
   const captures = useCaptureStore((s) => s.captures);
   const objectUrls = useCaptureStore((s) => s.objectUrls);
+  const filterId = useCaptureStore((s) => s.filterId);
+  const setFilterId = useCaptureStore((s) => s.setFilterId);
   const assignments = useGeneratorStore((s) => s.slotAssignments);
 
   useTryFlowGuard("select");
@@ -49,6 +51,8 @@ export function TrySelectPage() {
         captures={captures}
         objectUrls={objectUrls}
         assignments={assignments}
+        filterId={filterId}
+        onFilterChange={setFilterId}
         onAssign={assignCaptureToSlot}
         onClear={clearSlotAssignment}
         onAutoFill={() => autoFillSlots(captures.map((item) => item.id))}

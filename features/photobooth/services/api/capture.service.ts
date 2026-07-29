@@ -2,48 +2,60 @@ import {
   browserCaptureRepository,
   browserCameraAdapter,
   captureFrameFromVideo,
-  recordClip,
+  ClipRecorder,
 } from "@/features/photobooth/adapters/browser";
 import {
   createId,
-  RECORD_DURATION_MS,
   type Capture,
   type CaptureSet,
 } from "@/features/photobooth/domain";
 
 /** Today: browser repo. Later: HTTP endpoints. */
 export const captureService = {
-  async captureFromVideo(
-    video: HTMLVideoElement,
-    options?: { recordVideo?: boolean; durationMs?: number },
-  ): Promise<{ capture: Capture; blob: Blob; videoBlob: Blob | null }> {
-    const { blob, width, height } = await captureFrameFromVideo(video);
+  createClipRecorder(): ClipRecorder {
+    return new ClipRecorder();
+  },
+
+  getCameraStream(video?: HTMLVideoElement): MediaStream | null {
+    const fromAdapter = browserCameraAdapter.getStream();
+    if (fromAdapter) return fromAdapter;
+    if (video?.srcObject instanceof MediaStream) return video.srcObject;
+    return null;
+  },
+
+  captureStill(video: HTMLVideoElement) {
+    return captureFrameFromVideo(video);
+  },
+
+  async saveCapture(params: {
+    still: Blob;
+    width: number;
+    height: number;
+    videoBlob: Blob | null;
+    durationMs?: number;
+  }): Promise<{ capture: Capture; blob: Blob; videoBlob: Blob | null }> {
     const id = createId();
-    const durationMs = options?.durationMs ?? RECORD_DURATION_MS;
-    let videoBlob: Blob | null = null;
-    let videoBlobKey: string | null = null;
-
-    if (options?.recordVideo !== false) {
-      const stream = browserCameraAdapter.getStream() ?? video.srcObject;
-      if (stream instanceof MediaStream) {
-        const recorded = await recordClip(stream, durationMs);
-        videoBlob = recorded.blob;
-        videoBlobKey = `capture-video-${id}`;
-      }
-    }
-
+    const videoBlobKey = params.videoBlob ? `capture-video-${id}` : null;
     const capture: Capture = {
       id,
       blobKey: `capture-blob-${id}`,
       videoBlobKey,
-      width,
-      height,
+      width: params.width,
+      height: params.height,
       createdAt: new Date().toISOString(),
-      mimeType: blob.type || "image/jpeg",
-      durationMs: videoBlob ? durationMs : undefined,
+      mimeType: params.still.type || "image/jpeg",
+      durationMs: params.videoBlob ? params.durationMs : undefined,
     };
-    await browserCaptureRepository.saveCapture(capture, blob, videoBlob);
-    return { capture, blob, videoBlob };
+    await browserCaptureRepository.saveCapture(
+      capture,
+      params.still,
+      params.videoBlob,
+    );
+    return {
+      capture,
+      blob: params.still,
+      videoBlob: params.videoBlob,
+    };
   },
 
   getCapture(id: string): Promise<Capture | null> {

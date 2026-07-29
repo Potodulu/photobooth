@@ -75,40 +75,61 @@ function pickRecorderMime(): string | undefined {
   return candidates.find((mime) => MediaRecorder.isTypeSupported(mime));
 }
 
+/** Start/stop recorder so capture can run during countdown. */
+export class ClipRecorder {
+  private recorder: MediaRecorder | null = null;
+  private chunks: BlobPart[] = [];
+  private mimeType: string | undefined;
+  private startedAt = 0;
+
+  start(stream: MediaStream): void {
+    this.chunks = [];
+    this.mimeType = pickRecorderMime();
+    this.recorder = this.mimeType
+      ? new MediaRecorder(stream, { mimeType: this.mimeType })
+      : new MediaRecorder(stream);
+    this.recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) this.chunks.push(event.data);
+    };
+    this.startedAt = Date.now();
+    this.recorder.start(250);
+  }
+
+  stop(): Promise<{ blob: Blob; mimeType: string; durationMs: number }> {
+    const recorder = this.recorder;
+    if (!recorder || recorder.state === "inactive") {
+      return Promise.resolve({
+        blob: new Blob([], { type: this.mimeType || "video/webm" }),
+        mimeType: this.mimeType || "video/webm",
+        durationMs: 0,
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      recorder.onerror = () => reject(new Error("Recording failed"));
+      recorder.onstop = () => {
+        const type = recorder.mimeType || this.mimeType || "video/webm";
+        resolve({
+          blob: new Blob(this.chunks, { type }),
+          mimeType: type,
+          durationMs: Date.now() - this.startedAt,
+        });
+        this.recorder = null;
+      };
+      recorder.stop();
+    });
+  }
+}
+
 export function recordClip(
   stream: MediaStream,
   durationMs: number,
 ): Promise<{ blob: Blob; mimeType: string; durationMs: number }> {
-  const mimeType = pickRecorderMime();
-  const chunks: BlobPart[] = [];
-
+  const recorder = new ClipRecorder();
+  recorder.start(stream);
   return new Promise((resolve, reject) => {
-    try {
-      const recorder = mimeType
-        ? new MediaRecorder(stream, { mimeType })
-        : new MediaRecorder(stream);
-
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) chunks.push(event.data);
-      };
-      recorder.onerror = () => reject(new Error("Recording failed"));
-      recorder.onstop = () => {
-        const type = recorder.mimeType || mimeType || "video/webm";
-        resolve({
-          blob: new Blob(chunks, { type }),
-          mimeType: type,
-          durationMs,
-        });
-      };
-
-      recorder.start(250);
-      window.setTimeout(() => {
-        if (recorder.state !== "inactive") recorder.stop();
-      }, durationMs);
-    } catch (error) {
-      reject(
-        error instanceof Error ? error : new Error("Recording unsupported"),
-      );
-    }
+    window.setTimeout(() => {
+      recorder.stop().then(resolve).catch(reject);
+    }, durationMs);
   });
 }

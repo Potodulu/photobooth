@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "@/components/ui/Toast";
-import type {
-  Capture,
-  Layout,
-  SlotAssignment,
+import {
+  PHOTO_FILTERS,
+  getFilterCss,
+  type Capture,
+  type Layout,
+  type PhotoFilterId,
+  type SlotAssignment,
 } from "@/features/photobooth/domain";
 import { cn } from "@/libs/cn";
 import { Button } from "@/components/ui/Button";
@@ -17,6 +20,8 @@ type PhotoPickerProps = {
   captures: Capture[];
   objectUrls: Record<string, string>;
   assignments: SlotAssignment[];
+  filterId: PhotoFilterId;
+  onFilterChange: (id: PhotoFilterId) => void;
   onAssign: (slotId: string, captureId: string) => void;
   onClear: (slotId: string) => void;
   onAutoFill: () => void;
@@ -28,6 +33,8 @@ export function PhotoPicker({
   captures,
   objectUrls,
   assignments,
+  filterId,
+  onFilterChange,
   onAssign,
   onClear,
   onAutoFill,
@@ -42,6 +49,7 @@ export function PhotoPicker({
     firstEmpty?.id ?? layout.slots[0]?.id ?? null,
   );
   const [dragOverSlotId, setDragOverSlotId] = useState<string | null>(null);
+  const filterCss = getFilterCss(filterId);
 
   const complete = assignments.length === layout.slots.length;
   const activeSlotIdResolved =
@@ -74,6 +82,26 @@ export function PhotoPicker({
           >
             {t("continue")}
           </Button>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-sm font-semibold">{t("filters")}</p>
+        <p className="text-muted-foreground text-xs">{t("filtersHint")}</p>
+        <div className="flex flex-wrap gap-2">
+          {PHOTO_FILTERS.map((filter) => (
+            <Button
+              key={filter.id}
+              type="button"
+              size="sm"
+              radius="full"
+              variant={filterId === filter.id ? "solid" : "outline"}
+              color={filterId === filter.id ? "primary" : "neutral"}
+              onClick={() => onFilterChange(filter.id)}
+            >
+              {t(`filter.${filter.id}`)}
+            </Button>
+          ))}
         </div>
       </div>
 
@@ -143,6 +171,7 @@ export function PhotoPicker({
                     src={objectUrls[assignment.captureId]}
                     alt=""
                     className="size-full object-cover"
+                    style={{ filter: filterCss }}
                   />
                 ) : (
                   <div className="text-muted-foreground flex size-full items-center justify-center text-sm">
@@ -178,6 +207,7 @@ export function PhotoPicker({
                 src={objectUrls[capture.id]}
                 alt=""
                 className="size-full object-cover"
+                style={{ filter: filterCss }}
               />
             </button>
           ))}

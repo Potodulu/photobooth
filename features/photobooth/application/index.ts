@@ -1,6 +1,11 @@
 export { startGuestSession, cancelGuestSession } from "./startSession";
 export { loadLayouts, selectLayout } from "./selectLayout";
-export { takePhoto, retakeLastPhoto, persistCaptureSet } from "./capturePhoto";
+export {
+  takePhoto,
+  retakeLastPhoto,
+  persistCaptureSet,
+  type TakePhotoHooks,
+} from "./capturePhoto";
 export {
   loadFramesForSelectedLayout,
   selectFrame,
