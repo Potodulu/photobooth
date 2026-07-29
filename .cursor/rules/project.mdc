@@ -1,0 +1,133 @@
+---
+alwaysApply: true
+---
+
+# Frontend Project Rules (Next.js)
+
+## Core Philosophy
+
+- This project is frontend-first.
+- The frontend owns the entire user experience.
+- Backend acts only as a Session Engine and business API.
+- Never move UI logic into the backend unless absolutely necessary.
+
+## Product Mindset
+
+Always think in terms of "Photo Experience", not pages.
+
+Flow:
+Experience
+→ Session
+→ Capture
+→ Process
+→ Output
+
+Every feature should support this flow.
+
+## Responsibilities
+
+Frontend is responsible for:
+
+- Camera access
+- Live preview
+- Countdown
+- Frame rendering
+- Capture flow
+- Upload progress
+- Session state
+- Animations
+- Responsive interaction
+
+Backend is responsible for:
+
+- Authentication
+- Session lifecycle
+- Gallery
+- Storage
+- Payments
+- Analytics
+
+## UX Priority
+
+Prioritize:
+
+1. Fast interaction
+2. Smooth animation
+3. Minimal waiting
+4. Mobile-first
+5. Touch-friendly components
+6. Offline-ready architecture whenever possible
+
+## Component Design
+
+- Build reusable UI components.
+- Keep business logic outside UI components.
+- Prefer composition over large components.
+- Avoid duplicated UI.
+- One component should have one responsibility.
+
+## State Management
+
+Separate:
+
+- UI state
+- Session state
+- Server state
+
+Never mix them together.
+
+## File Structure
+
+Organize by feature instead of file type.
+
+Example:
+
+features/
+session/
+capture/
+gallery/
+experience/
+auth/
+
+Shared resources belong in:
+
+components/
+hooks/
+lib/
+services/
+types/
+
+## Styling
+
+- Use Tailwind CSS.
+- Prefer design tokens over hardcoded values.
+- Keep spacing, radius, shadows and colors consistent.
+- Avoid inline styles unless necessary.
+
+## Performance
+
+- Lazy load heavy features.
+- Optimize images.
+- Minimize rerenders.
+- Avoid unnecessary client components.
+- Prefer Server Components unless browser APIs are required.
+
+## Code Quality
+
+- Keep functions small.
+- Prefer readability over cleverness.
+- Avoid premature abstraction.
+- Remove dead code immediately.
+- Reuse existing utilities before creating new ones.
+
+## Future Compatibility
+
+Every implementation should make it easy to support:
+
+- Offline Booth
+- Online Booth
+- Remote Group Booth
+- AI Experiences
+
+Never hardcode logic for a single experience.
+Always build features to be experience-driven.
