@@ -1,0 +1,179 @@
+---
+alwaysApply: true
+---
+
+# Component Architecture
+
+Organize UI using layered components.
+
+## ui/
+
+Lowest level components.
+
+Contains only primitive UI.
+
+Examples:
+
+- Button
+- Input
+- Badge
+- Avatar
+- Dialog
+- Sheet
+- Card
+- Tabs
+
+Rules:
+
+- No business logic.
+- No API calls.
+- No feature-specific code.
+- Reusable across the entire project.
+
+---
+
+## shared/
+
+Reusable composed components built from ui/.
+
+Examples:
+
+- Navbar
+- Sidebar
+- CameraPreview
+- Countdown
+- SessionCard
+- GalleryGrid
+- UploadProgress
+
+Rules:
+
+- May combine multiple ui components.
+- May contain presentation logic.
+- Must remain feature-agnostic.
+
+---
+
+## module/
+
+Feature-specific components and business logic.
+
+Examples:
+
+- auth/
+- session/
+- capture/
+- gallery/
+- experience/
+
+Contains:
+
+- feature components
+- hooks
+- local stores
+- API integration
+- feature utilities
+
+Rules:
+
+- Owns business logic.
+- Can use shared and ui.
+- Should not depend on other modules unless explicitly shared.
+
+---
+
+## page/
+
+Contains page composition only.
+
+Examples:
+
+- HomePage
+- SessionPage
+- GalleryPage
+- DashboardPage
+
+Rules:
+
+- Compose layouts and modules.
+- No business logic.
+- Keep Next.js app/page.tsx files minimal.
+
+Example:
+
+app/session/[id]/page.tsx
+
+export default function Page() {
+return <SessionPage />;
+}
+
+---
+
+## layout/
+
+Application layouts.
+
+Examples:
+
+- DashboardLayout
+- PhotoboothLayout
+- AuthLayout
+
+Rules:
+
+- Defines page structure.
+- Handles navigation, sidebar, headers and slots.
+- No feature business logic.
+
+---
+
+## hoc/
+
+Application wrappers.
+
+Examples:
+
+- AuthProvider
+- QueryProvider
+- ThemeProvider
+- SessionProvider
+
+Rules:
+
+- Contains providers, guards and application wrappers.
+- Loaded globally.
+- Avoid placing feature logic here.
+
+---
+
+# Dependency Rule
+
+Allowed:
+
+ui
+↑
+shared
+↑
+module
+↑
+page
+↑
+app router
+
+layout can use:
+
+- ui
+- shared
+
+hoc can use:
+
+- providers
+- shared utilities
+
+Never import downward.
+
+ui -> module ❌
+shared -> module ❌
+page -> app ❌
+
+Always keep dependencies flowing upward.
