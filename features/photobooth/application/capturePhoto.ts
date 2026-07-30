@@ -1,5 +1,4 @@
 import {
-  COUNTDOWN_SECONDS,
   FLASH_DURATION_MS,
   MAX_CAPTURE_TAKES,
   createId,
@@ -21,7 +20,7 @@ export type TakePhotoHooks = {
   onFlash: (active: boolean) => void;
 };
 
-/** Record during countdown, flash, then still — one 10s window. */
+/** Record during countdown, flash, then still — clip length follows countdown. */
 export async function takePhoto(
   video: HTMLVideoElement,
   hooks: TakePhotoHooks,
@@ -36,14 +35,15 @@ export async function takePhoto(
     throw new Error("Camera stream unavailable");
   }
 
+  const seconds = captureStore.countdownSeconds;
   captureStore.setCapturing(true);
   const recorder = captureService.createClipRecorder();
 
   try {
     recorder.start(stream);
-    captureStore.setRecording(true, COUNTDOWN_SECONDS);
+    captureStore.setRecording(true, seconds);
 
-    for (let value = COUNTDOWN_SECONDS; value >= 1; value -= 1) {
+    for (let value = seconds; value >= 1; value -= 1) {
       hooks.onCountdown(value);
       captureStore.setRecording(true, value);
       await sleep(1000);

@@ -139,7 +139,9 @@ export type DownloadManifest = {
 
 export const PHOTOBOOTH_MANIFEST_VERSION = "1.1.0";
 export const MAX_CAPTURE_TAKES = 10;
-export const COUNTDOWN_SECONDS = 10;
+export const COUNTDOWN_OPTIONS = [3, 5, 10] as const;
+export type CountdownSeconds = (typeof COUNTDOWN_OPTIONS)[number];
+export const DEFAULT_COUNTDOWN_SECONDS: CountdownSeconds = 5;
 export const RECORD_DURATION_MS = 10_000;
 export const FLASH_DURATION_MS = 450;
 export const STORAGE_TTL_MS = 24 * 60 * 60 * 1000;

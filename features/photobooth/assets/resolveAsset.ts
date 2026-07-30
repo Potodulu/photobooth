@@ -3,12 +3,15 @@ import strip2 from "./layouts/strip-2.svg";
 import grid4 from "./layouts/grid-4.svg";
 import strip2r from "./layouts/strip-2r.svg";
 import strip4r from "./layouts/strip-4r.svg";
+import photostrip4slot from "./layouts/photostrip-4-slot.svg";
 import classicOverlay from "./frames/classic/overlay.png";
 import minimalOverlay from "./frames/minimal/overlay.png";
 import birthdayOverlay from "./frames/birthday/overlay.png";
 import classicPreview from "./frames/classic/overlay.svg";
 import minimalPreview from "./frames/minimal/overlay.svg";
 import birthdayPreview from "./frames/birthday/overlay.svg";
+import potoduluOriWhiteOverlay from "./frames/potodulu-ori-white/overlay.png";
+import potoduluOriWhitePreview from "./frames/potodulu-ori-white/overlay.svg";
 
 type AssetModule = string | { src: string };
 
@@ -22,12 +25,15 @@ const ASSETS: Record<string, string> = {
   "layouts/grid-4.svg": toUrl(grid4),
   "layouts/strip-2r.svg": toUrl(strip2r),
   "layouts/strip-4r.svg": toUrl(strip4r),
+  "layouts/photostrip-4-slot.svg": toUrl(photostrip4slot),
   "frames/classic/overlay.png": toUrl(classicOverlay),
   "frames/minimal/overlay.png": toUrl(minimalOverlay),
   "frames/birthday/overlay.png": toUrl(birthdayOverlay),
   "frames/classic/overlay.svg": toUrl(classicPreview),
   "frames/minimal/overlay.svg": toUrl(minimalPreview),
   "frames/birthday/overlay.svg": toUrl(birthdayPreview),
+  "frames/potodulu-ori-white/overlay.png": toUrl(potoduluOriWhiteOverlay),
+  "frames/potodulu-ori-white/overlay.svg": toUrl(potoduluOriWhitePreview),
 };
 
 /** Resolve a relative key under features/photobooth/assets to a bundler URL. */

@@ -7,7 +7,11 @@ import { Countdown } from "@/components/shared/Countdown";
 import { FlashOverlay } from "@/components/shared/FlashOverlay";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import type { Capture } from "@/features/photobooth/domain";
+import {
+  COUNTDOWN_OPTIONS,
+  type Capture,
+  type CountdownSeconds,
+} from "@/features/photobooth/domain";
 import type { TakePhotoHooks } from "@/features/photobooth/application/capturePhoto";
 import { cn } from "@/libs/cn";
 
@@ -21,10 +25,12 @@ type CaptureStudioProps = {
   objectUrls: Record<string, string>;
   maxTakes: number;
   requiredSlots: number;
+  countdownSeconds: CountdownSeconds;
   isCapturing: boolean;
   isRecording: boolean;
   recordingRemaining: number | null;
   onStartCamera: () => void;
+  onCountdownChange: (seconds: number) => void;
   onCapture: (hooks: TakePhotoHooks) => Promise<void>;
   onRetake: () => Promise<void>;
   onContinue: () => Promise<void>;
@@ -38,10 +44,12 @@ export function CaptureStudio({
   objectUrls,
   maxTakes,
   requiredSlots,
+  countdownSeconds,
   isCapturing,
   isRecording,
   recordingRemaining,
   onStartCamera,
+  onCountdownChange,
   onCapture,
   onRetake,
   onContinue,
@@ -93,6 +101,28 @@ export function CaptureStudio({
             </Button>
           </div>
         )}
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-sm font-semibold">{t("countdownLabel")}</p>
+        <p className="text-muted-foreground text-xs">{t("countdownHint")}</p>
+        <div className="flex flex-wrap gap-2">
+          {COUNTDOWN_OPTIONS.map((seconds) => (
+            <Button
+              key={seconds}
+              type="button"
+              size="sm"
+              radius="full"
+              variant={countdownSeconds === seconds ? "solid" : "outline"}
+              color={countdownSeconds === seconds ? "primary" : "neutral"}
+              disabled={busy}
+              aria-pressed={countdownSeconds === seconds}
+              onClick={() => onCountdownChange(seconds)}
+            >
+              {t("countdownOption", { seconds })}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">

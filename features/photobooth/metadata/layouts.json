@@ -83,5 +83,25 @@
     "padding": 48,
     "background": "#ffffff",
     "compatibleFrameIds": ["classic", "minimal", "birthday"]
+  },
+  {
+    "id": "photostrip-4-slot",
+    "name": "Photostrip 4 Slot",
+    "type": "paper",
+    "preview": "layouts/photostrip-4-slot.svg",
+    "paperSize": { "widthIn": 2, "heightIn": 6 },
+    "dpi": 300,
+    "canvasSize": { "width": 600, "height": 1800 },
+    "slots": [
+      { "id": "slot-1", "x": 43, "y": 30, "width": 514, "height": 386 },
+      { "id": "slot-2", "x": 43, "y": 456, "width": 514, "height": 386 },
+      { "id": "slot-3", "x": 43, "y": 882, "width": 514, "height": 386 },
+      { "id": "slot-4", "x": 43, "y": 1308, "width": 514, "height": 386 }
+    ],
+    "aspectRatio": "2:3",
+    "outputSize": { "width": 600, "height": 1800 },
+    "padding": 30,
+    "background": "#ffffff",
+    "compatibleFrameIds": [""]
   }
 ]

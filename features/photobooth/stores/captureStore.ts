@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import {
+  COUNTDOWN_OPTIONS,
+  DEFAULT_COUNTDOWN_SECONDS,
   MAX_CAPTURE_TAKES,
   type Capture,
+  type CountdownSeconds,
   type PhotoFilterId,
 } from "@/features/photobooth/domain";
 
@@ -11,6 +14,7 @@ type CaptureState = {
   videoUrls: Record<string, string>;
   activeCaptureSetId: string | null;
   maxTakes: number;
+  countdownSeconds: CountdownSeconds;
   isCapturing: boolean;
   isRecording: boolean;
   recordingRemaining: number | null;
@@ -22,6 +26,7 @@ type CaptureState = {
   ) => void;
   removeCapture: (id: string) => void;
   setCaptureSetId: (id: string | null) => void;
+  setCountdownSeconds: (seconds: number) => void;
   setCapturing: (isCapturing: boolean) => void;
   setRecording: (isRecording: boolean, remaining?: number | null) => void;
   setFilterId: (filterId: PhotoFilterId) => void;
@@ -34,6 +39,7 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
   videoUrls: {},
   activeCaptureSetId: null,
   maxTakes: MAX_CAPTURE_TAKES,
+  countdownSeconds: DEFAULT_COUNTDOWN_SECONDS,
   isCapturing: false,
   isRecording: false,
   recordingRemaining: null,
@@ -66,6 +72,10 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
     });
   },
   setCaptureSetId: (activeCaptureSetId) => set({ activeCaptureSetId }),
+  setCountdownSeconds: (seconds) => {
+    if (!(COUNTDOWN_OPTIONS as readonly number[]).includes(seconds)) return;
+    set({ countdownSeconds: seconds as CountdownSeconds });
+  },
   setCapturing: (isCapturing) => set({ isCapturing }),
   setRecording: (isRecording, remaining = null) =>
     set({ isRecording, recordingRemaining: remaining }),
@@ -79,6 +89,7 @@ export const useCaptureStore = create<CaptureState>((set, get) => ({
       objectUrls: {},
       videoUrls: {},
       activeCaptureSetId: null,
+      countdownSeconds: DEFAULT_COUNTDOWN_SECONDS,
       isCapturing: false,
       isRecording: false,
       recordingRemaining: null,

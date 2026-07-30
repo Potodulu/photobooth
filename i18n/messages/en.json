@@ -80,9 +80,12 @@
   },
   "TryCamera": {
     "title": "Capture",
-    "subtitle": "Recording runs during the 10s countdown. Flash, then still is taken at the end.",
+    "subtitle": "Pick a countdown, the clip records for that duration, then the still is taken on flash.",
     "permissionHint": "Allow camera access to start the live preview.",
     "enableCamera": "Enable camera",
+    "countdownLabel": "Countdown",
+    "countdownHint": "The clip records for this duration.",
+    "countdownOption": "{seconds}s",
     "capture": "Capture",
     "retake": "Retake last",
     "continue": "Continue",

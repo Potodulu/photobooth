@@ -80,9 +80,12 @@
   },
   "TryCamera": {
     "title": "Capture",
-    "subtitle": "Rekaman berjalan selama countdown 10 detik. Flash, lalu still diambil di akhir.",
+    "subtitle": "Pilih durasi countdown, video ikut terekam selama countdown, lalu still diambil saat flash.",
     "permissionHint": "Izinkan akses kamera untuk memulai preview live.",
     "enableCamera": "Aktifkan kamera",
+    "countdownLabel": "Durasi countdown",
+    "countdownHint": "Video ikut terekam selama durasi ini.",
+    "countdownOption": "{seconds} detik",
     "capture": "Ambil foto",
     "retake": "Ulangi terakhir",
     "continue": "Lanjut",

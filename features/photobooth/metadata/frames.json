@@ -52,5 +52,17 @@
     "backgroundColor": "#f5d76e",
     "borderColor": "#f07167",
     "borderWidth": 32
+  },
+  {
+    "id": "potodulu-ori-white",
+    "name": "Potodulu Ori White",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/potodulu-ori-white/overlay.svg",
+    "overlay": "frames/potodulu-ori-white/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/potodulu-ori-white/overlay.svg",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
   }
 ]

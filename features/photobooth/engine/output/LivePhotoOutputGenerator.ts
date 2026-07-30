@@ -121,7 +121,17 @@ export class LivePhotoOutputGenerator implements OutputGenerator {
   readonly format: OutputFormat = "live-photo";
 
   async generate(input: LiveInput): Promise<GeneratedBlob> {
-    const durationMs = input.durationMs ?? RECORD_DURATION_MS;
+    const videos = input.slotVideos ?? [];
+    let clipDurationMs = 0;
+    for (const item of videos) {
+      if (item.video && Number.isFinite(item.video.duration)) {
+        clipDurationMs = Math.max(clipDurationMs, item.video.duration * 1000);
+      }
+    }
+    const durationMs =
+      clipDurationMs > 0
+        ? clipDurationMs
+        : (input.durationMs ?? RECORD_DURATION_MS);
     const layout = input.layout;
     const frame = input.frame;
     const { width, height } = layout.outputSize;
@@ -131,7 +141,6 @@ export class LivePhotoOutputGenerator implements OutputGenerator {
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Canvas unsupported");
 
-    const videos = input.slotVideos ?? [];
     for (const item of videos) {
       if (item.video) {
         item.video.currentTime = 0;

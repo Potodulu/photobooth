@@ -21,6 +21,8 @@ export function TryCameraPage() {
   const captures = useCaptureStore((s) => s.captures);
   const objectUrls = useCaptureStore((s) => s.objectUrls);
   const maxTakes = useCaptureStore((s) => s.maxTakes);
+  const countdownSeconds = useCaptureStore((s) => s.countdownSeconds);
+  const setCountdownSeconds = useCaptureStore((s) => s.setCountdownSeconds);
   const isCapturing = useCaptureStore((s) => s.isCapturing);
   const isRecording = useCaptureStore((s) => s.isRecording);
   const recordingRemaining = useCaptureStore((s) => s.recordingRemaining);
@@ -42,10 +44,12 @@ export function TryCameraPage() {
         objectUrls={objectUrls}
         maxTakes={maxTakes}
         requiredSlots={requiredSlots}
+        countdownSeconds={countdownSeconds}
         isCapturing={isCapturing || busy}
         isRecording={isRecording}
         recordingRemaining={recordingRemaining}
         onStartCamera={start}
+        onCountdownChange={setCountdownSeconds}
         onCapture={async (hooks) => {
           if (!videoRef.current) return;
           await takePhoto(videoRef.current, hooks);
