@@ -12,6 +12,7 @@ type ResultPreviewProps = {
   filterName: string;
   isGenerating: boolean;
   downloadProgress: number;
+  error?: string | null;
   onGenerate: () => void;
   onDownload: () => void;
 };
@@ -23,6 +24,7 @@ export function ResultPreview({
   filterName,
   isGenerating,
   downloadProgress,
+  error = null,
   onGenerate,
   onDownload,
 }: ResultPreviewProps) {
@@ -49,6 +51,8 @@ export function ResultPreview({
                 <Spinner />
                 <p>{t("generating")}</p>
               </div>
+            ) : error ? (
+              <p className="text-destructive max-w-md text-sm">{error}</p>
             ) : (
               <p>{t("empty")}</p>
             )}

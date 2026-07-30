@@ -72,7 +72,11 @@
   "TryLayout": {
     "title": "Select layout",
     "subtitle": "Choose how your photos will be arranged.",
-    "continue": "Continue"
+    "continue": "Continue",
+    "typeDigital": "Digital",
+    "typePaper": "Paper",
+    "paperSize": "{width}×{height} in",
+    "emptyType": "No layouts in this category."
   },
   "TryCamera": {
     "title": "Capture",

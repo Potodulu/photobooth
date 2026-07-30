@@ -14,6 +14,13 @@ export type LayoutSlot = {
   id: string;
 } & Rect;
 
+export type LayoutType = "digital" | "paper";
+
+export type PaperSize = {
+  widthIn: number;
+  heightIn: number;
+};
+
 export type StoragePolicy = "browser-temporary" | "server-persistent";
 
 export type Experience = {
@@ -28,6 +35,7 @@ export type Experience = {
 export type Layout = {
   id: string;
   name: string;
+  type: LayoutType;
   preview: string;
   canvasSize: Size;
   slots: LayoutSlot[];
@@ -36,6 +44,8 @@ export type Layout = {
   padding: number;
   background: string;
   compatibleFrameIds: string[];
+  paperSize?: PaperSize;
+  dpi?: number;
 };
 
 export type Frame = {
@@ -114,6 +124,7 @@ export type CompositeInput = {
   frame: Frame | null;
   slotImages: Array<{ slotId: string; image: CanvasImageSource }>;
   filterId?: PhotoFilterId;
+  overlayImage?: CanvasImageSource | null;
 };
 
 export type DownloadManifest = {

@@ -11,6 +11,8 @@ import type { Capture } from "@/features/photobooth/domain";
 import type { TakePhotoHooks } from "@/features/photobooth/application/capturePhoto";
 import { cn } from "@/libs/cn";
 
+const SHOW_RECORDING_INDICATOR = false;
+
 type CaptureStudioProps = {
   videoRef: React.RefObject<HTMLVideoElement | null>;
   permission: string;
@@ -67,7 +69,9 @@ export function CaptureStudio({
           <>
             <CameraPreview videoRef={videoRef} />
             <Countdown value={count} />
-            {isRecording && recordingRemaining !== null ? (
+            {SHOW_RECORDING_INDICATOR &&
+            isRecording &&
+            recordingRemaining !== null ? (
               <div className="bg-destructive text-destructive-foreground absolute top-3 right-3 rounded-[var(--radius-md)] px-3 py-1 text-sm font-bold">
                 {t("recording", { seconds: recordingRemaining })}
               </div>

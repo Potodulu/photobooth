@@ -25,6 +25,7 @@ export function TryPreviewPage() {
   const previewLiveUrl = useGeneratorStore((s) => s.previewLiveUrl);
   const isGenerating = useGeneratorStore((s) => s.isGenerating);
   const downloadProgress = useGeneratorStore((s) => s.downloadProgress);
+  const generateError = useGeneratorStore((s) => s.error);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
   const selectedFrameId = useFrameStore((s) => s.selectedFrameId);
@@ -53,6 +54,7 @@ export function TryPreviewPage() {
         filterName={tSelect(`filter.${filterId}`)}
         isGenerating={isGenerating || busy}
         downloadProgress={downloadProgress}
+        error={generateError}
         onGenerate={() => void generatePreview()}
         onDownload={async () => {
           await downloadResultZip();

@@ -62,6 +62,7 @@ export function drawFrameOverlay(
   width: number,
   height: number,
   frame: Frame | null,
+  overlayImage?: CanvasImageSource | null,
 ) {
   if (!frame) return;
 
@@ -76,13 +77,17 @@ export function drawFrameOverlay(
       height - borderWidth,
     );
   }
+
+  if (overlayImage) {
+    ctx.drawImage(overlayImage, 0, 0, width, height);
+  }
 }
 
 export function composeToCanvas(
   input: CompositeInput,
   options?: { applyFilter?: boolean },
 ): HTMLCanvasElement {
-  const { layout, frame, slotImages, filterId } = input;
+  const { layout, frame, slotImages, filterId, overlayImage } = input;
   const { width, height } = layout.outputSize;
   const canvas = document.createElement("canvas");
   canvas.width = width;
@@ -105,7 +110,7 @@ export function composeToCanvas(
     drawCover(ctx, entry.image, slot.x, slot.y, slot.width, slot.height);
   }
   ctx.filter = "none";
-  drawFrameOverlay(ctx, width, height, frame);
+  drawFrameOverlay(ctx, width, height, frame, overlayImage);
   return canvas;
 }
 

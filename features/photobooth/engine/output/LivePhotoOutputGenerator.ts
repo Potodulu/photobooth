@@ -159,7 +159,7 @@ export class LivePhotoOutputGenerator implements OutputGenerator {
         }
         drawCover(ctx, source, slot.x, slot.y, slot.width, slot.height);
       }
-      drawFrameOverlay(ctx, width, height, frame);
+      drawFrameOverlay(ctx, width, height, frame, input.overlayImage);
     };
 
     // Seed first frame

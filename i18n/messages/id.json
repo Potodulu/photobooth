@@ -72,7 +72,11 @@
   "TryLayout": {
     "title": "Pilih layout",
     "subtitle": "Tentukan bagaimana fotomu akan disusun.",
-    "continue": "Lanjut"
+    "continue": "Lanjut",
+    "typeDigital": "Digital",
+    "typePaper": "Kertas",
+    "paperSize": "{width}×{height} in",
+    "emptyType": "Belum ada layout di kategori ini."
   },
   "TryCamera": {
     "title": "Capture",

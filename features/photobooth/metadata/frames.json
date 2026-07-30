@@ -2,11 +2,17 @@
   {
     "id": "classic",
     "name": "Classic",
-    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
-    "preview": "",
-    "overlay": null,
+    "supportedLayoutIds": [
+      "single-1",
+      "strip-2",
+      "grid-4",
+      "strip-2r",
+      "strip-4r"
+    ],
+    "preview": "frames/classic/overlay.svg",
+    "overlay": "frames/classic/overlay.png",
     "mask": null,
-    "thumbnail": "",
+    "thumbnail": "frames/classic/overlay.svg",
     "backgroundColor": "#1a1a1a",
     "borderColor": "#1a1a1a",
     "borderWidth": 24
@@ -14,11 +20,17 @@
   {
     "id": "minimal",
     "name": "Minimal",
-    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
-    "preview": "",
-    "overlay": null,
+    "supportedLayoutIds": [
+      "single-1",
+      "strip-2",
+      "grid-4",
+      "strip-2r",
+      "strip-4r"
+    ],
+    "preview": "frames/minimal/overlay.svg",
+    "overlay": "frames/minimal/overlay.png",
     "mask": null,
-    "thumbnail": "",
+    "thumbnail": "frames/minimal/overlay.svg",
     "backgroundColor": "#f7f4ef",
     "borderColor": "#1a1a1a",
     "borderWidth": 8
@@ -26,11 +38,17 @@
   {
     "id": "birthday",
     "name": "Birthday",
-    "supportedLayoutIds": ["single-1", "strip-2", "grid-4"],
-    "preview": "",
-    "overlay": null,
+    "supportedLayoutIds": [
+      "single-1",
+      "strip-2",
+      "grid-4",
+      "strip-2r",
+      "strip-4r"
+    ],
+    "preview": "frames/birthday/overlay.svg",
+    "overlay": "frames/birthday/overlay.png",
     "mask": null,
-    "thumbnail": "",
+    "thumbnail": "frames/birthday/overlay.svg",
     "backgroundColor": "#f5d76e",
     "borderColor": "#f07167",
     "borderWidth": 32

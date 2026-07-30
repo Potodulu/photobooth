@@ -13,6 +13,7 @@ import {
   buildResultZip,
   triggerBrowserDownload,
 } from "@/features/photobooth/adapters/browser/zip";
+import { tryResolvePhotoboothAsset } from "@/features/photobooth/assets";
 import {
   captureService,
   generatorService,
@@ -107,11 +108,24 @@ export async function generatePreview() {
       }),
     );
 
+    const overlayKey = frame?.overlay;
+    const overlayUrl = tryResolvePhotoboothAsset(overlayKey);
+    // ponytail: SVG drawn onto canvas taints it in Chromium — overlay must be raster (PNG).
+    let overlayImage: HTMLImageElement | null = null;
+    if (overlayUrl) {
+      try {
+        overlayImage = await loadImage(overlayUrl);
+      } catch {
+        overlayImage = null;
+      }
+    }
+
     const compositeBase = {
       layout,
       frame,
       slotImages,
       filterId: captureStore.filterId,
+      overlayImage,
     };
 
     const pngGen = new PngOutputGenerator();
@@ -156,7 +170,6 @@ export async function generatePreview() {
     generatorStore.setError(
       error instanceof Error ? error.message : "Generation failed",
     );
-    throw error;
   } finally {
     generatorStore.setGenerating(false);
   }

@@ -92,6 +92,7 @@ export class GifOutputGenerator implements OutputGenerator {
           frame: input.frame,
           slotImages,
           filterId: "none",
+          overlayImage: input.overlayImage,
         },
         { applyFilter: false },
       );
