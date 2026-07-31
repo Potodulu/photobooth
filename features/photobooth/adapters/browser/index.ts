@@ -2,6 +2,7 @@ import {
   BrowserCameraAdapter,
   captureFrameFromVideo,
   ClipRecorder,
+  createMirroredStream,
   recordClip,
 } from "./BrowserCameraAdapter";
 import { BrowserCaptureRepository } from "./BrowserCaptureRepository";
@@ -26,5 +27,6 @@ export {
   BrowserLayoutRepository,
   captureFrameFromVideo,
   ClipRecorder,
+  createMirroredStream,
   recordClip,
 };

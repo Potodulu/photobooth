@@ -77,10 +77,17 @@ export class GifOutputGenerator implements OutputGenerator {
             return {
               slotId: slot.id,
               image: videoEntry.video as CanvasImageSource,
+              panX: stillEntry?.panX ?? 0,
+              panY: stillEntry?.panY ?? 0,
             };
           }
           if (stillEntry) {
-            return { slotId: slot.id, image: stillEntry.image };
+            return {
+              slotId: slot.id,
+              image: stillEntry.image,
+              panX: stillEntry.panX ?? 0,
+              panY: stillEntry.panY ?? 0,
+            };
           }
           return { slotId: slot.id, image: document.createElement("canvas") };
         }),

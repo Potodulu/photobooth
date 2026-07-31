@@ -20,6 +20,8 @@ export function drawCover(
   dy: number,
   dw: number,
   dh: number,
+  panX = 0,
+  panY = 0,
 ) {
   const iw =
     "videoWidth" in image && (image as HTMLVideoElement).videoWidth
@@ -41,8 +43,12 @@ export function drawCover(
   const scale = Math.max(dw / iw, dh / ih);
   const sw = dw / scale;
   const sh = dh / scale;
-  const sx = (iw - sw) / 2;
-  const sy = (ih - sh) / 2;
+  const clampedX = Math.max(-1, Math.min(1, panX));
+  const clampedY = Math.max(-1, Math.min(1, panY));
+  const maxPanX = iw - sw;
+  const maxPanY = ih - sh;
+  const sx = maxPanX * (0.5 + clampedX * 0.5);
+  const sy = maxPanY * (0.5 + clampedY * 0.5);
 
   ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
 }
@@ -107,7 +113,16 @@ export function composeToCanvas(
   for (const slot of layout.slots) {
     const entry = slotImages.find((item) => item.slotId === slot.id);
     if (!entry) continue;
-    drawCover(ctx, entry.image, slot.x, slot.y, slot.width, slot.height);
+    drawCover(
+      ctx,
+      entry.image,
+      slot.x,
+      slot.y,
+      slot.width,
+      slot.height,
+      entry.panX ?? 0,
+      entry.panY ?? 0,
+    );
   }
   ctx.filter = "none";
   drawFrameOverlay(ctx, width, height, frame, overlayImage);

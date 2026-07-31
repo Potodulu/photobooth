@@ -6,6 +6,7 @@ import {
 } from "@/features/photobooth/domain";
 import { captureService } from "@/features/photobooth/services/api";
 import {
+  useCameraStore,
   useCaptureStore,
   useLayoutStore,
   useSessionStore,
@@ -30,17 +31,22 @@ export async function takePhoto(
     throw new Error(`Maximum ${MAX_CAPTURE_TAKES} captures reached`);
   }
 
-  const stream = captureService.getCameraStream(video);
-  if (!stream) {
+  const cameraStream = captureService.getCameraStream(video);
+  if (!cameraStream) {
     throw new Error("Camera stream unavailable");
   }
 
+  const mirrored = useCameraStore.getState().mirrorEnabled;
   const seconds = captureStore.countdownSeconds;
   captureStore.setCapturing(true);
   const recorder = captureService.createClipRecorder();
+  // ponytail: RAF canvas mirror stream — upgrade to OffscreenCanvas worker if perf hurts
+  const mirroredSource = mirrored
+    ? captureService.createMirroredStream(video)
+    : null;
 
   try {
-    recorder.start(stream);
+    recorder.start(mirroredSource?.stream ?? cameraStream);
     captureStore.setRecording(true, seconds);
 
     for (let value = seconds; value >= 1; value -= 1) {
@@ -53,8 +59,9 @@ export async function takePhoto(
     hooks.onFlash(true);
     await sleep(FLASH_DURATION_MS);
 
-    const still = await captureService.captureStill(video);
+    const still = await captureService.captureStill(video, { mirrored });
     const recorded = await recorder.stop();
+    mirroredSource?.stop();
 
     hooks.onFlash(false);
     captureStore.setRecording(false, null);
@@ -76,6 +83,7 @@ export async function takePhoto(
     hooks.onFlash(false);
     hooks.onCountdown(null);
     captureStore.setRecording(false, null);
+    mirroredSource?.stop();
     try {
       await recorder.stop();
     } catch {
@@ -115,6 +123,6 @@ export async function persistCaptureSet() {
 
   await captureService.saveCaptureSet(set);
   captureStore.setCaptureSetId(set.id);
-  session.setStep("frame");
+  session.setStep("select");
   return set;
 }

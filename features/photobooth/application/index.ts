@@ -14,8 +14,14 @@ export {
 export {
   assignCaptureToSlot,
   clearSlotAssignment,
+  updateSlotPan,
   autoFillSlots,
   confirmPhotoSelection,
 } from "./selectPhotos";
-export { generatePreview, downloadResultZip } from "./generateOutput";
+export {
+  generatePreview,
+  downloadResultZip,
+  downloadAsset,
+  collectPreviewAssets,
+} from "./generateOutput";
 export { prepareTryEntry, purgeAfterDownloadOrCancel } from "./retention";
