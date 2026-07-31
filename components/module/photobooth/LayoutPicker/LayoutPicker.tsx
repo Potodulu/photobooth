@@ -20,14 +20,14 @@ export function LayoutPicker({
   onSelect,
 }: LayoutPickerProps) {
   const t = useTranslations("TryLayout");
-  const [typeFilter, setTypeFilter] = useState<LayoutType>("digital");
+  const [typeFilter, setTypeFilter] = useState<LayoutType>("paper");
 
   const filtered = layouts.filter((layout) => layout.type === typeFilter);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
-        {(["digital", "paper"] as const).map((type) => {
+        {(["paper", "digital"] as const).map((type) => {
           const active = typeFilter === type;
           return (
             <button
@@ -41,7 +41,7 @@ export function LayoutPicker({
                   : "bg-card hover:bg-muted/40",
               )}
             >
-              {type === "digital" ? t("typeDigital") : t("typePaper")}
+              {type === "paper" ? t("typePaper") : t("typeDigital")}
             </button>
           );
         })}

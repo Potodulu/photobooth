@@ -37,6 +37,7 @@ type CaptureStudioProps = {
   onCapture: (hooks: TakePhotoHooks) => Promise<void>;
   onRetake: () => Promise<void>;
   onContinue: () => Promise<void>;
+  orientationBlocked?: boolean;
 };
 
 export function CaptureStudio({
@@ -58,13 +59,21 @@ export function CaptureStudio({
   onCapture,
   onRetake,
   onContinue,
+  orientationBlocked = false,
 }: CaptureStudioProps) {
   const t = useTranslations("TryCamera");
   const [count, setCount] = useState<number | null>(null);
   const [flash, setFlash] = useState(false);
 
   const runCapture = async () => {
-    if (isCapturing || captures.length >= maxTakes || count !== null) return;
+    if (
+      orientationBlocked ||
+      isCapturing ||
+      captures.length >= maxTakes ||
+      count !== null
+    ) {
+      return;
+    }
     await onCapture({
       onCountdown: setCount,
       onFlash: setFlash,
@@ -72,7 +81,7 @@ export function CaptureStudio({
   };
 
   const canContinue = captures.length >= requiredSlots;
-  const busy = isCapturing || count !== null;
+  const busy = orientationBlocked || isCapturing || count !== null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -100,6 +109,7 @@ export function CaptureStudio({
               variant="solid"
               color="primary"
               radius="lg"
+              disabled={orientationBlocked}
               onClick={onStartCamera}
             >
               {t("enableCamera")}
