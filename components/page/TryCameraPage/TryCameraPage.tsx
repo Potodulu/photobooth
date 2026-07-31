@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { CaptureStudio } from "@/components/module/photobooth/CaptureStudio";
+import { LandscapeOrientationGuard } from "@/components/shared/LandscapeOrientationGuard";
 import {
   useCamera,
+  useOrientationGuard,
   usePhotoboothActions,
   useTryFlowGuard,
   useTryStepSync,
@@ -19,7 +22,10 @@ import {
 export function TryCameraPage() {
   const t = useTranslations("TryCamera");
   const router = useRouter();
-  const { videoRef, permission, error, start } = useCamera();
+  const { isBlocked: orientationBlocked } = useOrientationGuard();
+  const { videoRef, permission, error, start, stop, stream } = useCamera();
+  const shouldRestartCameraRef = useRef(false);
+  const wasOrientationBlockedRef = useRef(orientationBlocked);
   const {
     takePhoto,
     retakeLastPhoto,
@@ -45,8 +51,34 @@ export function TryCameraPage() {
   useTryFlowGuard("camera");
   useTryStepSync("camera");
 
+  useEffect(() => {
+    const wasBlocked = wasOrientationBlockedRef.current;
+    wasOrientationBlockedRef.current = orientationBlocked;
+
+    if (orientationBlocked) {
+      if (stream) {
+        shouldRestartCameraRef.current = true;
+        stop();
+      }
+      return;
+    }
+
+    if (
+      wasBlocked &&
+      permission === "granted" &&
+      shouldRestartCameraRef.current
+    ) {
+      shouldRestartCameraRef.current = false;
+      void start();
+    }
+  }, [orientationBlocked, stream, permission, start, stop]);
+
   return (
     <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
+      <LandscapeOrientationGuard
+        active={orientationBlocked}
+        message={t("rotateToLandscape")}
+      />
       <CaptureStudio
         videoRef={videoRef}
         permission={permission}
@@ -60,11 +92,12 @@ export function TryCameraPage() {
         isCapturing={isCapturing || busy}
         isRecording={isRecording}
         recordingRemaining={recordingRemaining}
+        orientationBlocked={orientationBlocked}
         onStartCamera={start}
         onCountdownChange={setCountdownSeconds}
         onMirrorChange={setMirrorEnabled}
         onCapture={async (hooks) => {
-          if (!videoRef.current) return;
+          if (orientationBlocked || !videoRef.current) return;
           await takePhoto(videoRef.current, hooks);
         }}
         onRetake={retakeLastPhoto}

@@ -92,7 +92,8 @@
     "retake": "Retake last",
     "continue": "Continue",
     "count": "{current} / {max}",
-    "recording": "Recording {seconds}s"
+    "recording": "Recording {seconds}s",
+    "rotateToLandscape": "Rotate your device to landscape mode to use the photobooth."
   },
   "TryFrame": {
     "title": "Choose frame",

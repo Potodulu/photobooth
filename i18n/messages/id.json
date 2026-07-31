@@ -92,7 +92,8 @@
     "retake": "Ulangi terakhir",
     "continue": "Lanjut",
     "count": "{current} / {max}",
-    "recording": "Merekam {seconds}d"
+    "recording": "Merekam {seconds}d",
+    "rotateToLandscape": "Putar perangkat ke mode landscape untuk menggunakan photobooth."
   },
   "TryFrame": {
     "title": "Pilih frame",
