@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
-export type TryStep =
-  "warning" | "layout" | "camera" | "frame" | "select" | "preview";
+export type TryStep = "warning" | "layout" | "camera" | "select" | "preview";
 
 type SessionState = {
   experienceId: string | null;

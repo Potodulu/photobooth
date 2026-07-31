@@ -7,6 +7,7 @@ import { Countdown } from "@/components/shared/Countdown";
 import { FlashOverlay } from "@/components/shared/FlashOverlay";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { Switch } from "@/components/ui/Switch";
 import {
   COUNTDOWN_OPTIONS,
   type Capture,
@@ -26,11 +27,13 @@ type CaptureStudioProps = {
   maxTakes: number;
   requiredSlots: number;
   countdownSeconds: CountdownSeconds;
+  mirrorEnabled: boolean;
   isCapturing: boolean;
   isRecording: boolean;
   recordingRemaining: number | null;
   onStartCamera: () => void;
   onCountdownChange: (seconds: number) => void;
+  onMirrorChange: (enabled: boolean) => void;
   onCapture: (hooks: TakePhotoHooks) => Promise<void>;
   onRetake: () => Promise<void>;
   onContinue: () => Promise<void>;
@@ -45,11 +48,13 @@ export function CaptureStudio({
   maxTakes,
   requiredSlots,
   countdownSeconds,
+  mirrorEnabled,
   isCapturing,
   isRecording,
   recordingRemaining,
   onStartCamera,
   onCountdownChange,
+  onMirrorChange,
   onCapture,
   onRetake,
   onContinue,
@@ -75,7 +80,7 @@ export function CaptureStudio({
       <div className="relative">
         {permission === "granted" ? (
           <>
-            <CameraPreview videoRef={videoRef} />
+            <CameraPreview videoRef={videoRef} mirrored={mirrorEnabled} />
             <Countdown value={count} />
             {SHOW_RECORDING_INDICATOR &&
             isRecording &&
@@ -123,6 +128,19 @@ export function CaptureStudio({
             </Button>
           ))}
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold">{t("mirrorLabel")}</p>
+          <p className="text-muted-foreground text-xs">{t("mirrorHint")}</p>
+        </div>
+        <Switch
+          checked={mirrorEnabled}
+          disabled={busy}
+          onCheckedChange={onMirrorChange}
+          aria-label={t("mirrorLabel")}
+        />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">

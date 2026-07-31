@@ -3,6 +3,7 @@ import {
   browserCameraAdapter,
   captureFrameFromVideo,
   ClipRecorder,
+  createMirroredStream,
 } from "@/features/photobooth/adapters/browser";
 import {
   createId,
@@ -23,8 +24,12 @@ export const captureService = {
     return null;
   },
 
-  captureStill(video: HTMLVideoElement) {
-    return captureFrameFromVideo(video);
+  captureStill(video: HTMLVideoElement, options?: { mirrored?: boolean }) {
+    return captureFrameFromVideo(video, options);
+  },
+
+  createMirroredStream(video: HTMLVideoElement, fps?: number) {
+    return createMirroredStream(video, fps);
   },
 
   async saveCapture(params: {

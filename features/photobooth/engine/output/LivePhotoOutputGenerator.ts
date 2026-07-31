@@ -166,7 +166,16 @@ export class LivePhotoOutputGenerator implements OutputGenerator {
             videoEntry.video.currentTime = t;
           }
         }
-        drawCover(ctx, source, slot.x, slot.y, slot.width, slot.height);
+        drawCover(
+          ctx,
+          source,
+          slot.x,
+          slot.y,
+          slot.width,
+          slot.height,
+          imageEntry?.panX ?? 0,
+          imageEntry?.panY ?? 0,
+        );
       }
       drawFrameOverlay(ctx, width, height, frame, input.overlayImage);
     };

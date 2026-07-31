@@ -78,7 +78,12 @@ export async function generatePreview() {
           if (!blob) throw new Error("Capture blob missing");
           url = URL.createObjectURL(blob);
         }
-        return { slotId: assignment.slotId, image: await loadImage(url) };
+        return {
+          slotId: assignment.slotId,
+          image: await loadImage(url),
+          panX: assignment.panX ?? 0,
+          panY: assignment.panY ?? 0,
+        };
       }),
     );
 
@@ -227,4 +232,105 @@ export async function downloadResultZip() {
   triggerBrowserDownload(zipBlob, `potodulu-${result.id.slice(0, 8)}.zip`);
   generatorStore.setDownloadProgress(100);
   await purgeAfterDownloadOrCancel();
+}
+
+export type PreviewAsset = {
+  id: string;
+  kind: "png" | "gif" | "mp4" | "raw-photo" | "raw-video";
+  labelKey: string;
+  labelParams?: Record<string, string | number>;
+  fileName: string;
+  blob: Blob;
+  previewUrl?: string | null;
+};
+
+export function downloadAsset(blob: Blob, fileName: string) {
+  triggerBrowserDownload(blob, fileName);
+}
+
+export async function collectPreviewAssets(): Promise<PreviewAsset[]> {
+  const generatorStore = useGeneratorStore.getState();
+  const captureStore = useCaptureStore.getState();
+  const { pngOutput, gifOutput, liveOutput } = generatorStore;
+  const assets: PreviewAsset[] = [];
+
+  if (pngOutput) {
+    assets.push({
+      id: "composed-png",
+      kind: "png",
+      labelKey: "assetPng",
+      fileName: pngOutput.fileName ?? "photobooth.png",
+      blob: pngOutput.blob,
+      previewUrl: URL.createObjectURL(pngOutput.blob),
+    });
+  }
+  if (gifOutput) {
+    assets.push({
+      id: "composed-gif",
+      kind: "gif",
+      labelKey: "assetGif",
+      fileName: gifOutput.fileName ?? "photobooth.gif",
+      blob: gifOutput.blob,
+      previewUrl: URL.createObjectURL(gifOutput.blob),
+    });
+  }
+  if (liveOutput) {
+    assets.push({
+      id: "composed-live",
+      kind: "mp4",
+      labelKey: "assetLive",
+      fileName: liveOutput.fileName ?? "live-photo.mp4",
+      blob: liveOutput.blob,
+      previewUrl: generatorStore.previewLiveUrl,
+    });
+  }
+
+  for (let index = 0; index < captureStore.captures.length; index += 1) {
+    const capture = captureStore.captures[index];
+    const n = String(index + 1).padStart(2, "0");
+    const photoBlob =
+      (await captureService.getCaptureBlob(capture.blobKey)) ??
+      (captureStore.objectUrls[capture.id]
+        ? await fetch(captureStore.objectUrls[capture.id]).then((r) => r.blob())
+        : null);
+    if (photoBlob) {
+      const ext = capture.mimeType.includes("png") ? "png" : "jpg";
+      assets.push({
+        id: `raw-photo-${capture.id}`,
+        kind: "raw-photo",
+        labelKey: "assetRawPhoto",
+        labelParams: { index: index + 1 },
+        fileName: `photo-${n}.${ext}`,
+        blob: photoBlob,
+        previewUrl:
+          captureStore.objectUrls[capture.id] ?? URL.createObjectURL(photoBlob),
+      });
+    }
+
+    if (capture.videoBlobKey) {
+      const videoBlob =
+        (await captureService.getCaptureBlob(capture.videoBlobKey)) ??
+        (captureStore.videoUrls[capture.id]
+          ? await fetch(captureStore.videoUrls[capture.id]).then((r) =>
+              r.blob(),
+            )
+          : null);
+      if (videoBlob && videoBlob.size > 0) {
+        const ext = videoBlob.type.includes("mp4") ? "mp4" : "webm";
+        assets.push({
+          id: `raw-video-${capture.id}`,
+          kind: "raw-video",
+          labelKey: "assetRawVideo",
+          labelParams: { index: index + 1 },
+          fileName: `video-${n}.${ext}`,
+          blob: videoBlob,
+          previewUrl:
+            captureStore.videoUrls[capture.id] ??
+            URL.createObjectURL(videoBlob),
+        });
+      }
+    }
+  }
+
+  return assets;
 }

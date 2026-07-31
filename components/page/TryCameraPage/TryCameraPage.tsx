@@ -10,14 +10,23 @@ import {
   useTryFlowGuard,
   useTryStepSync,
 } from "@/features/photobooth/hooks";
-import { useCaptureStore, useLayoutStore } from "@/features/photobooth/stores";
+import {
+  useCameraStore,
+  useCaptureStore,
+  useLayoutStore,
+} from "@/features/photobooth/stores";
 
 export function TryCameraPage() {
   const t = useTranslations("TryCamera");
   const router = useRouter();
   const { videoRef, permission, error, start } = useCamera();
-  const { takePhoto, retakeLastPhoto, persistCaptureSet, busy } =
-    usePhotoboothActions();
+  const {
+    takePhoto,
+    retakeLastPhoto,
+    persistCaptureSet,
+    loadFramesForSelectedLayout,
+    busy,
+  } = usePhotoboothActions();
   const captures = useCaptureStore((s) => s.captures);
   const objectUrls = useCaptureStore((s) => s.objectUrls);
   const maxTakes = useCaptureStore((s) => s.maxTakes);
@@ -26,6 +35,8 @@ export function TryCameraPage() {
   const isCapturing = useCaptureStore((s) => s.isCapturing);
   const isRecording = useCaptureStore((s) => s.isRecording);
   const recordingRemaining = useCaptureStore((s) => s.recordingRemaining);
+  const mirrorEnabled = useCameraStore((s) => s.mirrorEnabled);
+  const setMirrorEnabled = useCameraStore((s) => s.setMirrorEnabled);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
   const layout = layouts.find((item) => item.id === selectedLayoutId);
@@ -45,11 +56,13 @@ export function TryCameraPage() {
         maxTakes={maxTakes}
         requiredSlots={requiredSlots}
         countdownSeconds={countdownSeconds}
+        mirrorEnabled={mirrorEnabled}
         isCapturing={isCapturing || busy}
         isRecording={isRecording}
         recordingRemaining={recordingRemaining}
         onStartCamera={start}
         onCountdownChange={setCountdownSeconds}
+        onMirrorChange={setMirrorEnabled}
         onCapture={async (hooks) => {
           if (!videoRef.current) return;
           await takePhoto(videoRef.current, hooks);
@@ -57,7 +70,8 @@ export function TryCameraPage() {
         onRetake={retakeLastPhoto}
         onContinue={async () => {
           await persistCaptureSet();
-          router.push("/try/frame");
+          await loadFramesForSelectedLayout();
+          router.push("/try/select");
         }}
       />
     </PhotoboothLayout>

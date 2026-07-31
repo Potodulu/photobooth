@@ -6,10 +6,12 @@ type CameraState = {
   permission: CameraPermission;
   facingMode: "user" | "environment";
   isStreaming: boolean;
+  mirrorEnabled: boolean;
   error: string | null;
   setPermission: (permission: CameraPermission) => void;
   setFacingMode: (facingMode: "user" | "environment") => void;
   setStreaming: (isStreaming: boolean) => void;
+  setMirrorEnabled: (mirrorEnabled: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
 };
@@ -18,16 +20,19 @@ export const useCameraStore = create<CameraState>((set) => ({
   permission: "idle",
   facingMode: "user",
   isStreaming: false,
+  mirrorEnabled: true,
   error: null,
   setPermission: (permission) => set({ permission }),
   setFacingMode: (facingMode) => set({ facingMode }),
   setStreaming: (isStreaming) => set({ isStreaming }),
+  setMirrorEnabled: (mirrorEnabled) => set({ mirrorEnabled }),
   setError: (error) => set({ error }),
   reset: () =>
     set({
       permission: "idle",
       facingMode: "user",
       isStreaming: false,
+      mirrorEnabled: true,
       error: null,
     }),
 }));

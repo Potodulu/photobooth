@@ -9,7 +9,6 @@ const STEP_PATH: Record<TryStep, string> = {
   warning: "/try",
   layout: "/try/layout",
   camera: "/try/camera",
-  frame: "/try/frame",
   select: "/try/select",
   preview: "/try/preview",
 };
@@ -18,7 +17,6 @@ const STEP_ORDER: TryStep[] = [
   "warning",
   "layout",
   "camera",
-  "frame",
   "select",
   "preview",
 ];

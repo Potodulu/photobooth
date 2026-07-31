@@ -18,7 +18,10 @@ import {
   takePhoto,
   assignCaptureToSlot,
   clearSlotAssignment,
+  updateSlotPan,
   autoFillSlots,
+  downloadAsset,
+  collectPreviewAssets,
   type TakePhotoHooks,
 } from "@/features/photobooth/application";
 
@@ -79,9 +82,12 @@ export function usePhotoboothActions() {
     confirmFrame,
     assignCaptureToSlot,
     clearSlotAssignment,
+    updateSlotPan,
     autoFillSlots,
     confirmPhotoSelection,
     generatePreview: generatePreviewAction,
     downloadResultZip: downloadResultZipAction,
+    downloadAsset,
+    collectPreviewAssets,
   };
 }

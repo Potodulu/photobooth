@@ -18,6 +18,7 @@ type GeneratorState = {
   setSlotAssignments: (slotAssignments: SlotAssignment[]) => void;
   assignSlot: (slotId: string, captureId: string) => void;
   clearSlot: (slotId: string) => void;
+  updateSlotPan: (slotId: string, panX: number, panY: number) => void;
   setPreviewLiveUrl: (previewLiveUrl: string | null) => void;
   setOutputs: (outputs: {
     png: GeneratedBlob;
@@ -30,6 +31,10 @@ type GeneratorState = {
   setError: (error: string | null) => void;
   reset: () => void;
 };
+
+function clampPan(value: number) {
+  return Math.max(-1, Math.min(1, value));
+}
 
 export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   slotAssignments: [],
@@ -44,7 +49,9 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   setSlotAssignments: (slotAssignments) => set({ slotAssignments }),
   assignSlot: (slotId, captureId) => {
     const rest = get().slotAssignments.filter((item) => item.slotId !== slotId);
-    set({ slotAssignments: [...rest, { slotId, captureId }] });
+    set({
+      slotAssignments: [...rest, { slotId, captureId, panX: 0, panY: 0 }],
+    });
   },
   clearSlot: (slotId) =>
     set({
@@ -52,6 +59,15 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
         (item) => item.slotId !== slotId,
       ),
     }),
+  updateSlotPan: (slotId, panX, panY) => {
+    set({
+      slotAssignments: get().slotAssignments.map((item) =>
+        item.slotId === slotId
+          ? { ...item, panX: clampPan(panX), panY: clampPan(panY) }
+          : item,
+      ),
+    });
+  },
   setPreviewLiveUrl: (previewLiveUrl) => {
     const prev = get().previewLiveUrl;
     if (prev && prev !== previewLiveUrl) URL.revokeObjectURL(prev);

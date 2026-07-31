@@ -29,9 +29,11 @@ export class BrowserCameraAdapter {
 
 export function captureFrameFromVideo(
   video: HTMLVideoElement,
-  mimeType = "image/jpeg",
-  quality = 0.92,
+  options?: { mirrored?: boolean; mimeType?: string; quality?: number },
 ): Promise<{ blob: Blob; width: number; height: number }> {
+  const mirrored = options?.mirrored ?? false;
+  const mimeType = options?.mimeType ?? "image/jpeg";
+  const quality = options?.quality ?? 0.92;
   const width = video.videoWidth;
   const height = video.videoHeight;
   if (!width || !height) {
@@ -46,6 +48,10 @@ export function captureFrameFromVideo(
     return Promise.reject(new Error("Canvas unsupported"));
   }
 
+  if (mirrored) {
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
+  }
   ctx.drawImage(video, 0, 0, width, height);
 
   return new Promise((resolve, reject) => {
@@ -61,6 +67,46 @@ export function captureFrameFromVideo(
       quality,
     );
   });
+}
+
+/** Canvas stream that draws the video mirrored each frame for WYSIWYG clip recording. */
+export function createMirroredStream(
+  video: HTMLVideoElement,
+  fps = 30,
+): { stream: MediaStream; stop: () => void } {
+  const width = video.videoWidth || 1280;
+  const height = video.videoHeight || 720;
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Canvas unsupported");
+  }
+
+  let rafId = 0;
+  let stopped = false;
+
+  const draw = () => {
+    if (stopped) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    rafId = requestAnimationFrame(draw);
+  };
+  draw();
+
+  const stream = canvas.captureStream(fps);
+  return {
+    stream,
+    stop: () => {
+      stopped = true;
+      cancelAnimationFrame(rafId);
+      stream.getTracks().forEach((track) => track.stop());
+    },
+  };
 }
 
 function pickRecorderMime(): string | undefined {

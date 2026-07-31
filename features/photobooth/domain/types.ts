@@ -96,6 +96,10 @@ export type CaptureSet = {
 export type SlotAssignment = {
   slotId: string;
   captureId: string;
+  /** Horizontal pan within cover crop, -1..1, default 0 (center). */
+  panX?: number;
+  /** Vertical pan within cover crop, -1..1, default 0 (center). */
+  panY?: number;
 };
 
 export type GeneratedResult = {
@@ -119,10 +123,17 @@ export type GeneratedBlob = {
   fileName?: string;
 };
 
+export type CompositeSlotImage = {
+  slotId: string;
+  image: CanvasImageSource;
+  panX?: number;
+  panY?: number;
+};
+
 export type CompositeInput = {
   layout: Layout;
   frame: Frame | null;
-  slotImages: Array<{ slotId: string; image: CanvasImageSource }>;
+  slotImages: CompositeSlotImage[];
   filterId?: PhotoFilterId;
   overlayImage?: CanvasImageSource | null;
 };

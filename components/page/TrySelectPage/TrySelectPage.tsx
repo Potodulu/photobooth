@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
@@ -11,6 +12,7 @@ import {
 } from "@/features/photobooth/hooks";
 import {
   useCaptureStore,
+  useFrameStore,
   useGeneratorStore,
   useLayoutStore,
 } from "@/features/photobooth/stores";
@@ -21,8 +23,11 @@ export function TrySelectPage() {
   const {
     assignCaptureToSlot,
     clearSlotAssignment,
+    updateSlotPan,
     autoFillSlots,
     confirmPhotoSelection,
+    loadFramesForSelectedLayout,
+    selectFrame,
   } = usePhotoboothActions();
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
@@ -32,9 +37,15 @@ export function TrySelectPage() {
   const filterId = useCaptureStore((s) => s.filterId);
   const setFilterId = useCaptureStore((s) => s.setFilterId);
   const assignments = useGeneratorStore((s) => s.slotAssignments);
+  const frames = useFrameStore((s) => s.frames);
+  const selectedFrameId = useFrameStore((s) => s.selectedFrameId);
 
   useTryFlowGuard("select");
   useTryStepSync("select");
+
+  useEffect(() => {
+    void loadFramesForSelectedLayout();
+  }, [loadFramesForSelectedLayout]);
 
   if (!layout) {
     return (
@@ -48,13 +59,17 @@ export function TrySelectPage() {
     <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
       <PhotoPicker
         layout={layout}
+        frames={frames}
+        selectedFrameId={selectedFrameId}
         captures={captures}
         objectUrls={objectUrls}
         assignments={assignments}
         filterId={filterId}
         onFilterChange={setFilterId}
+        onSelectFrame={selectFrame}
         onAssign={assignCaptureToSlot}
         onClear={clearSlotAssignment}
+        onPanChange={updateSlotPan}
         onAutoFill={() => autoFillSlots(captures.map((item) => item.id))}
         onConfirm={() => {
           confirmPhotoSelection();
