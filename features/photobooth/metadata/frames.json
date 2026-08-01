@@ -154,5 +154,17 @@
     "backgroundColor": "#1E1E1E",
     "borderColor": "#1E1E1E",
     "borderWidth": 30
+  },
+  {
+    "id": "naruto-1",
+    "name": "Naruto 1",
+    "supportedLayoutIds": ["photostrip-2-slot"],
+    "preview": "frames/naruto-1/overlay.png",
+    "overlay": "frames/naruto-1/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/naruto-1/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
   }
 ]
