@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" fill="none">
-  <!-- classic dark corner marks; center transparent for photos -->
-  <path d="M24 24h56v8H32v48H24V24zm296 0h56v56h-8V32h-48v-8zM24 520h8v48h48v8H24v-56zm328 48v-56h8v56h-56v-8h48z" fill="#1A1A1A"/>
-  <rect x="16" y="16" width="368" height="568" rx="4" stroke="#1A1A1A" stroke-width="6" fill="none"/>
-</svg>
