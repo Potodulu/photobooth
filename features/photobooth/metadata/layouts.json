@@ -18,5 +18,23 @@
     "padding": 30,
     "background": "#ffffff",
     "compatibleFrameIds": [""]
+  },
+  {
+    "id": "photostrip-2-slot",
+    "name": "Photostrip 2 Slot",
+    "type": "paper",
+    "preview": "layouts/photostrip-2-slot.svg",
+    "paperSize": { "widthIn": 2, "heightIn": 6 },
+    "dpi": 300,
+    "canvasSize": { "width": 600, "height": 1800 },
+    "slots": [
+      { "id": "slot-1", "x": 50, "y": 140, "width": 500, "height": 667 },
+      { "id": "slot-2", "x": 50, "y": 847, "width": 500, "height": 667 }
+    ],
+    "aspectRatio": "3:4",
+    "outputSize": { "width": 600, "height": 1800 },
+    "padding": 30,
+    "background": "#ffffff",
+    "compatibleFrameIds": [""]
   }
 ]
