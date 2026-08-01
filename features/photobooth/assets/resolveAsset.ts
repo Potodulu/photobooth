@@ -1,5 +1,6 @@
 // Layout assets
 import photostrip4slot from "./layouts/photostrip-4-slot.svg";
+import photostrip2slot from "./layouts/photostrip-2-slot.svg";
 
 // Frame assets
 import potoduluOriWhiteOverlay from "./frames/potodulu-ori-white/overlay.png";
@@ -16,6 +17,7 @@ import stripClassicPinkOverlay from "./frames/strip-classic-pink/overlay.png";
 import stripClassicSageOverlay from "./frames/strip-classic-sage/overlay.png";
 import stripClassicVanillaOverlay from "./frames/strip-classic-vanilla/overlay.png";
 import stripClassicWhiteOverlay from "./frames/strip-classic-white/overlay.png";
+import stripNaruto1Overlay from "./frames/naruto-1/overlay.png";
 
 type AssetModule = string | { src: string };
 
@@ -26,6 +28,7 @@ function toUrl(mod: AssetModule): string {
 const ASSETS: Record<string, string> = {
   // Layout assets
   "layouts/photostrip-4-slot.svg": toUrl(photostrip4slot),
+  "layouts/photostrip-2-slot.svg": toUrl(photostrip2slot),
 
   // Frame assets
   "frames/potodulu-ori-white/overlay.png": toUrl(potoduluOriWhiteOverlay),
@@ -44,6 +47,7 @@ const ASSETS: Record<string, string> = {
   "frames/strip-classic-sage/overlay.png": toUrl(stripClassicSageOverlay),
   "frames/strip-classic-vanilla/overlay.png": toUrl(stripClassicVanillaOverlay),
   "frames/strip-classic-white/overlay.png": toUrl(stripClassicWhiteOverlay),
+  "frames/naruto-1/overlay.png": toUrl(stripNaruto1Overlay),
 };
 
 /** Resolve a relative key under features/photobooth/assets to a bundler URL. */
