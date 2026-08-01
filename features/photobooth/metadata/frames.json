@@ -1,59 +1,5 @@
 [
   {
-    "id": "classic",
-    "name": "Classic",
-    "supportedLayoutIds": [
-      "single-1",
-      "strip-2",
-      "grid-4",
-      "strip-2r",
-      "strip-4r"
-    ],
-    "preview": "frames/classic/overlay.svg",
-    "overlay": "frames/classic/overlay.png",
-    "mask": null,
-    "thumbnail": "frames/classic/overlay.svg",
-    "backgroundColor": "#1a1a1a",
-    "borderColor": "#1a1a1a",
-    "borderWidth": 24
-  },
-  {
-    "id": "minimal",
-    "name": "Minimal",
-    "supportedLayoutIds": [
-      "single-1",
-      "strip-2",
-      "grid-4",
-      "strip-2r",
-      "strip-4r"
-    ],
-    "preview": "frames/minimal/overlay.svg",
-    "overlay": "frames/minimal/overlay.png",
-    "mask": null,
-    "thumbnail": "frames/minimal/overlay.svg",
-    "backgroundColor": "#f7f4ef",
-    "borderColor": "#1a1a1a",
-    "borderWidth": 8
-  },
-  {
-    "id": "birthday",
-    "name": "Birthday",
-    "supportedLayoutIds": [
-      "single-1",
-      "strip-2",
-      "grid-4",
-      "strip-2r",
-      "strip-4r"
-    ],
-    "preview": "frames/birthday/overlay.svg",
-    "overlay": "frames/birthday/overlay.png",
-    "mask": null,
-    "thumbnail": "frames/birthday/overlay.svg",
-    "backgroundColor": "#f5d76e",
-    "borderColor": "#f07167",
-    "borderWidth": 32
-  },
-  {
     "id": "potodulu-ori-white",
     "name": "Potodulu Ori White",
     "supportedLayoutIds": ["photostrip-4-slot"],
@@ -61,8 +7,152 @@
     "overlay": "frames/potodulu-ori-white/overlay.png",
     "mask": null,
     "thumbnail": "frames/potodulu-ori-white/overlay.svg",
+    "backgroundColor": "#1E1E1E",
+    "borderColor": "#1E1E1E",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-black",
+    "name": "Strip Classic Black",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-black/overlay.png",
+    "overlay": "frames/strip-classic-black/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-black/overlay.png",
     "backgroundColor": "#FFFEFE",
     "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-blue",
+    "name": "Strip Classic Blue",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-blue/overlay.png",
+    "overlay": "frames/strip-classic-blue/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-blue/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-cream",
+    "name": "Strip Classic Cream",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-cream/overlay.png",
+    "overlay": "frames/strip-classic-cream/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-cream/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-grey",
+    "name": "Strip Classic Grey",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-grey/overlay.png",
+    "overlay": "frames/strip-classic-grey/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-grey/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-lavender",
+    "name": "Strip Classic Lavender",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-lavender/overlay.png",
+    "overlay": "frames/strip-classic-lavender/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-lavender/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-mint",
+    "name": "Strip Classic Mint",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-mint/overlay.png",
+    "overlay": "frames/strip-classic-mint/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-mint/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-mist",
+    "name": "Strip Classic Mist",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-mist/overlay.png",
+    "overlay": "frames/strip-classic-mist/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-mist/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-peach",
+    "name": "Strip Classic Peach",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-peach/overlay.png",
+    "overlay": "frames/strip-classic-peach/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-peach/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-pink",
+    "name": "Strip Classic Pink",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-pink/overlay.png",
+    "overlay": "frames/strip-classic-pink/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-pink/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-sage",
+    "name": "Strip Classic Sage",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-sage/overlay.png",
+    "overlay": "frames/strip-classic-sage/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-sage/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-vanilla",
+    "name": "Strip Classic Vanilla",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-vanilla/overlay.png",
+    "overlay": "frames/strip-classic-vanilla/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-vanilla/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
+  },
+  {
+    "id": "strip-classic-white",
+    "name": "Strip Classic White",
+    "supportedLayoutIds": ["photostrip-4-slot"],
+    "preview": "frames/strip-classic-white/overlay.png",
+    "overlay": "frames/strip-classic-white/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/strip-classic-white/overlay.png",
+    "backgroundColor": "#1E1E1E",
+    "borderColor": "#1E1E1E",
     "borderWidth": 30
   }
 ]

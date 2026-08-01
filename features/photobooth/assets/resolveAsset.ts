@@ -1,17 +1,21 @@
-import single1 from "./layouts/single-1.svg";
-import strip2 from "./layouts/strip-2.svg";
-import grid4 from "./layouts/grid-4.svg";
-import strip2r from "./layouts/strip-2r.svg";
-import strip4r from "./layouts/strip-4r.svg";
+// Layout assets
 import photostrip4slot from "./layouts/photostrip-4-slot.svg";
-import classicOverlay from "./frames/classic/overlay.png";
-import minimalOverlay from "./frames/minimal/overlay.png";
-import birthdayOverlay from "./frames/birthday/overlay.png";
-import classicPreview from "./frames/classic/overlay.svg";
-import minimalPreview from "./frames/minimal/overlay.svg";
-import birthdayPreview from "./frames/birthday/overlay.svg";
+
+// Frame assets
 import potoduluOriWhiteOverlay from "./frames/potodulu-ori-white/overlay.png";
 import potoduluOriWhitePreview from "./frames/potodulu-ori-white/overlay.svg";
+import stripClassicBlackOverlay from "./frames/strip-classic-black/overlay.png";
+import stripClassicBlueOverlay from "./frames/strip-classic-blue/overlay.png";
+import stripClassicCreamOverlay from "./frames/strip-classic-cream/overlay.png";
+import stripClassicGreyOverlay from "./frames/strip-classic-grey/overlay.png";
+import stripClassicLavenderOverlay from "./frames/strip-classic-lavender/overlay.png";
+import stripClassicMintOverlay from "./frames/strip-classic-mint/overlay.png";
+import stripClassicMistOverlay from "./frames/strip-classic-mist/overlay.png";
+import stripClassicPeachOverlay from "./frames/strip-classic-peach/overlay.png";
+import stripClassicPinkOverlay from "./frames/strip-classic-pink/overlay.png";
+import stripClassicSageOverlay from "./frames/strip-classic-sage/overlay.png";
+import stripClassicVanillaOverlay from "./frames/strip-classic-vanilla/overlay.png";
+import stripClassicWhiteOverlay from "./frames/strip-classic-white/overlay.png";
 
 type AssetModule = string | { src: string };
 
@@ -20,20 +24,26 @@ function toUrl(mod: AssetModule): string {
 }
 
 const ASSETS: Record<string, string> = {
-  "layouts/single-1.svg": toUrl(single1),
-  "layouts/strip-2.svg": toUrl(strip2),
-  "layouts/grid-4.svg": toUrl(grid4),
-  "layouts/strip-2r.svg": toUrl(strip2r),
-  "layouts/strip-4r.svg": toUrl(strip4r),
+  // Layout assets
   "layouts/photostrip-4-slot.svg": toUrl(photostrip4slot),
-  "frames/classic/overlay.png": toUrl(classicOverlay),
-  "frames/minimal/overlay.png": toUrl(minimalOverlay),
-  "frames/birthday/overlay.png": toUrl(birthdayOverlay),
-  "frames/classic/overlay.svg": toUrl(classicPreview),
-  "frames/minimal/overlay.svg": toUrl(minimalPreview),
-  "frames/birthday/overlay.svg": toUrl(birthdayPreview),
+
+  // Frame assets
   "frames/potodulu-ori-white/overlay.png": toUrl(potoduluOriWhiteOverlay),
   "frames/potodulu-ori-white/overlay.svg": toUrl(potoduluOriWhitePreview),
+  "frames/strip-classic-black/overlay.png": toUrl(stripClassicBlackOverlay),
+  "frames/strip-classic-blue/overlay.png": toUrl(stripClassicBlueOverlay),
+  "frames/strip-classic-cream/overlay.png": toUrl(stripClassicCreamOverlay),
+  "frames/strip-classic-grey/overlay.png": toUrl(stripClassicGreyOverlay),
+  "frames/strip-classic-lavender/overlay.png": toUrl(
+    stripClassicLavenderOverlay,
+  ),
+  "frames/strip-classic-mint/overlay.png": toUrl(stripClassicMintOverlay),
+  "frames/strip-classic-mist/overlay.png": toUrl(stripClassicMistOverlay),
+  "frames/strip-classic-peach/overlay.png": toUrl(stripClassicPeachOverlay),
+  "frames/strip-classic-pink/overlay.png": toUrl(stripClassicPinkOverlay),
+  "frames/strip-classic-sage/overlay.png": toUrl(stripClassicSageOverlay),
+  "frames/strip-classic-vanilla/overlay.png": toUrl(stripClassicVanillaOverlay),
+  "frames/strip-classic-white/overlay.png": toUrl(stripClassicWhiteOverlay),
 };
 
 /** Resolve a relative key under features/photobooth/assets to a bundler URL. */

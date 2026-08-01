@@ -55,23 +55,18 @@ assert.equal(PRINT_DPI, 300);
 
 assert.ok(layouts.every((layout) => !layout.preview.startsWith("/")));
 
-assert.equal(frames.length, 4);
+assert.equal(frames.length, 13);
 assert.ok(frames.every((frame) => frame.supportedLayoutIds.length > 0));
 assert.ok(frames.every((frame) => frame.overlay?.endsWith(".png")));
 assert.ok(frames.every((frame) => frame.overlay?.startsWith("frames/")));
 assert.ok(
-  frames
-    .filter((frame) => frame.id !== "potodulu-ori-white")
-    .every((frame) =>
-      ["strip-2r", "strip-4r"].every((id) =>
-        frame.supportedLayoutIds.includes(id),
-      ),
-    ),
+  frames.every((frame) =>
+    frame.supportedLayoutIds.includes("photostrip-4-slot"),
+  ),
 );
-assert.ok(
-  frames
-    .find((frame) => frame.id === "potodulu-ori-white")
-    ?.supportedLayoutIds.includes("photostrip-4-slot"),
+assert.equal(
+  frames.filter((frame) => frame.id.startsWith("strip-classic-")).length,
+  12,
 );
 
 assert.equal(experiences.length, 1);
