@@ -1,3 +1,5 @@
 <svg width="600" height="1800" viewBox="0 0 600 1800" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M600 1800H0V0H600V1800ZM50 847V1514H550V847H50ZM50 807H550V140H50V807Z" fill="white"/>
+<rect width="600" height="1800" fill="white"/>
+<rect x="51.5" y="141.5" width="497" height="664" fill="#F0EFEF" stroke="#838383" stroke-width="3"/>
+<rect x="51.5" y="848.5" width="497" height="664" fill="#F0EFEF" stroke="#838383" stroke-width="3"/>
 </svg>
