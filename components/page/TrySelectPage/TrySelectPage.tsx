@@ -23,6 +23,7 @@ export function TrySelectPage() {
   const {
     assignCaptureToSlot,
     clearSlotAssignment,
+    resetSlotAssignments,
     updateSlotPan,
     autoFillSlots,
     confirmPhotoSelection,
@@ -56,8 +57,10 @@ export function TrySelectPage() {
   }
 
   return (
-    <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
+    <PhotoboothLayout>
       <PhotoPicker
+        title={t("title")}
+        subtitle={t("subtitle")}
         layout={layout}
         frames={frames}
         selectedFrameId={selectedFrameId}
@@ -70,6 +73,7 @@ export function TrySelectPage() {
         onAssign={assignCaptureToSlot}
         onClear={clearSlotAssignment}
         onPanChange={updateSlotPan}
+        onReset={resetSlotAssignments}
         onAutoFill={() => autoFillSlots(captures.map((item) => item.id))}
         onConfirm={() => {
           confirmPhotoSelection();

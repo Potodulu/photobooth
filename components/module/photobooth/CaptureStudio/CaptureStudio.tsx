@@ -134,39 +134,41 @@ export function CaptureStudio({
         )}
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm font-semibold">{t("countdownLabel")}</p>
-        <p className="text-muted-foreground text-xs">{t("countdownHint")}</p>
-        <div className="flex flex-wrap gap-2">
-          {COUNTDOWN_OPTIONS.map((seconds) => (
-            <Button
-              key={seconds}
-              type="button"
-              size="sm"
-              radius="full"
-              variant={countdownSeconds === seconds ? "solid" : "outline"}
-              color={countdownSeconds === seconds ? "primary" : "neutral"}
-              disabled={busy}
-              aria-pressed={countdownSeconds === seconds}
-              onClick={() => onCountdownChange(seconds)}
-            >
-              {t("countdownOption", { seconds })}
-            </Button>
-          ))}
+      <div className="flex w-full flex-col items-start justify-between gap-6 md:flex-row">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold">{t("countdownLabel")}</p>
+          <p className="text-muted-foreground text-xs">{t("countdownHint")}</p>
+          <div className="flex flex-wrap gap-2">
+            {COUNTDOWN_OPTIONS.map((seconds) => (
+              <Button
+                key={seconds}
+                type="button"
+                size="sm"
+                radius="full"
+                variant={countdownSeconds === seconds ? "solid" : "outline"}
+                color={countdownSeconds === seconds ? "primary" : "neutral"}
+                disabled={busy}
+                aria-pressed={countdownSeconds === seconds}
+                onClick={() => onCountdownChange(seconds)}
+              >
+                {t("countdownOption", { seconds })}
+              </Button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <p className="text-sm font-semibold">{t("mirrorLabel")}</p>
-          <p className="text-muted-foreground text-xs">{t("mirrorHint")}</p>
+        <div className="flex flex-col flex-wrap items-start justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-sm font-semibold">{t("mirrorLabel")}</p>
+            <p className="text-muted-foreground text-xs">{t("mirrorHint")}</p>
+          </div>
+          <Switch
+            checked={mirrorEnabled}
+            disabled={busy}
+            onCheckedChange={onMirrorChange}
+            aria-label={t("mirrorLabel")}
+          />
         </div>
-        <Switch
-          checked={mirrorEnabled}
-          disabled={busy}
-          onCheckedChange={onMirrorChange}
-          aria-label={t("mirrorLabel")}
-        />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">

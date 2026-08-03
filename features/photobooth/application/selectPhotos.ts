@@ -13,6 +13,10 @@ export function clearSlotAssignment(slotId: string) {
   useGeneratorStore.getState().clearSlot(slotId);
 }
 
+export function resetSlotAssignments() {
+  useGeneratorStore.getState().setSlotAssignments([]);
+}
+
 export function updateSlotPan(slotId: string, panX: number, panY: number) {
   useGeneratorStore.getState().updateSlotPan(slotId, panX, panY);
 }

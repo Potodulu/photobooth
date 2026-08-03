@@ -123,6 +123,7 @@
     "progress": "{current} / {total} slot",
     "autoFill": "Isi otomatis",
     "continue": "Buat preview",
+    "reset": "Reset",
     "clear": "Hapus",
     "emptySlot": "Kosong",
     "pickHint": "Ketuk foto untuk mengisi slot yang aktif.",
@@ -133,7 +134,7 @@
     "filters": "Filter foto (hanya PNG)",
     "filtersHint": "Satu filter untuk semua foto di hasil photobooth still.",
     "filter": {
-      "none": "Tanpa",
+      "none": "Tidak Pakai",
       "grayscale": "Abu",
       "sepia": "Sepia",
       "contrast": "Kontras",

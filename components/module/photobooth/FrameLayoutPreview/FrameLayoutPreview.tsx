@@ -100,11 +100,16 @@ export function FrameLayoutPreview({
     }
   }, []);
 
+  // Width from max-height × aspect so the box doesn't collapse (slots are absolute).
+  const maxPreviewHeight = "calc(100dvh - 8rem)";
+
   return (
     <div
-      className="border-border shadow-neo-md relative mx-auto w-full max-w-md overflow-hidden rounded-[var(--radius-xl)] border-2 lg:max-w-none"
+      className="border-border shadow-neo-md relative max-w-full overflow-hidden rounded-[var(--radius-xl)] border-2"
       style={{
         aspectRatio: `${outputWidth} / ${outputHeight}`,
+        width: `min(100%, calc(${maxPreviewHeight} * ${outputWidth} / ${outputHeight}))`,
+        maxHeight: maxPreviewHeight,
         backgroundColor: frame?.backgroundColor ?? layout.background,
       }}
     >
@@ -171,7 +176,13 @@ export function FrameLayoutPreview({
             {assignment && onClearSlot && isActive ? (
               <button
                 type="button"
-                className="bg-background/90 absolute top-1 right-1 z-20 rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                className="bg-background/90 absolute top-1 right-1 z-30 rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                onPointerDown={(event) => {
+                  event.stopPropagation();
+                }}
+                onPointerUp={(event) => {
+                  event.stopPropagation();
+                }}
                 onClick={(event) => {
                   event.stopPropagation();
                   onClearSlot(slot.id);
