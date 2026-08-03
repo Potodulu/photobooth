@@ -4,21 +4,33 @@
     "description": "A fast, playful photobooth experience built for online and offline booths."
   },
   "Nav": {
-    "cta": "Try Now"
+    "cta": "Start Online Session"
   },
   "Footer": {
     "tagline": "Photo experiences for online, offline, and remote group booths."
   },
   "Hero": {
+    "eyebrow": "Photo experience",
     "brand": "Potodulu",
-    "headline": "Try Online Photobooth",
-    "supporting": "Guest demo in your browser. No account required. Temporary browser storage only.",
-    "primaryCta": "Try Now",
-    "secondaryCta": "See features"
+    "headline": "Capture moments, right in your browser",
+    "supporting": "A fast, fun online photobooth. No install — open, snap, share.",
+    "primaryCta": "Start Online Session",
+    "secondaryCta": "See features",
+    "badges": {
+      "online": "Online Session",
+      "browser": "Browser-based",
+      "noAccount": "No Account",
+      "instant": "Start Instantly"
+    },
+    "preview": {
+      "badge": "Online Session",
+      "tagline": "Smile. Capture. Share.",
+      "sticker": "Snap away!"
+    }
   },
   "Features": {
-    "title": "Everything a photo session needs",
-    "subtitle": "From countdown to share-ready output — without friction.",
+    "title": "Featured capabilities",
+    "subtitle": "Everything you need for a memorable photo session — from capture to share-ready output.",
     "items": {
       "capture": {
         "title": "Fast capture",
@@ -26,40 +38,45 @@
       },
       "frame": {
         "title": "Frames & layouts",
-        "description": "Flexible frame composition for a consistent brand experience."
+        "description": "Pick layouts and frames for the moment. Flexible composition, polished results."
       },
-      "share": {
-        "title": "Share-ready output",
-        "description": "Results ready to download, print, or push to the session gallery."
+      "livePhoto": {
+        "title": "Live photo & GIF",
+        "description": "Photobooth output as PNG, animated GIF, and live photo MP4 — ready to share."
+      },
+      "filters": {
+        "title": "Photo filters",
+        "description": "One tap for grayscale, sepia, vivid, warm, and more."
+      },
+      "output": {
+        "title": "Download & share",
+        "description": "Download each asset or everything at once — straight from the browser."
       }
     }
   },
   "Experience": {
-    "title": "Online & Offline, one experience",
-    "subtitle": "Experience-driven architecture — the mode changes, the product feel stays.",
-    "online": {
-      "title": "Online Booth",
-      "description": "Remote sessions in the browser. Device cameras become the booth."
+    "title": "Photobooth modes",
+    "subtitle": "One platform, many ways to shoot. Start with online sessions today.",
+    "available": "Available",
+    "soon": "Soon",
+    "startSession": "Start Online Session",
+    "onlineSingle": {
+      "title": "Online Single Session",
+      "description": "Solo photobooth in the browser. Your device camera is the booth — no install, start instantly."
     },
     "offline": {
       "title": "Offline Booth",
-      "description": "Built for physical booth hardware. Local flow stays fast when the network dips."
+      "description": "Physical booth for events. Local flow stays fast even when the network dips."
+    },
+    "remoteGroup": {
+      "title": "Remote Group Booth",
+      "description": "Shoot together from afar. Everyone joins the same session, results sync instantly."
     }
   },
   "Cta": {
-    "title": "Ready to try the guest demo?",
-    "subtitle": "Browser only. No account. Temporary storage inside your device.",
-    "button": "Try Now"
-  },
-  "Demo": {
-    "title": "Guest Demo",
-    "subtitle": "Validate the full online photobooth flow without a backend.",
-    "badges": {
-      "guest": "Guest Demo",
-      "browser": "Browser Only",
-      "noAccount": "No Account Required",
-      "temporary": "Temporary Browser Storage"
-    }
+    "title": "Ready to snap?",
+    "subtitle": "Open an online photobooth session now — right from your browser.",
+    "button": "Start Online Session"
   },
   "TryWarning": {
     "pageTitle": "Before you start",

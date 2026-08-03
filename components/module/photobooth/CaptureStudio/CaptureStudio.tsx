@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { CameraPreview } from "@/components/shared/CameraPreview";
 import { Countdown } from "@/components/shared/Countdown";
+import { CropHintOverlay } from "@/components/shared/CropHintOverlay";
 import { FlashOverlay } from "@/components/shared/FlashOverlay";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -14,6 +15,7 @@ import {
   type CountdownSeconds,
 } from "@/features/photobooth/domain";
 import type { TakePhotoHooks } from "@/features/photobooth/application/capturePhoto";
+import { useLayoutStore } from "@/features/photobooth/stores";
 import { cn } from "@/libs/cn";
 
 const SHOW_RECORDING_INDICATOR = false;
@@ -64,6 +66,13 @@ export function CaptureStudio({
   const t = useTranslations("TryCamera");
   const [count, setCount] = useState<number | null>(null);
   const [flash, setFlash] = useState(false);
+  const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
+  const layouts = useLayoutStore((s) => s.layouts);
+  const layout = layouts.find((item) => item.id === selectedLayoutId);
+  const referenceSlot = layout?.slots[0];
+  const cropAspectRatio = referenceSlot
+    ? referenceSlot.width / referenceSlot.height
+    : undefined;
 
   const runCapture = async () => {
     if (
@@ -90,6 +99,13 @@ export function CaptureStudio({
         {permission === "granted" ? (
           <>
             <CameraPreview videoRef={videoRef} mirrored={mirrorEnabled} />
+            {cropAspectRatio ? (
+              <CropHintOverlay
+                videoRef={videoRef}
+                aspectRatio={cropAspectRatio}
+                className="rounded-[var(--radius-xl)]"
+              />
+            ) : null}
             <Countdown value={count} />
             {SHOW_RECORDING_INDICATOR &&
             isRecording &&

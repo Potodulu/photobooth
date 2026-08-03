@@ -18,11 +18,25 @@ type LiveInput = CompositeInput & {
   durationMs?: number;
 };
 
+/** Pick Baseline AVC codec level from macroblock-aligned coded area. */
+function pickAvcCodecString(width: number, height: number): string {
+  const codedArea = Math.ceil(width / 16) * 16 * Math.ceil(height / 16) * 16;
+  if (codedArea <= 921_600) return "avc1.42001f"; // Level 3.1
+  if (codedArea <= 2_097_152) return "avc1.420028"; // Level 4.0
+  if (codedArea <= 2_228_224) return "avc1.42002a"; // Level 4.2
+  if (codedArea <= 5_652_480) return "avc1.420032"; // Level 5.0
+  return "avc1.420034"; // Level 5.2
+}
+
+function pickBitrate(width: number, height: number, fps: number): number {
+  return Math.min(8_000_000, Math.round((width * height * fps) / 10));
+}
+
 async function encodeWithMp4Muxer(
   canvas: HTMLCanvasElement,
   drawFrame: (timeMs: number) => void,
   durationMs: number,
-  fps = 10,
+  fps = 30,
 ): Promise<Blob> {
   const width = canvas.width;
   const height = canvas.height;
@@ -45,25 +59,37 @@ async function encodeWithMp4Muxer(
   });
 
   encoder.configure({
-    codec: "avc1.42001f",
+    codec: pickAvcCodecString(width, height),
     width,
     height,
-    bitrate: 2_000_000,
+    bitrate: pickBitrate(width, height, fps),
     framerate: fps,
   });
 
   const frameInterval = 1000 / fps;
-  const totalFrames = Math.max(1, Math.round(durationMs / frameInterval));
+  const started = performance.now();
+  let frameIndex = 0;
 
-  for (let i = 0; i < totalFrames; i += 1) {
-    const timeMs = i * frameInterval;
-    drawFrame(timeMs);
-    const frame = new VideoFrame(canvas, {
-      timestamp: timeMs * 1000,
-    });
-    encoder.encode(frame, { keyFrame: i % 10 === 0 });
-    frame.close();
-  }
+  await new Promise<void>((resolve) => {
+    const tick = () => {
+      const elapsed = performance.now() - started;
+      if (elapsed >= durationMs) {
+        resolve();
+        return;
+      }
+      drawFrame(elapsed);
+      requestAnimationFrame(() => {
+        const frame = new VideoFrame(canvas, {
+          timestamp: elapsed * 1000,
+        });
+        encoder.encode(frame, { keyFrame: frameIndex % fps === 0 });
+        frame.close();
+        frameIndex += 1;
+        window.setTimeout(tick, frameInterval);
+      });
+    };
+    tick();
+  });
 
   await encoder.flush();
   muxer.finalize();
@@ -74,7 +100,7 @@ async function encodeWithMediaRecorder(
   canvas: HTMLCanvasElement,
   drawFrame: (timeMs: number) => void,
   durationMs: number,
-  fps = 10,
+  fps = 30,
 ): Promise<Blob | null> {
   const stream = canvas.captureStream(fps);
   const mimeCandidates = ["video/mp4;codecs=avc1", "video/mp4"];
@@ -183,16 +209,23 @@ export class LivePhotoOutputGenerator implements OutputGenerator {
     // Seed first frame
     drawFrame(0);
 
-    let blob: Blob | null = null;
-    if (typeof VideoEncoder !== "undefined") {
+    let blob: Blob | null = await encodeWithMediaRecorder(
+      canvas,
+      drawFrame,
+      durationMs,
+    );
+    if (!blob && typeof VideoEncoder !== "undefined") {
+      for (const item of videos) {
+        if (item.video) {
+          item.video.currentTime = 0;
+          await item.video.play().catch(() => undefined);
+        }
+      }
       try {
         blob = await encodeWithMp4Muxer(canvas, drawFrame, durationMs);
       } catch {
         blob = null;
       }
-    }
-    if (!blob) {
-      blob = await encodeWithMediaRecorder(canvas, drawFrame, durationMs);
     }
     if (!blob) {
       // Last resort: single-frame “video” still exported as mp4 via muxer stills fail —

@@ -11,24 +11,39 @@ export type GifCompositeInput = CompositeInput & {
   sampleCount?: number;
 };
 
+function waitForVideoFrame(video: HTMLVideoElement): Promise<void> {
+  if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    const onReady = () => {
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        video.removeEventListener("loadeddata", onReady);
+        video.removeEventListener("seeked", onReady);
+        resolve();
+      }
+    };
+    video.addEventListener("loadeddata", onReady);
+    video.addEventListener("seeked", onReady);
+  });
+}
+
 function seekVideo(video: HTMLVideoElement, time: number): Promise<void> {
+  const target = Math.min(
+    Math.max(0, time),
+    Number.isFinite(video.duration) ? Math.max(0, video.duration - 0.05) : time,
+  );
+
+  if (Math.abs(video.currentTime - target) < 0.02) {
+    return waitForVideoFrame(video);
+  }
+
   return new Promise((resolve) => {
     const onSeeked = () => {
       video.removeEventListener("seeked", onSeeked);
-      resolve();
+      void waitForVideoFrame(video).then(resolve);
     };
     video.addEventListener("seeked", onSeeked);
-    const target = Math.min(
-      Math.max(0, time),
-      Number.isFinite(video.duration)
-        ? Math.max(0, video.duration - 0.05)
-        : time,
-    );
-    if (Math.abs(video.currentTime - target) < 0.02) {
-      video.removeEventListener("seeked", onSeeked);
-      resolve();
-      return;
-    }
     video.currentTime = target;
   });
 }
@@ -60,6 +75,10 @@ export class GifOutputGenerator implements OutputGenerator {
     }
     if (duration <= 0) duration = 1;
 
+    for (const entry of slotVideos) {
+      if (entry.video) await seekVideo(entry.video, 0);
+    }
+
     for (let i = 0; i < sampleCount; i += 1) {
       const t =
         sampleCount === 1
@@ -73,6 +92,14 @@ export class GifOutputGenerator implements OutputGenerator {
             (item) => item.slotId === slot.id,
           );
           if (videoEntry?.video) {
+            if (i === 0 && stillEntry?.image) {
+              return {
+                slotId: slot.id,
+                image: stillEntry.image,
+                panX: stillEntry.panX ?? 0,
+                panY: stillEntry.panY ?? 0,
+              };
+            }
             await seekVideo(videoEntry.video, t);
             return {
               slotId: slot.id,

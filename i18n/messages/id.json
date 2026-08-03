@@ -4,62 +4,79 @@
     "description": "Pengalaman photobooth online & offline yang cepat, playful, dan siap dipamerkan."
   },
   "Nav": {
-    "cta": "Coba Sekarang"
+    "cta": "Mulai Sesi Online"
   },
   "Footer": {
     "tagline": "Photo experience untuk booth online, offline, dan remote group."
   },
   "Hero": {
+    "eyebrow": "Photo experience",
     "brand": "Potodulu",
-    "headline": "Coba Online Photobooth",
-    "supporting": "Demo tamu di browser. Tanpa akun. Penyimpanan sementara di browser saja.",
-    "primaryCta": "Coba Sekarang",
-    "secondaryCta": "Lihat fitur"
+    "headline": "Abadikan momen, langsung dari browser",
+    "supporting": "Photobooth online yang cepat dan fun. Tanpa instalasi — buka, potoin, share.",
+    "primaryCta": "Mulai Sesi Online",
+    "secondaryCta": "Lihat fitur",
+    "badges": {
+      "online": "Sesi Online",
+      "browser": "Langsung di Browser",
+      "noAccount": "Tanpa Akun",
+      "instant": "Langsung Pakai"
+    },
+    "preview": {
+      "badge": "Online Session",
+      "tagline": "Smile. Capture. Share.",
+      "sticker": "Potoin dulu!"
+    }
   },
   "Features": {
-    "title": "Semua yang dibutuhkan sesi foto",
-    "subtitle": "Dari countdown sampai hasil siap share — tanpa ribet.",
+    "title": "Fitur unggulan",
+    "subtitle": "Semua yang kamu butuhkan untuk sesi foto yang seru dan memorable.",
     "items": {
       "capture": {
         "title": "Capture cepat",
-        "description": "Preview live, countdown mulus, dan trigger yang responsif di layar sentuh."
+        "description": "Preview live, countdown mulus, dan trigger responsif — siap untuk layar sentuh."
       },
       "frame": {
         "title": "Frame & layout",
-        "description": "Komposisi frame yang fleksibel untuk pengalaman brand yang konsisten."
+        "description": "Pilih layout dan frame yang pas buat momenmu, dengan komposisi yang rapi."
       },
-      "share": {
-        "title": "Output siap share",
-        "description": "Hasil langsung siap unduh, print, atau dikirim ke galeri sesi."
+      "livePhoto": {
+        "title": "Live photo & GIF",
+        "description": "Hasil photobooth dalam PNG, GIF animasi, dan live photo MP4 — siap dibagikan."
+      },
+      "filters": {
+        "title": "Filter foto",
+        "description": "Satu tap untuk gaya abu-abu, sepia, vivid, dan filter hangat lainnya."
+      },
+      "output": {
+        "title": "Unduh & share",
+        "description": "Semua aset siap unduh per file atau sekaligus — langsung dari browser."
       }
     }
   },
   "Experience": {
-    "title": "Online & Offline, satu experience",
-    "subtitle": "Arsitektur experience-driven — mode berubah, rasa produk tetap sama.",
-    "online": {
-      "title": "Online Booth",
-      "description": "Sesi jarak jauh lewat browser. Kamera perangkat jadi booth, tanpa instalasi berat."
+    "title": "Mode sesi foto",
+    "subtitle": "Satu platform, berbagai cara menikmati photobooth.",
+    "available": "Tersedia",
+    "soon": "Soon",
+    "startSession": "Mulai Sesi Online",
+    "onlineSingle": {
+      "title": "Online Single Session",
+      "description": "Sesi photobooth solo lewat browser. Kamera perangkatmu jadi booth — tanpa instalasi, langsung pakai."
     },
     "offline": {
       "title": "Offline Booth",
-      "description": "Siap untuk perangkat booth fisik. Alur lokal tetap cepat meski jaringan goyah."
+      "description": "Untuk perangkat booth fisik. Alur lokal tetap cepat meski jaringan goyah."
+    },
+    "remoteGroup": {
+      "title": "Remote Group Booth",
+      "description": "Foto bareng dari jarak jauh — semua peserta join sesi yang sama secara real-time."
     }
   },
   "Cta": {
-    "title": "Siap coba demo tamu?",
-    "subtitle": "Hanya di browser. Tanpa akun. Penyimpanan sementara di perangkatmu.",
-    "button": "Coba Sekarang"
-  },
-  "Demo": {
-    "title": "Demo Tamu",
-    "subtitle": "Validasi alur online photobooth lengkap tanpa backend.",
-    "badges": {
-      "guest": "Demo Tamu",
-      "browser": "Browser Only",
-      "noAccount": "Tanpa Akun",
-      "temporary": "Penyimpanan Sementara"
-    }
+    "title": "Yuk mulai foto",
+    "subtitle": "Buka sesi online photobooth sekarang — langsung dari browser kamu.",
+    "button": "Mulai Sesi Online"
   },
   "TryWarning": {
     "pageTitle": "Sebelum mulai",
