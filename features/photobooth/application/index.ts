@@ -14,6 +14,7 @@ export {
 export {
   assignCaptureToSlot,
   clearSlotAssignment,
+  resetSlotAssignments,
   updateSlotPan,
   autoFillSlots,
   confirmPhotoSelection,
