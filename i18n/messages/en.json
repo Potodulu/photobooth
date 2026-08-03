@@ -123,6 +123,7 @@
     "progress": "{current} / {total} slots",
     "autoFill": "Auto-fill",
     "continue": "Generate preview",
+    "reset": "Reset",
     "clear": "Clear",
     "emptySlot": "Empty",
     "pickHint": "Tap a photo to fill the selected slot.",
