@@ -1,12 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Trash2 } from "lucide-react";
 import { ApiErrorAlert } from "@/components/shared/ApiErrorAlert";
 import { AssetPreview } from "@/components/shared/AssetPreview";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { FileUpload } from "@/components/ui/FileUpload";
 import {
   Form,
@@ -25,33 +27,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { Textarea } from "@/components/ui/Textarea";
+import { useFrames } from "@/hooks/queries";
 import type { CreateLayoutPayload, LayoutDto } from "@/types";
+
+const slotSchema = z.object({
+  slot_key: z.string().min(1, "Slot key wajib diisi"),
+  x: z.number().min(0).optional(),
+  y: z.number().min(0).optional(),
+  width: z.number().min(0).optional(),
+  height: z.number().min(0).optional(),
+  display_order: z.number().min(0).optional(),
+});
 
 const layoutFormSchema = z.object({
   name: z.string().min(1, "Nama wajib diisi").max(200),
   type: z.string().max(64).optional(),
   paper_size: z.string().optional(),
-  dpi: z.string().optional(),
+  dpi: z.number().min(1).max(1200).optional(),
   aspect_ratio: z.string().max(32).optional(),
   status: z.enum(["draft", "active", "inactive"]),
-  canvas_size_json: z.string().optional(),
-  padding_json: z.string().optional(),
-  background_json: z.string().optional(),
-  output_size_json: z.string().optional(),
-  slots_json: z.string().optional(),
-  compatible_frame_ids: z.string().optional(),
+  canvas_width: z.number().min(0).optional(),
+  canvas_height: z.number().min(0).optional(),
+  output_width: z.number().min(0).optional(),
+  output_height: z.number().min(0).optional(),
+  padding_top: z.number().min(0).optional(),
+  padding_right: z.number().min(0).optional(),
+  padding_bottom: z.number().min(0).optional(),
+  padding_left: z.number().min(0).optional(),
+  background_color: z.string().optional(),
+  slots: z.array(slotSchema).optional(),
+  compatible_frame_ids: z.array(z.string()).optional(),
 });
 
 export type LayoutFormValues = z.infer<typeof layoutFormSchema>;
-
-function safeJson(value: unknown, fallback: string): string {
-  try {
-    return JSON.stringify(value ?? JSON.parse(fallback), null, 2);
-  } catch {
-    return fallback;
-  }
-}
 
 export function layoutDtoToFormValues(
   layout?: LayoutDto | null,
@@ -60,15 +68,28 @@ export function layoutDtoToFormValues(
     name: layout?.name ?? "",
     type: layout?.type ?? "strip",
     paper_size: layout?.paper_size ?? "",
-    dpi: layout?.dpi != null ? String(layout.dpi) : "300",
+    dpi: layout?.dpi ?? 300,
     aspect_ratio: layout?.aspect_ratio ?? "",
     status: layout?.status ?? "active",
-    canvas_size_json: safeJson(layout?.canvas_size, "{}"),
-    padding_json: safeJson(layout?.padding, "{}"),
-    background_json: safeJson(layout?.background, "{}"),
-    output_size_json: safeJson(layout?.output_size, "{}"),
-    slots_json: safeJson(layout?.slots, "[]"),
-    compatible_frame_ids: (layout?.compatible_frame_ids ?? []).join(", "),
+    canvas_width: layout?.canvas_size?.width ?? 0,
+    canvas_height: layout?.canvas_size?.height ?? 0,
+    output_width: layout?.output_size?.width ?? 0,
+    output_height: layout?.output_size?.height ?? 0,
+    padding_top: layout?.padding?.top ?? 0,
+    padding_right: layout?.padding?.right ?? 0,
+    padding_bottom: layout?.padding?.bottom ?? 0,
+    padding_left: layout?.padding?.left ?? 0,
+    background_color: layout?.background?.color ?? "#FFFFFF",
+    slots:
+      layout?.slots?.map((s) => ({
+        slot_key: s.slot_key,
+        x: s.x,
+        y: s.y,
+        width: s.width,
+        height: s.height,
+        display_order: s.display_order,
+      })) ?? [],
+    compatible_frame_ids: layout?.compatible_frame_ids ?? [],
   };
 }
 
@@ -79,30 +100,26 @@ export function parseLayoutFormValues(
     name: values.name,
     type: values.type || undefined,
     paper_size: values.paper_size || undefined,
-    dpi: values.dpi ? Number(values.dpi) : undefined,
+    dpi: values.dpi || undefined,
     aspect_ratio: values.aspect_ratio || undefined,
     status: values.status,
-    canvas_size: values.canvas_size_json?.trim()
-      ? JSON.parse(values.canvas_size_json)
-      : undefined,
-    padding: values.padding_json?.trim()
-      ? JSON.parse(values.padding_json)
-      : undefined,
-    background: values.background_json?.trim()
-      ? JSON.parse(values.background_json)
-      : undefined,
-    output_size: values.output_size_json?.trim()
-      ? JSON.parse(values.output_size_json)
-      : undefined,
-    slots: values.slots_json?.trim()
-      ? JSON.parse(values.slots_json)
-      : undefined,
-    compatible_frame_ids: values.compatible_frame_ids
-      ? values.compatible_frame_ids
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean)
-      : [],
+    canvas_size:
+      values.canvas_width || values.canvas_height
+        ? { width: values.canvas_width ?? 0, height: values.canvas_height ?? 0 }
+        : undefined,
+    output_size:
+      values.output_width || values.output_height
+        ? { width: values.output_width ?? 0, height: values.output_height ?? 0 }
+        : undefined,
+    padding: {
+      top: values.padding_top ?? 0,
+      right: values.padding_right ?? 0,
+      bottom: values.padding_bottom ?? 0,
+      left: values.padding_left ?? 0,
+    },
+    background: { color: values.background_color || undefined },
+    slots: values.slots,
+    compatible_frame_ids: values.compatible_frame_ids ?? [],
   };
 }
 
@@ -123,29 +140,29 @@ export function LayoutForm({
   error,
 }: LayoutFormProps) {
   const [previewFile, setPreviewFile] = React.useState<File | null>(null);
-  const [formError, setFormError] = React.useState<string | null>(null);
+  const { data: framesData } = useFrames();
 
   const form = useForm<LayoutFormValues>({
-    resolver: zodResolver(layoutFormSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- z.number() vs Input type="number" string mismatch; runtime coercion is correct
+    resolver: zodResolver(layoutFormSchema) as any,
     defaultValues: layoutDtoToFormValues(initial),
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "slots",
+  });
+
   const submit = form.handleSubmit(async (values) => {
-    setFormError(null);
-    try {
-      parseLayoutFormValues(values);
-    } catch {
-      setFormError("JSON tidak valid. Cek lagi ya.");
-      return;
-    }
     await onSubmit(values, previewFile);
   });
+
+  const frames = framesData?.data ?? [];
 
   return (
     <Form {...form}>
       <form onSubmit={submit} className="mx-auto max-w-3xl space-y-5">
         <ApiErrorAlert error={error} />
-        {formError ? <ApiErrorAlert error={new Error(formError)} /> : null}
 
         <FormField
           control={form.control}
@@ -244,106 +261,313 @@ export function LayoutForm({
           />
         </div>
 
+        {/* Canvas Size */}
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium">Canvas size</legend>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="canvas_width"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Width</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="canvas_height"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Height</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </fieldset>
+
+        {/* Output Size */}
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium">Output size</legend>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="output_width"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Width</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="output_height"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Height</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </fieldset>
+
+        {/* Padding */}
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium">Padding</legend>
+          <div className="grid grid-cols-4 gap-4">
+            <FormField
+              control={form.control}
+              name="padding_top"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Top</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="padding_right"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Right</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="padding_bottom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bottom</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="padding_left"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Left</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </fieldset>
+
+        {/* Background */}
         <FormField
           control={form.control}
-          name="canvas_size_json"
+          name="background_color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Canvas size (JSON)</FormLabel>
+              <FormLabel>Background color</FormLabel>
               <FormControl>
-                <Textarea rows={2} {...field} />
+                <Input placeholder="#FFFFFF" {...field} />
               </FormControl>
-              <FormDescription>
-                {"{"}&#34;width&#34;:1200,&#34;height&#34;:1800{"}"}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="output_size_json"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Output size (JSON)</FormLabel>
-              <FormControl>
-                <Textarea rows={2} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Slots */}
+        <fieldset className="space-y-3">
+          <legend className="text-sm font-medium">Slots</legend>
+          {fields.map((item, index) => (
+            <div
+              key={item.id}
+              className="border-border bg-card space-y-3 rounded-lg border p-4"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-xs font-medium">
+                  Slot {index + 1}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  color="destructive"
+                  onClick={() => remove(index)}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.slot_key`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Slot key</FormLabel>
+                      <FormControl>
+                        <Input placeholder={`photo_${index + 1}`} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.x`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>X</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.y`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Y</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.width`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Width</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.height`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Height</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`slots.${index}.display_order`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Order</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              append({
+                slot_key: `photo_${fields.length + 1}`,
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0,
+                display_order: fields.length + 1,
+              })
+            }
+          >
+            <Plus className="mr-2 size-4" />
+            Tambah slot
+          </Button>
+        </fieldset>
 
-        <FormField
-          control={form.control}
-          name="padding_json"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Padding (JSON)</FormLabel>
-              <FormControl>
-                <Textarea rows={2} {...field} />
-              </FormControl>
-              <FormDescription>
-                {"{"}
-                &#34;top&#34;:20,&#34;right&#34;:20,&#34;bottom&#34;:20,&#34;left&#34;:20
-                {"}"}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="background_json"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Background (JSON)</FormLabel>
-              <FormControl>
-                <Textarea rows={2} {...field} />
-              </FormControl>
-              <FormDescription>
-                {"{"}&#34;color&#34;:&#34;#FFFFFF&#34;{"}"}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="slots_json"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slots (JSON)</FormLabel>
-              <FormControl>
-                <Textarea rows={6} {...field} />
-              </FormControl>
-              <FormDescription>
-                Array of {"{"} slot_key, x, y, width, height, display_order{" "}
-                {"}"}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+        {/* Compatible Frames */}
         <FormField
           control={form.control}
           name="compatible_frame_ids"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Compatible frame IDs</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>Pisahkan dengan koma</FormDescription>
+              <FormLabel>Compatible frames</FormLabel>
+              {frames.length > 0 ? (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {frames.map((frame) => {
+                    const checked = field.value?.includes(frame.id) ?? false;
+                    return (
+                      <label
+                        key={frame.id}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={(v) => {
+                            const current = field.value ?? [];
+                            field.onChange(
+                              v
+                                ? [...current, frame.id]
+                                : current.filter((id) => id !== frame.id),
+                            );
+                          }}
+                        />
+                        {frame.name}
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm">
+                  Belum ada frame.
+                </p>
+              )}
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Preview Image */}
         <div className="space-y-2">
           <p className="text-sm font-medium">Preview image</p>
           <FileUpload
