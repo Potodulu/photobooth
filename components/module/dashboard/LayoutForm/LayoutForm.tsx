@@ -26,21 +26,21 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
-import type { LayoutDto } from "@/types";
+import type { CreateLayoutPayload, LayoutDto } from "@/types";
 
 const layoutFormSchema = z.object({
-  name: z.string().min(1, "Nama wajib diisi"),
-  type: z.enum(["digital", "paper"]),
-  paper_size_json: z.string().optional(),
+  name: z.string().min(1, "Nama wajib diisi").max(200),
+  type: z.string().max(64).optional(),
+  paper_size: z.string().optional(),
   dpi: z.string().optional(),
-  canvas_size_json: z.string().min(1, "Canvas size wajib diisi"),
-  slots_json: z.string().min(1, "Slots wajib diisi"),
-  padding: z.string().min(1, "Padding wajib diisi"),
-  background: z.string().min(1, "Background wajib diisi"),
-  aspect_ratio: z.string().min(1, "Aspect ratio wajib diisi"),
-  output_size_json: z.string().min(1, "Output size wajib diisi"),
+  aspect_ratio: z.string().max(32).optional(),
+  status: z.enum(["draft", "active", "inactive"]),
+  canvas_size_json: z.string().optional(),
+  padding_json: z.string().optional(),
+  background_json: z.string().optional(),
+  output_size_json: z.string().optional(),
+  slots_json: z.string().optional(),
   compatible_frame_ids: z.string().optional(),
-  status: z.enum(["draft", "active", "archived"]),
 });
 
 export type LayoutFormValues = z.infer<typeof layoutFormSchema>;
@@ -58,60 +58,51 @@ export function layoutDtoToFormValues(
 ): LayoutFormValues {
   return {
     name: layout?.name ?? "",
-    type: layout?.type ?? "digital",
-    paper_size_json: layout?.paper_size
-      ? safeJson(layout.paper_size, "null")
-      : "",
-    dpi: layout?.dpi != null ? String(layout.dpi) : "",
-    canvas_size_json: safeJson(
-      layout?.canvas_size,
-      '{"width":1080,"height":1920}',
-    ),
+    type: layout?.type ?? "strip",
+    paper_size: layout?.paper_size ?? "",
+    dpi: layout?.dpi != null ? String(layout.dpi) : "300",
+    aspect_ratio: layout?.aspect_ratio ?? "",
+    status: layout?.status ?? "active",
+    canvas_size_json: safeJson(layout?.canvas_size, "{}"),
+    padding_json: safeJson(layout?.padding, "{}"),
+    background_json: safeJson(layout?.background, "{}"),
+    output_size_json: safeJson(layout?.output_size, "{}"),
     slots_json: safeJson(layout?.slots, "[]"),
-    padding: layout?.padding != null ? String(layout.padding) : "0",
-    background: layout?.background ?? "#ffffff",
-    aspect_ratio: layout?.aspect_ratio ?? "9:16",
-    output_size_json: safeJson(
-      layout?.output_size,
-      '{"width":1080,"height":1920}',
-    ),
     compatible_frame_ids: (layout?.compatible_frame_ids ?? []).join(", "),
-    status: layout?.status ?? "draft",
   };
 }
 
-export function parseLayoutFormValues(values: LayoutFormValues) {
-  const canvas_size = JSON.parse(values.canvas_size_json) as {
-    width: number;
-    height: number;
-  };
-  const output_size = JSON.parse(values.output_size_json) as {
-    width: number;
-    height: number;
-  };
-  const slots = JSON.parse(values.slots_json) as LayoutDto["slots"];
-  const paper_size = values.paper_size_json?.trim()
-    ? (JSON.parse(values.paper_size_json) as LayoutDto["paper_size"])
-    : null;
-
+export function parseLayoutFormValues(
+  values: LayoutFormValues,
+): CreateLayoutPayload {
   return {
     name: values.name,
-    type: values.type,
-    paper_size,
-    dpi: values.dpi ? Number(values.dpi) : null,
-    canvas_size,
-    slots,
-    padding: Number(values.padding),
-    background: values.background,
-    aspect_ratio: values.aspect_ratio,
-    output_size,
+    type: values.type || undefined,
+    paper_size: values.paper_size || undefined,
+    dpi: values.dpi ? Number(values.dpi) : undefined,
+    aspect_ratio: values.aspect_ratio || undefined,
+    status: values.status,
+    canvas_size: values.canvas_size_json?.trim()
+      ? JSON.parse(values.canvas_size_json)
+      : undefined,
+    padding: values.padding_json?.trim()
+      ? JSON.parse(values.padding_json)
+      : undefined,
+    background: values.background_json?.trim()
+      ? JSON.parse(values.background_json)
+      : undefined,
+    output_size: values.output_size_json?.trim()
+      ? JSON.parse(values.output_size_json)
+      : undefined,
+    slots: values.slots_json?.trim()
+      ? JSON.parse(values.slots_json)
+      : undefined,
     compatible_frame_ids: values.compatible_frame_ids
       ? values.compatible_frame_ids
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean)
       : [],
-    status: values.status,
   };
 }
 
@@ -177,17 +168,10 @@ export function LayoutForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Type</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="digital">digital</SelectItem>
-                    <SelectItem value="paper">paper</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormControl>
+                  <Input placeholder="strip" {...field} />
+                </FormControl>
+                <FormDescription>Misal: strip, grid, collage</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -208,7 +192,7 @@ export function LayoutForm({
                   <SelectContent>
                     <SelectItem value="draft">draft</SelectItem>
                     <SelectItem value="active">active</SelectItem>
-                    <SelectItem value="archived">archived</SelectItem>
+                    <SelectItem value="inactive">inactive</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -217,7 +201,7 @@ export function LayoutForm({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <FormField
             control={form.control}
             name="dpi"
@@ -225,21 +209,34 @@ export function LayoutForm({
               <FormItem>
                 <FormLabel>DPI</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input type="number" min={1} max={1200} {...field} />
                 </FormControl>
-                <FormDescription>Opsional</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="padding"
+            name="paper_size"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Padding</FormLabel>
+                <FormLabel>Paper size</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input placeholder="4x6" {...field} />
+                </FormControl>
+                <FormDescription>Misal: 4x6, A4</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="aspect_ratio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Aspect ratio</FormLabel>
+                <FormControl>
+                  <Input placeholder="2:3" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -249,58 +246,16 @@ export function LayoutForm({
 
         <FormField
           control={form.control}
-          name="background"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Background</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="aspect_ratio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Aspect ratio</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="paper_size_json"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Paper size (JSON)</FormLabel>
-              <FormControl>
-                <Textarea rows={3} {...field} />
-              </FormControl>
-              <FormDescription>
-                Contoh: {"{"}&quot;width_in&quot;:4,&quot;height_in&quot;:6{"}"}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="canvas_size_json"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Canvas size (JSON)</FormLabel>
               <FormControl>
-                <Textarea rows={3} {...field} />
+                <Textarea rows={2} {...field} />
               </FormControl>
+              <FormDescription>
+                {"{"}&#34;width&#34;:1200,&#34;height&#34;:1800{"}"}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -313,8 +268,44 @@ export function LayoutForm({
             <FormItem>
               <FormLabel>Output size (JSON)</FormLabel>
               <FormControl>
-                <Textarea rows={3} {...field} />
+                <Textarea rows={2} {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="padding_json"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Padding (JSON)</FormLabel>
+              <FormControl>
+                <Textarea rows={2} {...field} />
+              </FormControl>
+              <FormDescription>
+                {"{"}
+                &#34;top&#34;:20,&#34;right&#34;:20,&#34;bottom&#34;:20,&#34;left&#34;:20
+                {"}"}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="background_json"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Background (JSON)</FormLabel>
+              <FormControl>
+                <Textarea rows={2} {...field} />
+              </FormControl>
+              <FormDescription>
+                {"{"}&#34;color&#34;:&#34;#FFFFFF&#34;{"}"}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -329,6 +320,10 @@ export function LayoutForm({
               <FormControl>
                 <Textarea rows={6} {...field} />
               </FormControl>
+              <FormDescription>
+                Array of {"{"} slot_key, x, y, width, height, display_order{" "}
+                {"}"}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

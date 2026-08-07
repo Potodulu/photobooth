@@ -12,11 +12,12 @@ export type {
 export { getUserDisplayName } from "./auth";
 
 export type {
-  LayoutTypeDto,
   LayoutStatusDto,
   SizeDto,
-  PaperSizeDto,
+  PaddingDto,
+  BackgroundDto,
   LayoutSlotDto,
+  SlotInput,
   LayoutDto,
   CreateLayoutPayload,
   UpdateLayoutPayload,

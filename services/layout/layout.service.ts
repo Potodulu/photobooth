@@ -60,9 +60,9 @@ export const layoutService = {
     return apiClient.delete<void>(API_ROUTES.LAYOUTS.byId(id));
   },
 
-  uploadPreview(id: string, file: File): Promise<void> {
+  uploadPreview(id: string, file: File): Promise<LayoutDto> {
     const form = new FormData();
     form.append("file", file);
-    return apiClient.post<void>(API_ROUTES.LAYOUTS.preview(id), form);
+    return apiClient.post<LayoutDto>(API_ROUTES.LAYOUTS.preview(id), form);
   },
 };
