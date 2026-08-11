@@ -63,6 +63,8 @@ export const layoutService = {
   uploadPreview(id: string, file: File): Promise<LayoutDto> {
     const form = new FormData();
     form.append("file", file);
-    return apiClient.post<LayoutDto>(API_ROUTES.LAYOUTS.preview(id), form);
+    const api = apiClient.post<LayoutDto>(API_ROUTES.LAYOUTS.preview(id), form);
+    console.log({ api: Promise.resolve(api) });
+    return api;
   },
 };
