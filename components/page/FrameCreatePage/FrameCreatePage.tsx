@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { ROUTES } from "@/constants/route";
 import type { FrameAssetKind } from "@/constants/apiRoute";
@@ -15,6 +16,7 @@ import { toast } from "@/components/ui/Toast";
 import { ApiError, parseApiErrorMessage } from "@/libs/api";
 
 export function FrameCreatePage() {
+  const t = useTranslations("FrameCreatePage");
   const router = useRouter();
   const createMutation = useCreateFrame();
   const uploadMutation = useUploadFrameAsset();
@@ -41,14 +43,14 @@ export function FrameCreatePage() {
         }
       }
 
-      toast.success("Frame berhasil dibuat.");
+      toast.success(t("success"));
       router.push(ROUTES.DASHBOARD.FRAMES);
     } catch (err) {
       setError(err);
       toast.error(
         err instanceof ApiError
           ? parseApiErrorMessage(err.body, err.message)
-          : "Gagal membuat frame.",
+          : t("error"),
       );
     }
   };
@@ -56,13 +58,11 @@ export function FrameCreatePage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="font-display text-2xl font-bold">Buat frame</h1>
-        <p className="text-muted-foreground text-sm">
-          Isi detail frame dan upload asset.
-        </p>
+        <h1 className="font-display text-2xl font-bold">{t("title")}</h1>
+        <p className="text-muted-foreground text-sm">{t("subtitle")}</p>
       </div>
       <FrameForm
-        submitLabel="Buat frame"
+        submitLabel={t("submitLabel")}
         onSubmit={handleSubmit}
         error={error}
       />

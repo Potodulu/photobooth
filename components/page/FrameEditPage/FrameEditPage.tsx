@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { ROUTES } from "@/constants/route";
 import type { FrameAssetKind } from "@/constants/apiRoute";
 import { useFrame, useUpdateFrame, useUploadFrameAsset } from "@/hooks/queries";
 import {
   FrameForm,
-  parseFrameFormValues,
+  parseFrameFormUpdateValues,
   type FrameAssetFiles,
   type FrameFormValues,
 } from "@/components/module/dashboard/FrameForm";
@@ -17,6 +18,7 @@ import { toast } from "@/components/ui/Toast";
 import { ApiError, parseApiErrorMessage } from "@/libs/api";
 
 export function FrameEditPage({ id }: { id: string }) {
+  const t = useTranslations("FrameEditPage");
   const router = useRouter();
   const { data, isLoading, error: loadError } = useFrame(id);
   const updateMutation = useUpdateFrame();
@@ -29,7 +31,7 @@ export function FrameEditPage({ id }: { id: string }) {
   ) => {
     setError(null);
     try {
-      const payload = parseFrameFormValues(values);
+      const payload = parseFrameFormUpdateValues(values);
       await updateMutation.mutateAsync({ id, data: payload });
 
       const kinds = Object.keys(assets) as FrameAssetKind[];
@@ -40,14 +42,14 @@ export function FrameEditPage({ id }: { id: string }) {
         }
       }
 
-      toast.success("Frame berhasil disimpan.");
+      toast.success(t("success"));
       router.push(ROUTES.DASHBOARD.FRAMES);
     } catch (err) {
       setError(err);
       toast.error(
         err instanceof ApiError
           ? parseApiErrorMessage(err.body, err.message)
-          : "Gagal menyimpan frame.",
+          : t("error"),
       );
     }
   };
@@ -57,21 +59,19 @@ export function FrameEditPage({ id }: { id: string }) {
   }
 
   if (loadError || !data) {
-    return (
-      <ApiErrorAlert error={loadError ?? new Error("Frame tidak ditemukan")} />
-    );
+    return <ApiErrorAlert error={loadError ?? new Error(t("notFound"))} />;
   }
 
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="font-display text-2xl font-bold">Edit frame</h1>
+        <h1 className="font-display text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground text-sm">{data.name}</p>
       </div>
       <FrameForm
         key={data.id}
         initial={data}
-        submitLabel="Simpan perubahan"
+        submitLabel={t("submitLabel")}
         onSubmit={handleSubmit}
         error={error}
       />

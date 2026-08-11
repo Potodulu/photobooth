@@ -56,9 +56,16 @@ export const frameService = {
     return apiClient.delete<void>(API_ROUTES.FRAMES.byId(id));
   },
 
-  uploadAsset(id: string, kind: FrameAssetKind, file: File): Promise<void> {
+  uploadAsset(id: string, kind: FrameAssetKind, file: File): Promise<FrameDto> {
     const form = new FormData();
     form.append("file", file);
-    return apiClient.post<void>(API_ROUTES.FRAMES.asset(id, kind), form);
+    return apiClient.post<FrameDto>(API_ROUTES.FRAMES.asset(id, kind), form);
+  },
+
+  downloadOverlayPath(id: string, sessionId?: string): string {
+    const path = API_ROUTES.FRAMES.downloadOverlay(id);
+    if (!sessionId) return path;
+    const search = new URLSearchParams({ session_id: sessionId });
+    return `${path}?${search.toString()}`;
   },
 };

@@ -188,6 +188,55 @@
       "action": "Back home"
     }
   },
+  "FrameForm": {
+    "title": "Frame Settings",
+    "nameLabel": "Name",
+    "namePlaceholder": "Frame name",
+    "layoutLabel": "Layout",
+    "layoutPlaceholder": "Select layout",
+    "layoutNone": "No layout",
+    "layoutDescription": "One frame links to one layout.",
+    "backgroundColorLabel": "Background color",
+    "backgroundColorPlaceholder": "#FFFFFF",
+    "borderColorLabel": "Border color",
+    "borderColorPlaceholder": "#FFD700",
+    "borderWidthLabel": "Border width",
+    "statusLabel": "Status",
+    "statusPlaceholder": "Select status",
+    "assetsTitle": "Assets",
+    "assetLabel": "{kind}",
+    "assetPlaceholder": "Upload {kind}",
+    "submitLabel": "Save"
+  },
+  "FrameCreatePage": {
+    "title": "Create frame",
+    "subtitle": "Fill in frame details and upload assets.",
+    "submitLabel": "Create frame",
+    "success": "Frame created.",
+    "error": "Failed to create frame."
+  },
+  "FrameEditPage": {
+    "title": "Edit frame",
+    "notFound": "Frame not found",
+    "submitLabel": "Save changes",
+    "success": "Frame saved.",
+    "error": "Failed to save frame."
+  },
+  "FrameListPage": {
+    "title": "Frames",
+    "subtitle": "Manage frames and overlay assets.",
+    "create": "Create frame",
+    "searchPlaceholder": "Search frames...",
+    "empty": "No frames yet. Create the first one.",
+    "columnName": "Name",
+    "columnBackground": "Background",
+    "columnStatus": "Status",
+    "columnLayout": "Layout",
+    "layoutNone": "—",
+    "deleteConfirm": "Delete frame \"{name}\"?",
+    "deleteSuccess": "Frame deleted.",
+    "deleteError": "Failed to delete frame."
+  },
   "LayoutForm": {
     "title": "Layout Settings",
     "importJson": "Import Setting JSON",

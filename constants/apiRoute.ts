@@ -23,6 +23,7 @@ export const API_ROUTES = {
     byId: (id: string) => `/frames/${id}` as const,
     asset: (id: string, kind: FrameAssetKind) =>
       `/frames/${id}/assets/${kind}` as const,
+    downloadOverlay: (id: string) => `/frames/${id}/download/overlay` as const,
   },
   ASSETS: {
     byId: (id: string) => `/assets/${id}` as const,

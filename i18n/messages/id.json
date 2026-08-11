@@ -188,6 +188,55 @@
       "action": "Kembali"
     }
   },
+  "FrameForm": {
+    "title": "Setting Frame",
+    "nameLabel": "Nama",
+    "namePlaceholder": "Nama frame",
+    "layoutLabel": "Layout",
+    "layoutPlaceholder": "Pilih layout",
+    "layoutNone": "Tanpa layout",
+    "layoutDescription": "Satu frame terhubung ke satu layout.",
+    "backgroundColorLabel": "Background color",
+    "backgroundColorPlaceholder": "#FFFFFF",
+    "borderColorLabel": "Border color",
+    "borderColorPlaceholder": "#FFD700",
+    "borderWidthLabel": "Border width",
+    "statusLabel": "Status",
+    "statusPlaceholder": "Pilih status",
+    "assetsTitle": "Assets",
+    "assetLabel": "{kind}",
+    "assetPlaceholder": "Upload {kind}",
+    "submitLabel": "Simpan"
+  },
+  "FrameCreatePage": {
+    "title": "Buat frame",
+    "subtitle": "Isi detail frame dan upload asset.",
+    "submitLabel": "Buat frame",
+    "success": "Frame berhasil dibuat.",
+    "error": "Gagal membuat frame."
+  },
+  "FrameEditPage": {
+    "title": "Edit frame",
+    "notFound": "Frame tidak ditemukan",
+    "submitLabel": "Simpan perubahan",
+    "success": "Frame berhasil disimpan.",
+    "error": "Gagal menyimpan frame."
+  },
+  "FrameListPage": {
+    "title": "Frames",
+    "subtitle": "Kelola frame dan asset overlay.",
+    "create": "Buat frame",
+    "searchPlaceholder": "Cari frame...",
+    "empty": "Belum ada frame. Yuk buat yang pertama.",
+    "columnName": "Nama",
+    "columnBackground": "Background",
+    "columnStatus": "Status",
+    "columnLayout": "Layout",
+    "layoutNone": "—",
+    "deleteConfirm": "Hapus frame \"{name}\"?",
+    "deleteSuccess": "Frame dihapus.",
+    "deleteError": "Gagal hapus frame."
+  },
   "LayoutForm": {
     "title": "Setting Layout",
     "importJson": "Import Setting JSON",
