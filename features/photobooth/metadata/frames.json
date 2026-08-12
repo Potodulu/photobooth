@@ -166,5 +166,17 @@
     "backgroundColor": "#FFFEFE",
     "borderColor": "#FFFEFE",
     "borderWidth": 30
+  },
+  {
+    "id": "fe-solid-x-kemenkop",
+    "name": "Fe Solid X Kemenkop",
+    "supportedLayoutIds": ["photostrip-3-slot"],
+    "preview": "frames/fe-solid-x-kemenkop/overlay.png",
+    "overlay": "frames/fe-solid-x-kemenkop/overlay.png",
+    "mask": null,
+    "thumbnail": "frames/fe-solid-x-kemenkop/overlay.png",
+    "backgroundColor": "#FFFEFE",
+    "borderColor": "#FFFEFE",
+    "borderWidth": 30
   }
 ]

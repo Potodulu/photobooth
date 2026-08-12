@@ -36,5 +36,24 @@
     "padding": 30,
     "background": "#ffffff",
     "compatibleFrameIds": [""]
+  },
+  {
+    "id": "photostrip-3-slot",
+    "name": "Photostrip 3 Slot",
+    "type": "paper",
+    "preview": "layouts/photostrip-3-slot.svg",
+    "paperSize": { "widthIn": 2, "heightIn": 6 },
+    "dpi": 300,
+    "canvasSize": { "width": 600, "height": 1800 },
+    "slots": [
+      { "id": "slot-1", "x": 43, "y": 43, "width": 514, "height": 400 },
+      { "id": "slot-2", "x": 43, "y": 486, "width": 514, "height": 400 },
+      { "id": "slot-3", "x": 43, "y": 929, "width": 514, "height": 400 }
+    ],
+    "aspectRatio": "3:4",
+    "outputSize": { "width": 600, "height": 1800 },
+    "padding": 30,
+    "background": "#ffffff",
+    "compatibleFrameIds": [""]
   }
 ]
