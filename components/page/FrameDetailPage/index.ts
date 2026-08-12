@@ -1,0 +1,1 @@
+export { FrameDetailPage } from "./FrameDetailPage";

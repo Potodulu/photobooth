@@ -2,8 +2,10 @@ import {
   FLASH_DURATION_MS,
   MAX_CAPTURE_TAKES,
   createId,
+  type CaptureOrientation,
   type CaptureSet,
 } from "@/features/photobooth/domain";
+import { getOrientationState } from "@/features/photobooth/adapters/browser/orientation";
 import { captureService } from "@/features/photobooth/services/api";
 import {
   useCameraStore,
@@ -19,6 +21,7 @@ function sleep(ms: number) {
 export type TakePhotoHooks = {
   onCountdown: (value: number | null) => void;
   onFlash: (active: boolean) => void;
+  onCaptureOrientationFrozen?: (frozen: CaptureOrientation) => void;
 };
 
 /** Record during countdown, flash, then still — clip length follows countdown. */
@@ -37,6 +40,14 @@ export async function takePhoto(
   }
 
   const mirrored = useCameraStore.getState().mirrorEnabled;
+  const orientation = getOrientationState();
+  const frozenOrientation: CaptureOrientation = {
+    deviceOrientation: orientation.orientation,
+    angle: orientation.angle,
+    mirrored,
+  };
+  hooks.onCaptureOrientationFrozen?.(frozenOrientation);
+
   const seconds = captureStore.countdownSeconds;
   captureStore.setCapturing(true);
   const recorder = captureService.createClipRecorder();
@@ -73,6 +84,7 @@ export async function takePhoto(
       height: still.height,
       videoBlob,
       durationMs: recorded.durationMs,
+      captureOrientation: frozenOrientation,
     });
 
     const objectUrl = URL.createObjectURL(blob);

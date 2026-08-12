@@ -8,6 +8,7 @@ import {
 import {
   createId,
   type Capture,
+  type CaptureOrientation,
   type CaptureSet,
 } from "@/features/photobooth/domain";
 
@@ -38,6 +39,7 @@ export const captureService = {
     height: number;
     videoBlob: Blob | null;
     durationMs?: number;
+    captureOrientation?: CaptureOrientation;
   }): Promise<{ capture: Capture; blob: Blob; videoBlob: Blob | null }> {
     const id = createId();
     const videoBlobKey = params.videoBlob ? `capture-video-${id}` : null;
@@ -50,6 +52,7 @@ export const captureService = {
       createdAt: new Date().toISOString(),
       mimeType: params.still.type || "image/jpeg",
       durationMs: params.videoBlob ? params.durationMs : undefined,
+      captureOrientation: params.captureOrientation,
     };
     await browserCaptureRepository.saveCapture(
       capture,

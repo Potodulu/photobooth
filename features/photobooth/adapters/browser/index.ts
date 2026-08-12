@@ -30,3 +30,14 @@ export {
   createMirroredStream,
   recordClip,
 };
+
+export {
+  getOrientationState,
+  getServerOrientationState,
+  isMobileDevice,
+  isPortraitOrientation,
+  resolveDeviceOrientation,
+  subscribeOrientation,
+  type DeviceOrientation,
+  type OrientationState,
+} from "./orientation";

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { resolveLocaleParams } from "@/i18n/resolveLocaleParams";
 import { HomePage } from "@/components/page/HomePage";
 
 export async function generateMetadata({
@@ -21,7 +22,6 @@ export default async function Page({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await resolveLocaleParams(params);
   return <HomePage />;
 }

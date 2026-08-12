@@ -1,6 +1,7 @@
 // Layout assets
 import photostrip4slot from "./layouts/photostrip-4-slot.svg";
 import photostrip2slot from "./layouts/photostrip-2-slot.svg";
+import photostrip3slot from "./layouts/photostrip-3-slot.svg";
 
 // Frame assets
 import potoduluOriWhiteOverlay from "./frames/potodulu-ori-white/overlay.png";
@@ -18,6 +19,7 @@ import stripClassicSageOverlay from "./frames/strip-classic-sage/overlay.png";
 import stripClassicVanillaOverlay from "./frames/strip-classic-vanilla/overlay.png";
 import stripClassicWhiteOverlay from "./frames/strip-classic-white/overlay.png";
 import stripNaruto1Overlay from "./frames/naruto-1/overlay.png";
+import stripFeSolidXKemenkopOverlay from "./frames/fe-solid-x-kemenkop/overlay.png";
 
 type AssetModule = string | { src: string };
 
@@ -29,6 +31,7 @@ const ASSETS: Record<string, string> = {
   // Layout assets
   "layouts/photostrip-4-slot.svg": toUrl(photostrip4slot),
   "layouts/photostrip-2-slot.svg": toUrl(photostrip2slot),
+  "layouts/photostrip-3-slot.svg": toUrl(photostrip3slot),
 
   // Frame assets
   "frames/potodulu-ori-white/overlay.png": toUrl(potoduluOriWhiteOverlay),
@@ -48,6 +51,7 @@ const ASSETS: Record<string, string> = {
   "frames/strip-classic-vanilla/overlay.png": toUrl(stripClassicVanillaOverlay),
   "frames/strip-classic-white/overlay.png": toUrl(stripClassicWhiteOverlay),
   "frames/naruto-1/overlay.png": toUrl(stripNaruto1Overlay),
+  "frames/fe-solid-x-kemenkop/overlay.png": toUrl(stripFeSolidXKemenkopOverlay),
 };
 
 /** Resolve a relative key under features/photobooth/assets to a bundler URL. */
