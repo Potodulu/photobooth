@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { resolveLocaleParams } from "@/i18n/resolveLocaleParams";
 import { LoginPage } from "@/components/page/LoginPage";
 
 export default async function Page({
@@ -6,7 +6,6 @@ export default async function Page({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  await resolveLocaleParams(params);
   return <LoginPage />;
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Eye, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTES } from "@/constants/route";
@@ -36,7 +36,12 @@ export function FrameListPage() {
         accessorKey: "name",
         header: t("columnName"),
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.name}</span>
+          <Link
+            href={ROUTES.DASHBOARD.frameDetail(row.original.id)}
+            className="hover:text-primary font-medium underline-offset-4 hover:underline"
+          >
+            {row.original.name}
+          </Link>
         ),
       },
       {
@@ -75,6 +80,11 @@ export function FrameListPage() {
         header: "",
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-1">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href={ROUTES.DASHBOARD.frameDetail(row.original.id)}>
+                <Eye className="size-4" />
+              </Link>
+            </Button>
             <Button variant="ghost" size="sm" asChild>
               <Link href={ROUTES.DASHBOARD.frameEdit(row.original.id)}>
                 <Pencil className="size-4" />

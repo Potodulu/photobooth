@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { resolveLocaleParams } from "@/i18n/resolveLocaleParams";
 import { FrameEditPage } from "@/components/page/FrameEditPage";
 
 export default async function Page({
@@ -6,7 +6,6 @@ export default async function Page({
 }: {
   params: Promise<{ locale: string; id: string }>;
 }) {
-  const { locale, id } = await params;
-  setRequestLocale(locale);
+  const { id } = await resolveLocaleParams(params);
   return <FrameEditPage id={id} />;
 }

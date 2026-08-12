@@ -222,6 +222,24 @@
     "success": "Frame berhasil disimpan.",
     "error": "Gagal menyimpan frame."
   },
+  "FrameDetailPage": {
+    "title": "Detail frame",
+    "notFound": "Frame tidak ditemukan",
+    "edit": "Edit",
+    "infoTitle": "Info",
+    "assetsTitle": "Assets",
+    "name": "Nama",
+    "status": "Status",
+    "layout": "Layout",
+    "layoutNone": "—",
+    "background": "Background",
+    "borderColor": "Border color",
+    "borderWidth": "Border width",
+    "preview": "Preview",
+    "overlay": "Overlay",
+    "mask": "Mask",
+    "thumbnail": "Thumbnail"
+  },
   "FrameListPage": {
     "title": "Frames",
     "subtitle": "Kelola frame dan asset overlay.",

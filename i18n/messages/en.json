@@ -222,6 +222,24 @@
     "success": "Frame saved.",
     "error": "Failed to save frame."
   },
+  "FrameDetailPage": {
+    "title": "Frame detail",
+    "notFound": "Frame not found",
+    "edit": "Edit",
+    "infoTitle": "Info",
+    "assetsTitle": "Assets",
+    "name": "Name",
+    "status": "Status",
+    "layout": "Layout",
+    "layoutNone": "—",
+    "background": "Background",
+    "borderColor": "Border color",
+    "borderWidth": "Border width",
+    "preview": "Preview",
+    "overlay": "Overlay",
+    "mask": "Mask",
+    "thumbnail": "Thumbnail"
+  },
   "FrameListPage": {
     "title": "Frames",
     "subtitle": "Manage frames and overlay assets.",

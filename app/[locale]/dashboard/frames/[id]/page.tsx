@@ -1,5 +1,5 @@
 import { resolveLocaleParams } from "@/i18n/resolveLocaleParams";
-import { LayoutEditPage } from "@/components/page/LayoutEditPage";
+import { FrameDetailPage } from "@/components/page/FrameDetailPage";
 
 export default async function Page({
   params,
@@ -7,5 +7,5 @@ export default async function Page({
   params: Promise<{ locale: string; id: string }>;
 }) {
   const { id } = await resolveLocaleParams(params);
-  return <LayoutEditPage id={id} />;
+  return <FrameDetailPage id={id} />;
 }
