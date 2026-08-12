@@ -73,6 +73,17 @@ export type PhotoFilterId =
   | "fade"
   | "mono-high";
 
+/** How the device was held; independent from output/template orientation. */
+export type DeviceOrientation =
+  "portrait" | "landscape-left" | "landscape-right";
+
+/** Frozen at countdown start for a single shutter press. */
+export type CaptureOrientation = {
+  deviceOrientation: DeviceOrientation;
+  angle: number;
+  mirrored: boolean;
+};
+
 export type Capture = {
   id: string;
   blobKey: string;
@@ -82,6 +93,8 @@ export type Capture = {
   createdAt: string;
   mimeType: string;
   durationMs?: number;
+  /** Orientation locked when countdown began for this still. */
+  captureOrientation?: CaptureOrientation;
 };
 
 export type CaptureSet = {

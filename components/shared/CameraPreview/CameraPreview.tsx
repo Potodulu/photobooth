@@ -7,6 +7,8 @@ type CameraPreviewProps = {
   mirrored?: boolean;
   filterCss?: string;
   className?: string;
+  /** Fill parent instead of fixed aspect-video card. */
+  fill?: boolean;
 };
 
 export function CameraPreview({
@@ -14,11 +16,15 @@ export function CameraPreview({
   mirrored = true,
   filterCss = "none",
   className,
+  fill = false,
 }: CameraPreviewProps) {
   return (
     <div
       className={cn(
-        "border-border bg-foreground/10 shadow-neo-md relative mx-auto aspect-video max-h-[60vh] w-full overflow-hidden rounded-[var(--radius-xl)] border-2",
+        "bg-foreground/10 relative overflow-hidden",
+        fill
+          ? "size-full"
+          : "border-border shadow-neo-md mx-auto aspect-video max-h-[60vh] w-full rounded-[var(--radius-xl)] border-2",
         className,
       )}
     >

@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { CaptureStudio } from "@/components/module/photobooth/CaptureStudio";
-import { LandscapeOrientationGuard } from "@/components/shared/LandscapeOrientationGuard";
 import {
   useCamera,
-  useOrientationGuard,
   usePhotoboothActions,
   useTryFlowGuard,
   useTryStepSync,
@@ -20,12 +17,8 @@ import {
 } from "@/features/photobooth/stores";
 
 export function TryCameraPage() {
-  const t = useTranslations("TryCamera");
   const router = useRouter();
-  const { isBlocked: orientationBlocked } = useOrientationGuard();
-  const { videoRef, permission, error, start, stop, stream } = useCamera();
-  const shouldRestartCameraRef = useRef(false);
-  const wasOrientationBlockedRef = useRef(orientationBlocked);
+  const { videoRef, permission, error, start, stop } = useCamera();
   const {
     takePhoto,
     retakeLastPhoto,
@@ -52,33 +45,16 @@ export function TryCameraPage() {
   useTryStepSync("camera");
 
   useEffect(() => {
-    const wasBlocked = wasOrientationBlockedRef.current;
-    wasOrientationBlockedRef.current = orientationBlocked;
-
-    if (orientationBlocked) {
-      if (stream) {
-        shouldRestartCameraRef.current = true;
-        stop();
-      }
-      return;
-    }
-
-    if (
-      wasBlocked &&
-      permission === "granted" &&
-      shouldRestartCameraRef.current
-    ) {
-      shouldRestartCameraRef.current = false;
-      void start();
-    }
-  }, [orientationBlocked, stream, permission, start, stop]);
+    void start();
+    return () => {
+      stop();
+    };
+    // Mount-only camera lifecycle for immersive capture screen.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- start/stop are stable enough for page mount
+  }, []);
 
   return (
-    <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
-      <LandscapeOrientationGuard
-        active={orientationBlocked}
-        message={t("rotateToLandscape")}
-      />
+    <PhotoboothLayout immersive>
       <CaptureStudio
         videoRef={videoRef}
         permission={permission}
@@ -92,12 +68,11 @@ export function TryCameraPage() {
         isCapturing={isCapturing || busy}
         isRecording={isRecording}
         recordingRemaining={recordingRemaining}
-        orientationBlocked={orientationBlocked}
         onStartCamera={start}
         onCountdownChange={setCountdownSeconds}
         onMirrorChange={setMirrorEnabled}
         onCapture={async (hooks) => {
-          if (orientationBlocked || !videoRef.current) return;
+          if (!videoRef.current) return;
           await takePhoto(videoRef.current, hooks);
         }}
         onRetake={retakeLastPhoto}

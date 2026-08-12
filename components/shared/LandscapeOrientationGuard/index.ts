@@ -1,1 +1,0 @@
-export { LandscapeOrientationGuard } from "./LandscapeOrientationGuard";
