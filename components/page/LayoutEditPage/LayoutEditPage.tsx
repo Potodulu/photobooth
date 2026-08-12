@@ -32,7 +32,7 @@ export function LayoutEditPage({ id }: { id: string }) {
     setError(null);
     try {
       const payload = parseLayoutFormValues(values);
-      // await updateMutation.mutateAsync({ id, data: payload });
+      await updateMutation.mutateAsync({ id, data: payload });
       if (previewFile) {
         await uploadMutation.mutateAsync({ id, file: previewFile });
       }
