@@ -111,6 +111,8 @@
     "captureAria": "Ambil foto",
     "galleryTitle": "Foto tersimpan",
     "galleryClose": "Tutup",
+    "galleryBack": "Kembali",
+    "galleryPreviewAria": "Lihat foto {index}",
     "rotateHint": "Putar HP untuk foto landscape",
     "orientationLocked": "Orientasi capture terkunci untuk shot ini",
     "capture": "Ambil foto",

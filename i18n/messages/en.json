@@ -111,6 +111,8 @@
     "captureAria": "Take photo",
     "galleryTitle": "Captured",
     "galleryClose": "Close",
+    "galleryBack": "Back",
+    "galleryPreviewAria": "View photo {index}",
     "rotateHint": "Rotate phone for landscape photo",
     "orientationLocked": "Capture orientation locked for this shot",
     "capture": "Capture",

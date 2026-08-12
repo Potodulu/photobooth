@@ -178,6 +178,8 @@ export function CaptureStudio({
         title={t("galleryTitle")}
         closeLabel={t("galleryClose")}
         retakeLabel={t("retake")}
+        backLabel={t("galleryBack")}
+        previewAria={(index) => t("galleryPreviewAria", { index })}
         canRetake={captures.length > 0}
         busy={busy}
         onRetake={() => void onRetake()}
