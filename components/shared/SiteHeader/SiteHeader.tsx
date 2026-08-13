@@ -2,10 +2,11 @@ import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/libs/cn";
+import { ROUTES } from "@/constants/route";
 
 export function SiteHeader({
   ctaLabel,
-  ctaHref = "/try",
+  ctaHref = ROUTES.ONLINE.ROOT,
   className,
 }: {
   ctaLabel: string;

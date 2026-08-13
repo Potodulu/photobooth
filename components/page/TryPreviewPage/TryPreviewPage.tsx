@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { ResultPreview } from "@/components/module/photobooth/ResultPreview";
+import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
   useTryFlowGuard,
@@ -99,7 +100,7 @@ export function TryPreviewPage() {
           downloadAsset(asset.blob, asset.fileName);
         }}
         onRestart={() => {
-          router.push("/try");
+          router.push(ROUTES.ONLINE.ROOT);
         }}
         // ZIP download intentionally disabled — use per-asset downloads
         // onDownload={async () => {

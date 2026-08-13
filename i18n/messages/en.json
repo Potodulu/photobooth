@@ -80,9 +80,9 @@
   },
   "TryWarning": {
     "pageTitle": "Before you start",
-    "pageSubtitle": "This guest demo runs entirely in your browser. Opening this page clears previous demo storage.",
+    "pageSubtitle": "This online session runs entirely in your browser. Opening this page clears previous session storage.",
     "title": "Temporary browser storage",
-    "description": "This demo stores your work temporarily inside your browser. Opening /try clears old demo data. Storage is also cleared after download or cancel. Browser cleanup may remove work at any time.",
+    "description": "This online session stores your work temporarily inside your browser. Opening /online clears old session data. Storage is also cleared after download or cancel. Browser cleanup may remove work at any time.",
     "continue": "Continue",
     "cancel": "Cancel"
   },

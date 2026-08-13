@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { StorageWarning } from "@/components/module/photobooth/StorageWarning";
+import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
   useTryStepSync,
@@ -23,7 +24,7 @@ export function TryWarningPage() {
 
   const handleContinue = async () => {
     await startGuestSession();
-    router.push("/try/layout");
+    router.push(ROUTES.ONLINE.LAYOUT);
   };
 
   const handleCancel = async () => {

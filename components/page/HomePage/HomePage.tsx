@@ -26,6 +26,7 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 import { cn } from "@/libs/cn";
+import { ROUTES } from "@/constants/route";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -56,7 +57,7 @@ export function HomePage() {
       icon: Globe,
       color: "primary" as const,
       status: "available" as const,
-      href: "/try",
+      href: ROUTES.ONLINE.ROOT,
     },
     {
       key: "offline" as const,
@@ -74,7 +75,7 @@ export function HomePage() {
 
   return (
     <MarketingLayout>
-      <SiteHeader ctaLabel={tNav("cta")} ctaHref="/try" />
+      <SiteHeader ctaLabel={tNav("cta")} ctaHref={ROUTES.ONLINE.ROOT} />
 
       <main>
         <section className="border-border relative overflow-hidden border-b-2">
@@ -139,7 +140,7 @@ export function HomePage() {
                   radius="xl"
                   elevation="lg"
                 >
-                  <Link href="/try">{tHero("primaryCta")}</Link>
+                  <Link href={ROUTES.ONLINE.ROOT}>{tHero("primaryCta")}</Link>
                 </Button>
                 <Button
                   asChild
@@ -360,7 +361,7 @@ export function HomePage() {
                   radius="xl"
                   elevation="lg"
                 >
-                  <Link href="/try">{tCta("button")}</Link>
+                  <Link href={ROUTES.ONLINE.ROOT}>{tCta("button")}</Link>
                 </Button>
               </motion.div>
             </div>

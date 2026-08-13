@@ -20,7 +20,7 @@ export async function resetClientSessionState() {
   useSessionStore.getState().resetSession();
 }
 
-/** Fresh /try visit: drop expired then wipe all demo storage. */
+/** Fresh /online visit: drop expired then wipe all demo storage. */
 export async function prepareTryEntry() {
   await purgeExpired();
   await purgeAllDemoStorage();

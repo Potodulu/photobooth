@@ -45,14 +45,13 @@ export function PhotoboothLayout({
 
   return (
     <div className={cn("bg-background flex min-h-dvh flex-col", className)}>
-      <header className="border-border flex items-center justify-between border-b-2 px-4 py-4 sm:px-6">
+      <header className="border-border flex items-center border-b-2 px-4 py-4 sm:px-6">
         <Link
           href="/"
           className="font-display text-xl font-extrabold tracking-tight"
         >
           Potodulu
         </Link>
-        <span className="text-muted-foreground text-sm">Try Now</span>
       </header>
       <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
         {(title || subtitle) && (

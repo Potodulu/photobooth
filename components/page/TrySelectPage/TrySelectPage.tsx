@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { PhotoPicker } from "@/components/module/photobooth/PhotoPicker";
+import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
   useTryFlowGuard,
@@ -77,7 +78,7 @@ export function TrySelectPage() {
         onAutoFill={() => autoFillSlots(captures.map((item) => item.id))}
         onConfirm={() => {
           confirmPhotoSelection();
-          router.push("/try/preview");
+          router.push(ROUTES.ONLINE.PREVIEW);
         }}
       />
     </PhotoboothLayout>

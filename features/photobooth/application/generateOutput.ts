@@ -219,7 +219,7 @@ export async function downloadResultZip() {
     createdAt: result.createdAt,
     version: result.version,
     retentionNote:
-      "Browser temporary storage. Cleared after download and when revisiting /try.",
+      "Browser temporary storage. Cleared after download and when revisiting /online.",
   };
 
   const zipBlob = await buildResultZip({

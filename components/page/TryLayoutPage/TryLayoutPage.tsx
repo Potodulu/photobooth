@@ -6,6 +6,7 @@ import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { LayoutPicker } from "@/components/module/photobooth/LayoutPicker";
 import { Button } from "@/components/ui/Button";
+import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
   useTryFlowGuard,
@@ -30,7 +31,7 @@ export function TryLayoutPage() {
   const handleContinue = () => {
     if (!selectedLayoutId) return;
     selectLayout(selectedLayoutId);
-    router.push("/try/camera");
+    router.push(ROUTES.ONLINE.CAMERA);
   };
 
   return (

@@ -3,13 +3,13 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   MAINTENANCE: "/maintenance",
-  TRY: {
-    ROOT: "/try",
-    LAYOUT: "/try/layout",
-    CAMERA: "/try/camera",
-    SELECT: "/try/select",
-    PREVIEW: "/try/preview",
-    FRAME: "/try/frame",
+  ONLINE: {
+    ROOT: "/online",
+    LAYOUT: "/online/layout",
+    CAMERA: "/online/camera",
+    SELECT: "/online/select",
+    PREVIEW: "/online/preview",
+    FRAME: "/online/frame",
   },
   DASHBOARD: {
     ROOT: "/dashboard",
@@ -30,7 +30,7 @@ export type AppRoute =
   | typeof ROUTES.LOGIN
   | typeof ROUTES.REGISTER
   | typeof ROUTES.MAINTENANCE
-  | (typeof ROUTES.TRY)[keyof typeof ROUTES.TRY]
+  | (typeof ROUTES.ONLINE)[keyof typeof ROUTES.ONLINE]
   | typeof ROUTES.DASHBOARD.ROOT
   | typeof ROUTES.DASHBOARD.LAYOUTS
   | typeof ROUTES.DASHBOARD.LAYOUTS_NEW

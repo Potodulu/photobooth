@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { CaptureStudio } from "@/components/module/photobooth/CaptureStudio";
+import { ROUTES } from "@/constants/route";
 import {
   useCamera,
   usePhotoboothActions,
@@ -79,7 +80,7 @@ export function TryCameraPage() {
         onContinue={async () => {
           await persistCaptureSet();
           await loadFramesForSelectedLayout();
-          router.push("/try/select");
+          router.push(ROUTES.ONLINE.SELECT);
         }}
       />
     </PhotoboothLayout>

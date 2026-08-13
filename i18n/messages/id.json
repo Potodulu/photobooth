@@ -80,9 +80,9 @@
   },
   "TryWarning": {
     "pageTitle": "Sebelum mulai",
-    "pageSubtitle": "Demo tamu ini sepenuhnya di browser. Membuka halaman ini membersihkan storage demo sebelumnya.",
+    "pageSubtitle": "Sesi online ini sepenuhnya di browser. Membuka halaman ini membersihkan storage sesi sebelumnya.",
     "title": "Penyimpanan browser sementara",
-    "description": "Demo ini menyimpan hasilmu sementara di browser. Membuka /try menghapus data demo lama. Storage juga dibersihkan setelah unduh atau batal. Pembersihan browser bisa menghapus data kapan saja.",
+    "description": "Sesi online menyimpan hasilmu sementara di browser. Membuka /online menghapus data sesi lama. Storage juga dibersihkan setelah unduh atau batal. Pembersihan browser bisa menghapus data kapan saja.",
     "continue": "Lanjut",
     "cancel": "Batal"
   },

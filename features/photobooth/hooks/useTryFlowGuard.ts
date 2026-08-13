@@ -2,15 +2,16 @@
 
 import { useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
+import { ROUTES } from "@/constants/route";
 import { useSessionStore } from "@/features/photobooth/stores";
 import type { TryStep } from "@/features/photobooth/stores/sessionStore";
 
 const STEP_PATH: Record<TryStep, string> = {
-  warning: "/try",
-  layout: "/try/layout",
-  camera: "/try/camera",
-  select: "/try/select",
-  preview: "/try/preview",
+  warning: ROUTES.ONLINE.ROOT,
+  layout: ROUTES.ONLINE.LAYOUT,
+  camera: ROUTES.ONLINE.CAMERA,
+  select: ROUTES.ONLINE.SELECT,
+  preview: ROUTES.ONLINE.PREVIEW,
 };
 
 const STEP_ORDER: TryStep[] = [
@@ -30,7 +31,7 @@ export function useTryFlowGuard(requiredStep: TryStep) {
     if (requiredStep === "warning") return;
 
     if (!accepted) {
-      router.replace("/try");
+      router.replace(ROUTES.ONLINE.ROOT);
       return;
     }
 
