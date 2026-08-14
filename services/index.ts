@@ -6,3 +6,5 @@ export { profileService } from "./profile";
 export { sessionService } from "./session";
 export { uploadService } from "./upload";
 export { galleryService } from "./gallery";
+export { userAccessService } from "./userAccess";
+export { roleService } from "./role";

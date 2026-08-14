@@ -24,3 +24,17 @@ export function useUpdateProfile() {
     },
   });
 }
+
+export function useUpdateEmail() {
+  return useMutation({
+    mutationFn: (data: { email: string; current_password?: string }) =>
+      profileService.updateEmail(data),
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (data: { current_password: string; new_password: string }) =>
+      profileService.changePassword(data),
+  });
+}

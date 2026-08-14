@@ -16,3 +16,13 @@ export type UpdateProfilePayload = {
   bio?: string | null;
   phone?: string | null;
 };
+
+export type UpdateEmailPayload = {
+  email: string;
+  current_password?: string;
+};
+
+export type ChangePasswordPayload = {
+  current_password: string;
+  new_password: string;
+};

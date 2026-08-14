@@ -12,6 +12,19 @@ export const API_ROUTES = {
   },
   PROFILES: {
     ME: "/profiles/me",
+    UPDATE_EMAIL: "/profiles/me/email",
+    CHANGE_PASSWORD: "/profiles/me/password",
+  },
+  USER_ACCESS: {
+    LIST: "/users",
+    CREATE: "/users",
+    byId: (id: string) => `/users/${id}` as const,
+    inactivate: (id: string) => `/users/${id}/inactivate` as const,
+  },
+  ROLES: {
+    LIST: "/roles",
+    CREATE: "/roles",
+    byId: (id: string) => `/roles/${id}` as const,
   },
   LAYOUTS: {
     LIST: "/layouts",

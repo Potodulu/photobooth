@@ -35,7 +35,21 @@ export type {
 
 export type { AssetDto } from "./asset";
 
-export type { ProfileDto, UpdateProfilePayload } from "./profile";
+export type {
+  ProfileDto,
+  UpdateProfilePayload,
+  UpdateEmailPayload,
+  ChangePasswordPayload,
+} from "./profile";
+
+export type {
+  UserStatus,
+  UserAccountDto,
+  CreateUserPayload,
+  UpdateUserPayload,
+} from "./userAccess";
+
+export type { RoleDto, CreateRolePayload, UpdateRolePayload } from "./role";
 
 export type {
   SessionVisibility,

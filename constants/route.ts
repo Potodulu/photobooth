@@ -22,6 +22,8 @@ export const ROUTES = {
     frameDetail: (id: string) => `/dashboard/frames/${id}` as const,
     frameEdit: (id: string) => `/dashboard/frames/${id}/edit` as const,
     PROFILE: "/dashboard/profile",
+    USER_ACCESS: "/dashboard/user-access",
+    ROLES: "/dashboard/roles",
   },
 } as const;
 
@@ -36,4 +38,6 @@ export type AppRoute =
   | typeof ROUTES.DASHBOARD.LAYOUTS_NEW
   | typeof ROUTES.DASHBOARD.FRAMES
   | typeof ROUTES.DASHBOARD.FRAMES_NEW
-  | typeof ROUTES.DASHBOARD.PROFILE;
+  | typeof ROUTES.DASHBOARD.PROFILE
+  | typeof ROUTES.DASHBOARD.USER_ACCESS
+  | typeof ROUTES.DASHBOARD.ROLES;

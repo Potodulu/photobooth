@@ -3,6 +3,8 @@ import {
   LayoutTemplate,
   LayoutDashboard,
   UserRound,
+  Users,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import { ROUTES } from "@/constants/route";
@@ -33,6 +35,18 @@ export const dashboardMenuConfig: DashboardMenuItem[] = [
     title: "Frames",
     icon: Frame,
     href: ROUTES.DASHBOARD.FRAMES,
+    roles: [ROLES.ADMIN],
+  },
+  {
+    title: "User Access",
+    icon: Users,
+    href: ROUTES.DASHBOARD.USER_ACCESS,
+    roles: [ROLES.ADMIN],
+  },
+  {
+    title: "Role",
+    icon: ShieldCheck,
+    href: ROUTES.DASHBOARD.ROLES,
     roles: [ROLES.ADMIN],
   },
   {

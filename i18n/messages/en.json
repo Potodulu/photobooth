@@ -324,5 +324,117 @@
       "invalidFormat": "Invalid JSON format: {msg}",
       "readError": "Failed to read or process the JSON file."
     }
+  },
+  "UserAccessPage": {
+    "title": "User Access",
+    "subtitle": "Manage user and contributor access across the system.",
+    "addUser": "Add User",
+    "tabUser": "User",
+    "tabContributor": "Contributor",
+    "loading": "Loading user data...",
+    "empty": "No users in this category.",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "action": "Action"
+    },
+    "addModal": {
+      "title": "Add User ({role})",
+      "description": "Create a new user account for role {role}.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "phone": "Phone",
+      "cancel": "Cancel",
+      "save": "Save",
+      "success": "User added successfully.",
+      "error": "Failed to add user."
+    },
+    "viewModal": {
+      "title": "User Detail",
+      "fullName": "Name:",
+      "email": "Email:",
+      "role": "Role:",
+      "status": "Status:",
+      "phone": "Phone:",
+      "close": "Close"
+    },
+    "editModal": {
+      "title": "Edit User Account",
+      "description": "Update user profile, email, or reset password.",
+      "fullName": "Full Name",
+      "email": "Email",
+      "resetPassword": "Reset Password",
+      "resetHint": "Password will be generated randomly. Click copy icon to duplicate.",
+      "phone": "Phone",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "success": "User account updated successfully.",
+      "error": "Failed to update user account."
+    },
+    "inactivate": {
+      "confirm": "Inactivate user {name}?",
+      "success": "User inactivated successfully.",
+      "error": "Failed to inactivate user."
+    }
+  },
+  "RolePage": {
+    "title": "Role Management",
+    "subtitle": "Manage system roles & access permissions.",
+    "addRole": "Add Role",
+    "loading": "Loading role data...",
+    "permissions": "Permissions:",
+    "userCount": "{count} Users",
+    "addModal": {
+      "title": "Add Role",
+      "description": "Add a new role to the system.",
+      "name": "Role Name",
+      "code": "Role Code (e.g. MODERATOR)",
+      "descriptionLabel": "Description",
+      "permissionsLabel": "Permissions (comma separated)",
+      "cancel": "Cancel",
+      "save": "Save",
+      "success": "Role created successfully.",
+      "error": "Failed to create role."
+    },
+    "editModal": {
+      "title": "Edit Role",
+      "name": "Role Name",
+      "descriptionLabel": "Description",
+      "permissionsLabel": "Permissions (comma separated)",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "success": "Role updated successfully.",
+      "error": "Failed to update role."
+    },
+    "delete": {
+      "confirm": "Delete role {name}?",
+      "success": "Role deleted successfully.",
+      "error": "Failed to delete role."
+    }
+  },
+  "ProfileTabs": {
+    "pageTitle": "Profile & Account",
+    "pageSubtitle": "Manage your profile information and account authentication.",
+    "tabProfile": "Profile Info",
+    "tabEmail": "Email Settings",
+    "tabPassword": "Change Password",
+    "emailForm": {
+      "newEmail": "New Email",
+      "currentPassword": "Current Password (Verification)",
+      "submit": "Update Email",
+      "success": "Email updated successfully.",
+      "error": "Failed to update email."
+    },
+    "passwordForm": {
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "submit": "Change Password",
+      "success": "Password changed successfully.",
+      "error": "Failed to change password."
+    }
   }
 }

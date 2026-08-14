@@ -324,5 +324,117 @@
       "invalidFormat": "Format JSON tidak valid: {msg}",
       "readError": "Gagal membaca atau memproses file JSON."
     }
+  },
+  "UserAccessPage": {
+    "title": "User Access",
+    "subtitle": "Kelola akses user dan contributor di sistem.",
+    "addUser": "Add User",
+    "tabUser": "User",
+    "tabContributor": "Contributor",
+    "loading": "Memuat data user...",
+    "empty": "Belum ada user di kategori ini.",
+    "table": {
+      "name": "Nama",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "action": "Aksi"
+    },
+    "addModal": {
+      "title": "Add User ({role})",
+      "description": "Buat akun user baru untuk role {role}.",
+      "fullName": "Nama Lengkap",
+      "email": "Email",
+      "password": "Password",
+      "phone": "Phone",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "success": "User berhasil ditambahkan.",
+      "error": "Gagal menambahkan user."
+    },
+    "viewModal": {
+      "title": "Detail User",
+      "fullName": "Nama:",
+      "email": "Email:",
+      "role": "Role:",
+      "status": "Status:",
+      "phone": "Phone:",
+      "close": "Tutup"
+    },
+    "editModal": {
+      "title": "Edit Account User",
+      "description": "Ubah profile, email, atau reset password user.",
+      "fullName": "Nama Lengkap",
+      "email": "Email",
+      "resetPassword": "Reset Password",
+      "resetHint": "Password akan dibuat otomatis secara acak. Klik icon copy untuk menyalin.",
+      "phone": "Phone",
+      "cancel": "Batal",
+      "save": "Simpan Perubahan",
+      "success": "Account user berhasil diperbarui.",
+      "error": "Gagal memperbarui account user."
+    },
+    "inactivate": {
+      "confirm": "Nonaktifkan user {name}?",
+      "success": "User berhasil dinonaktifkan.",
+      "error": "Gagal menonaktifkan user."
+    }
+  },
+  "RolePage": {
+    "title": "Role Management",
+    "subtitle": "Kelola role & hak akses di sistem.",
+    "addRole": "Add Role",
+    "loading": "Memuat data role...",
+    "permissions": "Permissions:",
+    "userCount": "{count} User",
+    "addModal": {
+      "title": "Add Role",
+      "description": "Tambahkan role baru ke sistem.",
+      "name": "Nama Role",
+      "code": "Kode Role (e.g. MODERATOR)",
+      "descriptionLabel": "Deskripsi",
+      "permissionsLabel": "Permissions (pisah dengan koma)",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "success": "Role berhasil dibuat.",
+      "error": "Gagal membuat role."
+    },
+    "editModal": {
+      "title": "Edit Role",
+      "name": "Nama Role",
+      "descriptionLabel": "Deskripsi",
+      "permissionsLabel": "Permissions (pisah dengan koma)",
+      "cancel": "Batal",
+      "save": "Simpan Perubahan",
+      "success": "Role berhasil diperbarui.",
+      "error": "Gagal memperbarui role."
+    },
+    "delete": {
+      "confirm": "Hapus role {name}?",
+      "success": "Role berhasil dihapus.",
+      "error": "Gagal menghapus role."
+    }
+  },
+  "ProfileTabs": {
+    "pageTitle": "Profile & Account",
+    "pageSubtitle": "Kelola info profil dan autentikasi akun kamu.",
+    "tabProfile": "Profile Info",
+    "tabEmail": "Setting Email",
+    "tabPassword": "Ubah Password",
+    "emailForm": {
+      "newEmail": "Email Baru",
+      "currentPassword": "Password Saat Ini (Verifikasi)",
+      "submit": "Update Email",
+      "success": "Email berhasil diperbarui.",
+      "error": "Gagal memperbarui email."
+    },
+    "passwordForm": {
+      "currentPassword": "Password Saat Ini",
+      "newPassword": "Password Baru",
+      "confirmPassword": "Konfirmasi Password Baru",
+      "submit": "Ubah Password",
+      "success": "Password berhasil diubah.",
+      "error": "Gagal mengubah password."
+    }
   }
 }
