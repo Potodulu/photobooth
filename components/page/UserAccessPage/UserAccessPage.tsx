@@ -71,12 +71,14 @@ function UserTable({
           <tbody className="divide-border divide-y">
             {users.map((user) => (
               <tr key={user.id} className="hover:bg-muted/20">
-                <td className="px-4 py-3 font-medium">{user.full_name}</td>
+                <td className="px-4 py-3 font-medium">
+                  {user.profile?.full_name || user.email}
+                </td>
                 <td className="text-muted-foreground px-4 py-3">
                   {user.email}
                 </td>
                 <td className="px-4 py-3">
-                  <Badge variant="outline">{user.role}</Badge>
+                  <Badge variant="outline">{user.role_code}</Badge>
                 </td>
                 <td className="px-4 py-3">
                   <Badge
@@ -127,8 +129,9 @@ function UserTable({
 
 function UserAccessContent() {
   const t = useTranslations("UserAccessPage");
-  const [activeTab, setActiveTab] = React.useState<RoleCode>("USER");
-  const { data: users = [], isLoading } = useUserAccessList(activeTab);
+  const [activeTab, setActiveTab] = React.useState<RoleCode>("user");
+  const { data, isLoading } = useUserAccessList(activeTab);
+  const users = data?.items ?? [];
 
   const createMutation = useCreateUserAccess();
   const updateMutation = useUpdateUserAccess();
@@ -147,7 +150,7 @@ function UserAccessContent() {
     email: "",
     password: "",
     full_name: "",
-    role: activeTab as RoleCode,
+    role_code: activeTab as RoleCode,
     phone: "",
   });
 
@@ -179,7 +182,7 @@ function UserAccessContent() {
     try {
       await createMutation.mutateAsync({
         ...formData,
-        role: activeTab,
+        role_code: activeTab,
       });
       toast.success(t("addModal.success"));
       setIsAddOpen(false);
@@ -187,7 +190,7 @@ function UserAccessContent() {
         email: "",
         password: "",
         full_name: "",
-        role: activeTab,
+        role_code: activeTab,
         phone: "",
       });
     } catch {
@@ -217,7 +220,8 @@ function UserAccessContent() {
   };
 
   const handleInactivate = async (user: UserAccountDto) => {
-    if (confirm(t("inactivate.confirm", { name: user.full_name }))) {
+    const name = user.profile?.full_name || user.email;
+    if (confirm(t("inactivate.confirm", { name }))) {
       try {
         await inactivateMutation.mutateAsync(user.id);
         toast.success(t("inactivate.success"));
@@ -245,8 +249,8 @@ function UserAccessContent() {
         onValueChange={(val) => setActiveTab(val as RoleCode)}
       >
         <TabsList>
-          <TabsTrigger value="USER">{t("tabUser")}</TabsTrigger>
-          <TabsTrigger value="CONTRIBUTOR">{t("tabContributor")}</TabsTrigger>
+          <TabsTrigger value="user">{t("tabUser")}</TabsTrigger>
+          <TabsTrigger value="contributor">{t("tabContributor")}</TabsTrigger>
         </TabsList>
 
         <div className="mt-4">
@@ -256,7 +260,7 @@ function UserAccessContent() {
             </div>
           ) : (
             <>
-              <TabsContent value="USER">
+              <TabsContent value="user">
                 <UserTable
                   users={users}
                   onView={(u) => {
@@ -268,9 +272,9 @@ function UserAccessContent() {
                     setFormData({
                       email: u.email,
                       password: "",
-                      full_name: u.full_name,
-                      role: u.role,
-                      phone: u.phone || "",
+                      full_name: u.profile?.full_name || "",
+                      role_code: u.role_code,
+                      phone: u.profile?.phone || "",
                     });
                     setGeneratedPassword("");
                     setIsEditOpen(true);
@@ -278,7 +282,7 @@ function UserAccessContent() {
                   onInactivate={handleInactivate}
                 />
               </TabsContent>
-              <TabsContent value="CONTRIBUTOR">
+              <TabsContent value="contributor">
                 <UserTable
                   users={users}
                   onView={(u) => {
@@ -290,9 +294,9 @@ function UserAccessContent() {
                     setFormData({
                       email: u.email,
                       password: "",
-                      full_name: u.full_name,
-                      role: u.role,
-                      phone: u.phone || "",
+                      full_name: u.profile?.full_name || "",
+                      role_code: u.role_code,
+                      phone: u.profile?.phone || "",
                     });
                     setGeneratedPassword("");
                     setIsEditOpen(true);
@@ -392,20 +396,20 @@ function UserAccessContent() {
             <div className="space-y-2 text-sm">
               <p>
                 <strong>{t("viewModal.fullName")}</strong>{" "}
-                {selectedUser.full_name}
+                {selectedUser.profile?.full_name || "-"}
               </p>
               <p>
                 <strong>{t("viewModal.email")}</strong> {selectedUser.email}
               </p>
               <p>
-                <strong>{t("viewModal.role")}</strong> {selectedUser.role}
+                <strong>{t("viewModal.role")}</strong> {selectedUser.role_code}
               </p>
               <p>
                 <strong>{t("viewModal.status")}</strong> {selectedUser.status}
               </p>
               <p>
                 <strong>{t("viewModal.phone")}</strong>{" "}
-                {selectedUser.phone || "-"}
+                {selectedUser.profile?.phone || "-"}
               </p>
             </div>
           )}

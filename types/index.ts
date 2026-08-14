@@ -44,12 +44,15 @@ export type {
 
 export type {
   UserStatus,
+  UserProfileDto,
   UserAccountDto,
   CreateUserPayload,
   UpdateUserPayload,
 } from "./userAccess";
 
 export type { RoleDto, CreateRolePayload, UpdateRolePayload } from "./role";
+
+export type { DashboardStatsDto } from "./dashboard";
 
 export type {
   SessionVisibility,

@@ -5,6 +5,7 @@ import type {
   UpdateProfilePayload,
   UpdateEmailPayload,
   ChangePasswordPayload,
+  UserAccountDto,
 } from "@/types";
 
 export const profileService = {
@@ -16,13 +17,17 @@ export const profileService = {
     return apiClient.patch<ProfileDto>(API_ROUTES.PROFILES.ME, data);
   },
 
-  updateEmail(data: UpdateEmailPayload): Promise<void> {
-    // ponytail: mock implementation ceiling until backend endpoint is integrated
-    return apiClient.patch<void>(API_ROUTES.PROFILES.UPDATE_EMAIL, data);
+  updateEmail(data: UpdateEmailPayload): Promise<UserAccountDto> {
+    return apiClient.patch<UserAccountDto>(
+      API_ROUTES.PROFILES.UPDATE_EMAIL,
+      data,
+    );
   },
 
-  changePassword(data: ChangePasswordPayload): Promise<void> {
-    // ponytail: mock implementation ceiling until backend endpoint is integrated
-    return apiClient.post<void>(API_ROUTES.PROFILES.CHANGE_PASSWORD, data);
+  changePassword(data: ChangePasswordPayload): Promise<{ message: string }> {
+    return apiClient.post<{ message: string }>(
+      API_ROUTES.PROFILES.CHANGE_PASSWORD,
+      data,
+    );
   },
 };

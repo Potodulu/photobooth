@@ -26,6 +26,9 @@ export const API_ROUTES = {
     CREATE: "/roles",
     byId: (id: string) => `/roles/${id}` as const,
   },
+  DASHBOARD: {
+    STATS: "/dashboard/stats",
+  },
   LAYOUTS: {
     LIST: "/layouts",
     byId: (id: string) => `/layouts/${id}` as const,

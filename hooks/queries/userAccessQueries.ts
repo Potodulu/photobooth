@@ -13,7 +13,8 @@ import type {
 
 export const userAccessKeys = {
   all: ["userAccess"] as const,
-  list: (role?: RoleCode) => ["userAccess", "list", role] as const,
+  list: (role?: RoleCode, page?: number, per_page?: number) =>
+    ["userAccess", "list", role, page, per_page] as const,
 };
 
 export const roleKeys = {
@@ -21,10 +22,10 @@ export const roleKeys = {
   list: () => ["roles", "list"] as const,
 };
 
-export function useUserAccessList(role?: RoleCode) {
+export function useUserAccessList(role?: RoleCode, page = 1, per_page = 20) {
   return useQuery({
-    queryKey: userAccessKeys.list(role),
-    queryFn: () => userAccessService.list(role),
+    queryKey: userAccessKeys.list(role, page, per_page),
+    queryFn: () => userAccessService.list(role, page, per_page),
   });
 }
 

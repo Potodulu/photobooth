@@ -1,9 +1,7 @@
-import type { RoleCode } from "./auth";
-
 export type RoleDto = {
   id: string;
+  code: string;
   name: string;
-  code: RoleCode;
   description: string;
   permissions: string[];
   user_count: number;
@@ -12,10 +10,10 @@ export type RoleDto = {
 };
 
 export type CreateRolePayload = {
-  name: string;
   code: string;
+  name: string;
   description: string;
   permissions: string[];
 };
 
-export type UpdateRolePayload = Partial<CreateRolePayload>;
+export type UpdateRolePayload = Partial<Omit<CreateRolePayload, "code">>;

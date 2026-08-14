@@ -131,7 +131,7 @@ function ProfileFormInner() {
     setError(null);
     try {
       await updateEmailMutation.mutateAsync({
-        email: values.email,
+        new_email: values.email,
         current_password: values.current_password,
       });
       toast.success(t("emailForm.success"));

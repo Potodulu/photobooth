@@ -8,3 +8,4 @@ export { uploadService } from "./upload";
 export { galleryService } from "./gallery";
 export { userAccessService } from "./userAccess";
 export { roleService } from "./role";
+export { dashboardService } from "./dashboard";

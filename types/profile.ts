@@ -1,9 +1,10 @@
 export type ProfileDto = {
-  id: string;
+  id?: string;
   user_id: string;
   full_name: string;
   email?: string | null;
   avatar_url?: string | null;
+  avatar_asset_id?: string | null;
   bio?: string | null;
   phone?: string | null;
   created_at?: string;
@@ -18,7 +19,7 @@ export type UpdateProfilePayload = {
 };
 
 export type UpdateEmailPayload = {
-  email: string;
+  new_email: string;
   current_password?: string;
 };
 

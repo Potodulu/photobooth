@@ -26,9 +26,13 @@ export function useUpdateProfile() {
 }
 
 export function useUpdateEmail() {
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { email: string; current_password?: string }) =>
+    mutationFn: (data: { new_email: string; current_password?: string }) =>
       profileService.updateEmail(data),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: profileKeys.me });
+    },
   });
 }
 
