@@ -25,6 +25,20 @@ export const API_ROUTES = {
       `/frames/${id}/assets/${kind}` as const,
     downloadOverlay: (id: string) => `/frames/${id}/download/overlay` as const,
   },
+  SESSIONS: {
+    CREATE: "/sessions",
+    byId: (id: string) => `/sessions/${id}` as const,
+    byCode: (code: string) => `/sessions/code/${code}` as const,
+  },
+  UPLOADS: {
+    assets: (sessionId: string) =>
+      `/uploads/sessions/${sessionId}/assets` as const,
+    results: (sessionId: string) =>
+      `/uploads/sessions/${sessionId}/results` as const,
+  },
+  GALLERY: {
+    bySessionId: (sessionId: string) => `/gallery/${sessionId}` as const,
+  },
   ASSETS: {
     byId: (id: string) => `/assets/${id}` as const,
     download: (id: string) => `/assets/${id}/download` as const,

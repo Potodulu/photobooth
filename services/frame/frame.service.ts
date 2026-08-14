@@ -36,12 +36,14 @@ export const frameService = {
       : API_ROUTES.FRAMES.LIST;
     const response = await apiClient.get<
       ApiPaginatedData<FrameDto> | FrameDto[]
-    >(path);
+    >(path, { auth: false });
     return normalizeList(response);
   },
 
   get(id: string): Promise<FrameDto> {
-    return apiClient.get<FrameDto>(API_ROUTES.FRAMES.byId(id));
+    return apiClient.get<FrameDto>(API_ROUTES.FRAMES.byId(id), {
+      auth: false,
+    });
   },
 
   create(data: CreateFramePayload): Promise<FrameDto> {

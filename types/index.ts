@@ -36,3 +36,14 @@ export type {
 export type { AssetDto } from "./asset";
 
 export type { ProfileDto, UpdateProfilePayload } from "./profile";
+
+export type {
+  SessionVisibility,
+  SessionRetentionPolicy,
+  SessionStatus,
+  SessionDto,
+  CreateSessionPayload,
+  SessionAssetType,
+  SessionAssetDto,
+  GalleryResponseDto,
+} from "./session";

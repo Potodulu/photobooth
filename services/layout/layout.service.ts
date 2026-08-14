@@ -40,12 +40,14 @@ export const layoutService = {
       : API_ROUTES.LAYOUTS.LIST;
     const response = await apiClient.get<
       ApiPaginatedData<LayoutDto> | LayoutDto[]
-    >(path);
+    >(path, { auth: false });
     return normalizeList(response);
   },
 
   get(id: string): Promise<LayoutDto> {
-    return apiClient.get<LayoutDto>(API_ROUTES.LAYOUTS.byId(id));
+    return apiClient.get<LayoutDto>(API_ROUTES.LAYOUTS.byId(id), {
+      auth: false,
+    });
   },
 
   create(data: CreateLayoutPayload): Promise<LayoutDto> {
