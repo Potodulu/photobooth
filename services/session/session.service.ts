@@ -3,7 +3,7 @@ import { apiClient } from "@/libs/api";
 import type { CreateSessionPayload, SessionDto } from "@/types";
 
 export const sessionService = {
-  create(data?: CreateSessionPayload): Promise<SessionDto> {
+  create(data: CreateSessionPayload = {}): Promise<SessionDto> {
     return apiClient.post<SessionDto>(API_ROUTES.SESSIONS.CREATE, data, {
       auth: false,
     });

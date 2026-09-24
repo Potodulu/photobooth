@@ -56,6 +56,9 @@ const ASSETS: Record<string, string> = {
 
 /** Resolve a relative key under features/photobooth/assets to a bundler URL. */
 export function resolvePhotoboothAsset(key: string): string {
+  if (key.startsWith("/") || key.startsWith("http://") || key.startsWith("https://")) {
+    return key;
+  }
   const url = ASSETS[key];
   if (!url) {
     throw new Error(`Unknown photobooth asset: ${key}`);
@@ -67,5 +70,8 @@ export function tryResolvePhotoboothAsset(
   key: string | null | undefined,
 ): string | null {
   if (!key) return null;
+  if (key.startsWith("/") || key.startsWith("http://") || key.startsWith("https://")) {
+    return key;
+  }
   return ASSETS[key] ?? null;
 }

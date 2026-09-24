@@ -19,7 +19,7 @@ export function LayoutPicker({
   selectedId,
   onSelect,
 }: LayoutPickerProps) {
-  const t = useTranslations("TryLayout");
+  const t = useTranslations("OnlineLayout");
   const [typeFilter, setTypeFilter] = useState<LayoutType>("paper");
 
   const filtered = layouts.filter((layout) => layout.type === typeFilter);

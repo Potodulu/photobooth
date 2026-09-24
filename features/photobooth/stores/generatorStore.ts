@@ -13,6 +13,7 @@ type GeneratorState = {
   liveOutput: GeneratedBlob | null;
   result: GeneratedResult | null;
   isGenerating: boolean;
+  isUploading: boolean;
   downloadProgress: number;
   error: string | null;
   setSlotAssignments: (slotAssignments: SlotAssignment[]) => void;
@@ -27,6 +28,7 @@ type GeneratorState = {
   }) => void;
   setResult: (result: GeneratedResult | null) => void;
   setGenerating: (isGenerating: boolean) => void;
+  setUploading: (isUploading: boolean) => void;
   setDownloadProgress: (downloadProgress: number) => void;
   setError: (error: string | null) => void;
   reset: () => void;
@@ -44,6 +46,7 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
   liveOutput: null,
   result: null,
   isGenerating: false,
+  isUploading: false,
   downloadProgress: 0,
   error: null,
   setSlotAssignments: (slotAssignments) => set({ slotAssignments }),
@@ -77,6 +80,7 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
     set({ pngOutput: png, gifOutput: gif, liveOutput: live }),
   setResult: (result) => set({ result }),
   setGenerating: (isGenerating) => set({ isGenerating }),
+  setUploading: (isUploading) => set({ isUploading }),
   setDownloadProgress: (downloadProgress) => set({ downloadProgress }),
   setError: (error) => set({ error }),
   reset: () => {
@@ -90,6 +94,7 @@ export const useGeneratorStore = create<GeneratorState>((set, get) => ({
       liveOutput: null,
       result: null,
       isGenerating: false,
+      isUploading: false,
       downloadProgress: 0,
       error: null,
     });

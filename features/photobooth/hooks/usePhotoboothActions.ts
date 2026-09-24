@@ -10,7 +10,7 @@ import {
   loadFramesForSelectedLayout,
   loadLayouts,
   persistCaptureSet,
-  prepareTryEntry,
+  prepareOnlineSession,
   retakeLastPhoto,
   selectFrame,
   selectLayout,
@@ -46,7 +46,10 @@ export function usePhotoboothActions() {
     () => run(cancelGuestSession),
     [run],
   );
-  const prepareTryEntryAction = useCallback(() => run(prepareTryEntry), [run]);
+  const prepareOnlineSessionAction = useCallback(
+    () => run(prepareOnlineSession),
+    [run],
+  );
   const loadLayoutsAction = useCallback(() => run(loadLayouts), [run]);
   const takePhotoAction = useCallback(
     (video: HTMLVideoElement, hooks: TakePhotoHooks) =>
@@ -72,7 +75,7 @@ export function usePhotoboothActions() {
     busy,
     startGuestSession: startGuestSessionAction,
     cancelGuestSession: cancelGuestSessionAction,
-    prepareTryEntry: prepareTryEntryAction,
+    prepareOnlineSession: prepareOnlineSessionAction,
     loadLayouts: loadLayoutsAction,
     selectLayout,
     takePhoto: takePhotoAction,

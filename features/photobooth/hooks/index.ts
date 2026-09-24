@@ -1,7 +1,5 @@
-export { useTryFlowGuard, useTryStepSync } from "./useTryFlowGuard";
+export { useOnlineFlowGuard, useOnlineStepSync } from "./useOnlineFlowGuard";
 export { useCamera } from "./useCamera";
-export {
-  useDeviceOrientation,
-  useOrientationGuard,
-} from "./useDeviceOrientation";
+export { useDeviceOrientation } from "./useDeviceOrientation";
+export { useOrientationGuard } from "./useOrientationGuard";
 export { usePhotoboothActions } from "./usePhotoboothActions";

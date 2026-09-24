@@ -1,3 +1,4 @@
+import QRCode from "qrcode";
 import type {
   CompositeInput,
   Frame,
@@ -7,6 +8,8 @@ import type {
   PhotoFilterId,
 } from "@/features/photobooth/domain";
 import { getFilterCss } from "@/features/photobooth/domain";
+import { useSessionStore } from "@/features/photobooth/stores";
+import { ROUTES } from "@/constants/route";
 
 export interface OutputGenerator {
   readonly format: OutputFormat;
@@ -89,6 +92,42 @@ export function drawFrameOverlay(
   }
 }
 
+export async function drawQRCodeOverlay(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  galleryUrl: string,
+) {
+  try {
+    const qrDataUrl = await QRCode.toDataURL(galleryUrl, {
+      margin: 1,
+      width: Math.max(80, Math.min(160, Math.round(width * 0.12))),
+      color: {
+        dark: "#000000",
+        light: "#FFFFFF",
+      },
+    });
+
+    const qrImage = new Image();
+    await new Promise<void>((resolve, reject) => {
+      qrImage.onload = () => resolve();
+      qrImage.onerror = reject;
+      qrImage.src = qrDataUrl;
+    });
+
+    const qrSize = Math.max(80, Math.min(160, Math.round(width * 0.12)));
+    const padding = Math.max(12, Math.round(width * 0.02));
+    const x = width - qrSize - padding;
+    const y = height - qrSize - padding;
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(x - 4, y - 4, qrSize + 8, qrSize + 8);
+    ctx.drawImage(qrImage, x, y, qrSize, qrSize);
+  } catch (error) {
+    console.error("Failed to inject QR code to canvas:", error);
+  }
+}
+
 export function composeToCanvas(
   input: CompositeInput,
   options?: { applyFilter?: boolean },
@@ -134,6 +173,21 @@ export class PngOutputGenerator implements OutputGenerator {
 
   async generate(input: CompositeInput): Promise<GeneratedBlob> {
     const canvas = composeToCanvas(input, { applyFilter: true });
+    const ctx = canvas.getContext("2d");
+
+    const sessionId = useSessionStore.getState().sessionId;
+    if (ctx && sessionId) {
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const galleryUrl = `${origin}${ROUTES.ONLINE.GALLERY(sessionId)}`;
+      await drawQRCodeOverlay(
+        ctx,
+        canvas.width,
+        canvas.height,
+        galleryUrl,
+      );
+    }
+
     const blob = await new Promise<Blob>((resolve, reject) => {
       canvas.toBlob((result) => {
         if (!result) {

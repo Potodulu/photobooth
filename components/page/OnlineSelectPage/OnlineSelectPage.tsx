@@ -8,18 +8,19 @@ import { PhotoPicker } from "@/components/module/photobooth/PhotoPicker";
 import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
-  useTryFlowGuard,
-  useTryStepSync,
+  useOnlineFlowGuard,
+  useOnlineStepSync,
 } from "@/features/photobooth/hooks";
 import {
   useCaptureStore,
   useFrameStore,
   useGeneratorStore,
   useLayoutStore,
+  useSessionStore,
 } from "@/features/photobooth/stores";
 
-export function TrySelectPage() {
-  const t = useTranslations("TrySelect");
+export function OnlineSelectPage() {
+  const t = useTranslations("OnlineSelect");
   const router = useRouter();
   const {
     assignCaptureToSlot,
@@ -41,9 +42,10 @@ export function TrySelectPage() {
   const assignments = useGeneratorStore((s) => s.slotAssignments);
   const frames = useFrameStore((s) => s.frames);
   const selectedFrameId = useFrameStore((s) => s.selectedFrameId);
+  const sessionId = useSessionStore((s) => s.sessionId);
 
-  useTryFlowGuard("select");
-  useTryStepSync("select");
+  useOnlineFlowGuard("select");
+  useOnlineStepSync("select");
 
   useEffect(() => {
     void loadFramesForSelectedLayout();
@@ -77,8 +79,9 @@ export function TrySelectPage() {
         onReset={resetSlotAssignments}
         onAutoFill={() => autoFillSlots(captures.map((item) => item.id))}
         onConfirm={() => {
+          if (!sessionId) return;
           confirmPhotoSelection();
-          router.push(ROUTES.ONLINE.PREVIEW);
+          router.push(ROUTES.ONLINE.PREVIEW(sessionId));
         }}
       />
     </PhotoboothLayout>

@@ -8,16 +8,17 @@ import { ROUTES } from "@/constants/route";
 import {
   useCamera,
   usePhotoboothActions,
-  useTryFlowGuard,
-  useTryStepSync,
+  useOnlineFlowGuard,
+  useOnlineStepSync,
 } from "@/features/photobooth/hooks";
 import {
   useCameraStore,
   useCaptureStore,
   useLayoutStore,
+  useSessionStore,
 } from "@/features/photobooth/stores";
 
-export function TryCameraPage() {
+export function OnlineCameraPage() {
   const router = useRouter();
   const { videoRef, permission, error, start, stop } = useCamera();
   const {
@@ -41,17 +42,17 @@ export function TryCameraPage() {
   const layouts = useLayoutStore((s) => s.layouts);
   const layout = layouts.find((item) => item.id === selectedLayoutId);
   const requiredSlots = layout?.slots.length ?? 1;
+  const sessionId = useSessionStore((s) => s.sessionId);
 
-  useTryFlowGuard("camera");
-  useTryStepSync("camera");
+  useOnlineFlowGuard("camera");
+  useOnlineStepSync("camera");
 
   useEffect(() => {
     void start();
     return () => {
       stop();
     };
-    // Mount-only camera lifecycle for immersive capture screen.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- start/stop are stable enough for page mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -78,9 +79,10 @@ export function TryCameraPage() {
         }}
         onRetake={retakeLastPhoto}
         onContinue={async () => {
+          if (!sessionId) return;
           await persistCaptureSet();
           await loadFramesForSelectedLayout();
-          router.push(ROUTES.ONLINE.SELECT);
+          router.push(ROUTES.ONLINE.SELECT(sessionId));
         }}
       />
     </PhotoboothLayout>

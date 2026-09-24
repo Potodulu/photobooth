@@ -78,15 +78,19 @@
     "subtitle": "Buka sesi online photobooth sekarang — langsung dari browser kamu.",
     "button": "Mulai Sesi Online"
   },
-  "TryWarning": {
+  "OnlineWarning": {
     "pageTitle": "Sebelum mulai",
-    "pageSubtitle": "Sesi online ini sepenuhnya di browser. Membuka halaman ini membersihkan storage sesi sebelumnya.",
+    "pageSubtitle": "Sesi online ini sepenuhnya di browser.",
     "title": "Penyimpanan browser sementara",
-    "description": "Sesi online menyimpan hasilmu sementara di browser. Membuka /online menghapus data sesi lama. Storage juga dibersihkan setelah unduh atau batal. Pembersihan browser bisa menghapus data kapan saja.",
+    "description": "Sesi online menyimpan hasilmu sementara di browser. Membuka /online menghapus data sesi lama.",
     "continue": "Lanjut",
-    "cancel": "Batal"
+    "cancel": "Batal",
+    "errorTitle": "Gagal Membuat Sesi",
+    "errorDescription": "Terjadi masalah saat menghubungi server photobooth. Pastikan jaringan terhubung lalu coba lagi.",
+    "retry": "Coba Lagi",
+    "backHome": "Ke Halaman Utama"
   },
-  "TryLayout": {
+  "OnlineLayout": {
     "title": "Pilih layout",
     "subtitle": "Tentukan bagaimana fotomu akan disusun.",
     "continue": "Lanjut",
@@ -95,7 +99,7 @@
     "paperSize": "{width}×{height} in",
     "emptyType": "Belum ada layout di kategori ini."
   },
-  "TryCamera": {
+  "OnlineCamera": {
     "title": "Capture",
     "subtitle": "Pilih durasi countdown, video ikut terekam selama countdown, lalu still diambil saat flash.",
     "permissionHint": "Izinkan akses kamera untuk memulai preview live.",
@@ -122,12 +126,12 @@
     "recording": "Merekam {seconds}d",
     "rotateToLandscape": "Putar perangkat ke mode landscape untuk menggunakan photobooth."
   },
-  "TryFrame": {
+  "OnlineFrame": {
     "title": "Pilih frame",
     "subtitle": "Frame berbasis metadata. Aset visual bisa ditambahkan nanti.",
     "continue": "Lanjut"
   },
-  "TrySelect": {
+  "OnlineSelect": {
     "title": "Pilih foto",
     "subtitle": "Pilih foto ke slot, sesuaikan posisi crop, pilih frame, dan terapkan filter — semuanya di halaman ini.",
     "progress": "{current} / {total} slot",
@@ -156,7 +160,7 @@
       "mono-high": "Mono+"
     }
   },
-  "TryPreview": {
+  "OnlinePreview": {
     "title": "Preview",
     "subtitle": "Preview live-photo. Unduh aset yang kamu mau satu per satu.",
     "previewAlt": "Preview live-photo hasil photobooth",

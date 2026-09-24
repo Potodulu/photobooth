@@ -120,13 +120,13 @@ export async function persistCaptureSet() {
   const layout = useLayoutStore.getState();
   const captureStore = useCaptureStore.getState();
 
-  if (!session.experienceId || !layout.selectedLayoutId) {
+  if (!layout.selectedLayoutId) {
     throw new Error("Session incomplete");
   }
 
   const set: CaptureSet = {
     id: captureStore.activeCaptureSetId ?? createId(),
-    experienceId: session.experienceId,
+    experienceId: session.experienceId ?? "online-guest-demo",
     layoutId: layout.selectedLayoutId,
     captureIds: captureStore.captures.map((item) => item.id),
     maxTakes: MAX_CAPTURE_TAKES,

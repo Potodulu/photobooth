@@ -25,4 +25,4 @@ export {
   downloadAsset,
   collectPreviewAssets,
 } from "./generateOutput";
-export { prepareTryEntry, purgeAfterDownloadOrCancel } from "./retention";
+export { prepareOnlineSession, purgeAfterDownloadOrCancel } from "./retention";

@@ -60,7 +60,7 @@ export function PhotoPicker({
   onReset,
   onConfirm,
 }: PhotoPickerProps) {
-  const t = useTranslations("TrySelect");
+  const t = useTranslations("OnlineSelect");
   const firstEmpty =
     layout.slots.find(
       (slot) => !assignments.some((item) => item.slotId === slot.id),

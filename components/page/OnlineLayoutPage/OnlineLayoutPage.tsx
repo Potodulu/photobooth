@@ -9,29 +9,30 @@ import { Button } from "@/components/ui/Button";
 import { ROUTES } from "@/constants/route";
 import {
   usePhotoboothActions,
-  useTryFlowGuard,
-  useTryStepSync,
+  useOnlineFlowGuard,
+  useOnlineStepSync,
 } from "@/features/photobooth/hooks";
-import { useLayoutStore } from "@/features/photobooth/stores";
+import { useLayoutStore, useSessionStore } from "@/features/photobooth/stores";
 
-export function TryLayoutPage() {
-  const t = useTranslations("TryLayout");
+export function OnlineLayoutPage() {
+  const t = useTranslations("OnlineLayout");
   const router = useRouter();
   const { loadLayouts, selectLayout, busy } = usePhotoboothActions();
   const layouts = useLayoutStore((s) => s.layouts);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
+  const sessionId = useSessionStore((s) => s.sessionId);
 
-  useTryFlowGuard("layout");
-  useTryStepSync("layout");
+  useOnlineFlowGuard("layout");
+  useOnlineStepSync("layout");
 
   useEffect(() => {
     void loadLayouts();
   }, [loadLayouts]);
 
   const handleContinue = () => {
-    if (!selectedLayoutId) return;
+    if (!selectedLayoutId || !sessionId) return;
     selectLayout(selectedLayoutId);
-    router.push(ROUTES.ONLINE.CAMERA);
+    router.push(ROUTES.ONLINE.CAMERA(sessionId));
   };
 
   return (

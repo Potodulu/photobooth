@@ -21,7 +21,7 @@ export async function resetClientSessionState() {
 }
 
 /** Fresh /online visit: drop expired then wipe all demo storage. */
-export async function prepareTryEntry() {
+export async function prepareOnlineSession() {
   await purgeExpired();
   await purgeAllDemoStorage();
   await resetClientSessionState();

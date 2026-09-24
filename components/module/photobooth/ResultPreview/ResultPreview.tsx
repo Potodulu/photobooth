@@ -1,9 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Spinner } from "@/components/ui/Spinner";
+import { ROUTES } from "@/constants/route";
 import type { PreviewAsset } from "@/features/photobooth/application/generateOutput";
 
 type ResultPreviewProps = {
@@ -12,12 +14,15 @@ type ResultPreviewProps = {
   frameName: string;
   filterName: string;
   isGenerating: boolean;
+  isUploading?: boolean;
   error?: string | null;
   assets: PreviewAsset[];
   assetsLoading: boolean;
+  showRestartButton?: boolean;
+  sessionId?: string;
   onGenerate: () => void;
   onDownloadAsset: (asset: PreviewAsset) => void;
-  onRestart: () => void;
+  onRestart?: () => void;
 };
 
 export function ResultPreview({
@@ -26,14 +31,22 @@ export function ResultPreview({
   frameName,
   filterName,
   isGenerating,
+  isUploading = false,
   error = null,
   assets,
   assetsLoading,
+  showRestartButton = true,
+  sessionId,
   onGenerate,
   onDownloadAsset,
   onRestart,
 }: ResultPreviewProps) {
-  const t = useTranslations("TryPreview");
+  const t = useTranslations("OnlinePreview");
+
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const galleryUrl = sessionId
+    ? `${origin}${ROUTES.ONLINE.GALLERY(sessionId)}`
+    : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,7 +91,27 @@ export function ResultPreview({
         <Badge variant="outline" color="neutral" radius="full">
           {t("livePreviewBadge")}
         </Badge>
+        {isUploading ? (
+          <Badge variant="soft" color="warning" radius="full" className="flex items-center gap-1.5">
+            <Spinner size="sm" />
+            <span>Mengunggah ke server...</span>
+          </Badge>
+        ) : null}
       </div>
+
+      {galleryUrl ? (
+        <div className="border-border bg-card shadow-neo-sm flex flex-col sm:flex-row items-center gap-4 rounded-[var(--radius-lg)] border-2 p-4">
+          <div className="bg-white p-2 rounded-lg border border-border">
+            <QRCodeSVG value={galleryUrl} size={110} />
+          </div>
+          <div className="flex flex-col text-center sm:text-left gap-1">
+            <p className="font-semibold text-sm">QR Gallery Session</p>
+            <p className="text-muted-foreground text-xs">
+              Scan QR code ini untuk membuka halaman galeri foto sesi kamu.
+            </p>
+          </div>
+        </div>
+      ) : null}
 
       <div className="flex flex-wrap gap-3">
         {!previewLiveUrl ? (
@@ -92,19 +125,17 @@ export function ResultPreview({
             {t("generate")}
           </Button>
         ) : null}
-        <Button
-          variant="outline"
-          color="neutral"
-          radius="lg"
-          onClick={onRestart}
-        >
-          {t("restart")}
-        </Button>
+        {showRestartButton && onRestart ? (
+          <Button
+            variant="outline"
+            color="neutral"
+            radius="lg"
+            onClick={onRestart}
+          >
+            {t("restart")}
+          </Button>
+        ) : null}
       </div>
-
-      {/* ZIP download disabled — per-asset download instead
-      <Button onClick={onDownloadZip}>{t("download")}</Button>
-      */}
 
       {previewLiveUrl ? (
         <div className="space-y-3">

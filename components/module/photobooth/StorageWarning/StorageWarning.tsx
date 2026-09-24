@@ -14,16 +14,18 @@ import {
 
 type StorageWarningProps = {
   open: boolean;
+  loading?: boolean;
   onContinue: () => void;
   onCancel: () => void;
 };
 
 export function StorageWarning({
   open,
+  loading = false,
   onContinue,
   onCancel,
 }: StorageWarningProps) {
-  const t = useTranslations("TryWarning");
+  const t = useTranslations("OnlineWarning");
 
   return (
     <AlertDialog open={open}>
@@ -41,6 +43,7 @@ export function StorageWarning({
             variant="outline"
             color="neutral"
             radius="lg"
+            disabled={loading}
             onClick={onCancel}
           >
             {t("cancel")}
@@ -49,6 +52,7 @@ export function StorageWarning({
             variant="solid"
             color="primary"
             radius="lg"
+            loading={loading}
             onClick={onContinue}
           >
             {t("continue")}

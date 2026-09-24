@@ -58,7 +58,7 @@ export function CaptureStudio({
   onRetake,
   onContinue,
 }: CaptureStudioProps) {
-  const t = useTranslations("TryCamera");
+  const t = useTranslations("OnlineCamera");
   const { isPortrait, isLandscape, orientation } = useDeviceOrientation();
   const [count, setCount] = useState<number | null>(null);
   const [flash, setFlash] = useState(false);

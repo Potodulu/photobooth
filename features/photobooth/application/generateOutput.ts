@@ -23,7 +23,9 @@ import {
   useFrameStore,
   useGeneratorStore,
   useLayoutStore,
+  useSessionStore,
 } from "@/features/photobooth/stores";
+import { uploadService } from "@/services/upload";
 import { purgeAfterDownloadOrCancel } from "./retention";
 
 async function loadImage(url: string): Promise<HTMLImageElement> {
@@ -170,6 +172,80 @@ export async function generatePreview() {
     generatorStore.setResult(result);
     generatorStore.setOutputs({ png, gif, live });
     generatorStore.setPreviewLiveUrl(URL.createObjectURL(live.blob));
+
+    // Upload assets & results to Backend API if sessionId exists
+    const sessionId = useSessionStore.getState().sessionId;
+    if (sessionId) {
+      generatorStore.setUploading(true);
+      void (async () => {
+        try {
+          // 1. Upload raw photo assets & video clips
+          for (let index = 0; index < captureStore.captures.length; index += 1) {
+            const capture = captureStore.captures[index];
+            const blob =
+              (await captureService.getCaptureBlob(capture.blobKey)) ??
+              (captureStore.objectUrls[capture.id]
+                ? await fetch(captureStore.objectUrls[capture.id]).then((r) =>
+                    r.blob(),
+                  )
+                : null);
+            if (blob) {
+              const ext = capture.mimeType.includes("png") ? "png" : "jpg";
+              const file = new File(
+                [blob],
+                `webcam_shot_${index + 1}.${ext}`,
+                { type: blob.type || "image/jpeg" },
+              );
+              await uploadService.uploadAsset(sessionId, file);
+            }
+
+            if (capture.videoBlobKey) {
+              const videoBlob =
+                (await captureService.getCaptureBlob(capture.videoBlobKey)) ??
+                (captureStore.videoUrls[capture.id]
+                  ? await fetch(captureStore.videoUrls[capture.id]).then((r) =>
+                      r.blob(),
+                    )
+                  : null);
+              if (videoBlob && videoBlob.size > 0) {
+                const ext = videoBlob.type.includes("mp4") ? "mp4" : "webm";
+                const videoFile = new File(
+                  [videoBlob],
+                  `webcam_clip_${index + 1}.${ext}`,
+                  { type: videoBlob.type || "video/webm" },
+                );
+                await uploadService.uploadAsset(sessionId, videoFile);
+              }
+            }
+          }
+
+          // 2. Upload composite results (PNG photostrip, GIF, Live Photo MP4)
+          const pngFile = new File([png.blob], "photostrip_result.png", {
+            type: "image/png",
+          });
+          await uploadService.uploadResult(sessionId, pngFile);
+
+          if (gif?.blob) {
+            const gifFile = new File([gif.blob], "photostrip_result.gif", {
+              type: "image/gif",
+            });
+            await uploadService.uploadResult(sessionId, gifFile);
+          }
+
+          if (live?.blob) {
+            const liveFile = new File([live.blob], "livephoto_result.mp4", {
+              type: "video/mp4",
+            });
+            await uploadService.uploadResult(sessionId, liveFile);
+          }
+        } catch (uploadError) {
+          console.error("Failed to upload assets to backend:", uploadError);
+        } finally {
+          generatorStore.setUploading(false);
+        }
+      })();
+    }
+
     return { result, png, gif, live };
   } catch (error) {
     generatorStore.setError(

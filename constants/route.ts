@@ -5,11 +5,11 @@ export const ROUTES = {
   MAINTENANCE: "/maintenance",
   ONLINE: {
     ROOT: "/online",
-    LAYOUT: "/online/layout",
-    CAMERA: "/online/camera",
-    SELECT: "/online/select",
-    PREVIEW: "/online/preview",
-    FRAME: "/online/frame",
+    LAYOUT: (sessionId: string) => `/online/${sessionId}/layout` as const,
+    CAMERA: (sessionId: string) => `/online/${sessionId}/camera` as const,
+    SELECT: (sessionId: string) => `/online/${sessionId}/select` as const,
+    PREVIEW: (sessionId: string) => `/online/${sessionId}/preview` as const,
+    GALLERY: (sessionId: string) => `/online/${sessionId}/gallery` as const,
   },
   DASHBOARD: {
     ROOT: "/dashboard",
@@ -32,7 +32,12 @@ export type AppRoute =
   | typeof ROUTES.LOGIN
   | typeof ROUTES.REGISTER
   | typeof ROUTES.MAINTENANCE
-  | (typeof ROUTES.ONLINE)[keyof typeof ROUTES.ONLINE]
+  | typeof ROUTES.ONLINE.ROOT
+  | ReturnType<typeof ROUTES.ONLINE.LAYOUT>
+  | ReturnType<typeof ROUTES.ONLINE.CAMERA>
+  | ReturnType<typeof ROUTES.ONLINE.SELECT>
+  | ReturnType<typeof ROUTES.ONLINE.PREVIEW>
+  | ReturnType<typeof ROUTES.ONLINE.GALLERY>
   | typeof ROUTES.DASHBOARD.ROOT
   | typeof ROUTES.DASHBOARD.LAYOUTS
   | typeof ROUTES.DASHBOARD.LAYOUTS_NEW

@@ -1,5 +1,5 @@
-import { TryWarningPage } from "@/components/page/TryWarningPage";
+import { OnlineWarningPage } from "@/components/page/OnlineWarningPage";
 
 export default function Page() {
-  return <TryWarningPage />;
+  return <OnlineWarningPage />;
 }

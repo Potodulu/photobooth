@@ -78,15 +78,19 @@
     "subtitle": "Open an online photobooth session now — right from your browser.",
     "button": "Start Online Session"
   },
-  "TryWarning": {
+  "OnlineWarning": {
     "pageTitle": "Before you start",
-    "pageSubtitle": "This online session runs entirely in your browser. Opening this page clears previous session storage.",
+    "pageSubtitle": "This online session runs entirely in your browser.",
     "title": "Temporary browser storage",
-    "description": "This online session stores your work temporarily inside your browser. Opening /online clears old session data. Storage is also cleared after download or cancel. Browser cleanup may remove work at any time.",
+    "description": "This online session stores your work temporarily inside your browser.",
     "continue": "Continue",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "errorTitle": "Failed to Create Session",
+    "errorDescription": "There was an issue reaching the photobooth server. Please check your internet connection and try again.",
+    "retry": "Try Again",
+    "backHome": "Back to Home"
   },
-  "TryLayout": {
+  "OnlineLayout": {
     "title": "Select layout",
     "subtitle": "Choose how your photos will be arranged.",
     "continue": "Continue",
@@ -95,7 +99,7 @@
     "paperSize": "{width}×{height} in",
     "emptyType": "No layouts in this category."
   },
-  "TryCamera": {
+  "OnlineCamera": {
     "title": "Capture",
     "subtitle": "Pick a countdown, the clip records for that duration, then the still is taken on flash.",
     "permissionHint": "Allow camera access to start the live preview.",
@@ -122,12 +126,12 @@
     "recording": "Recording {seconds}s",
     "rotateToLandscape": "Rotate your device to landscape mode to use the photobooth."
   },
-  "TryFrame": {
+  "OnlineFrame": {
     "title": "Choose frame",
     "subtitle": "Frames are metadata-driven. Assets can be added later.",
     "continue": "Continue"
   },
-  "TrySelect": {
+  "OnlineSelect": {
     "title": "Choose photos",
     "subtitle": "Assign photos to slots, adjust crop position, pick a frame, and apply a filter — all on this page.",
     "progress": "{current} / {total} slots",
@@ -156,7 +160,7 @@
       "mono-high": "Mono+"
     }
   },
-  "TryPreview": {
+  "OnlinePreview": {
     "title": "Preview",
     "subtitle": "Live-photo preview. Download each asset individually.",
     "previewAlt": "Generated live-photo preview",
