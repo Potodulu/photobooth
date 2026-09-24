@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { CaptureStudio } from "@/components/module/photobooth/CaptureStudio";
-import { ROUTES } from "@/constants/route";
+import { getPhotoboothStepRoute } from "@/constants/route";
 import {
   useCamera,
   usePhotoboothActions,
@@ -79,10 +79,9 @@ export function OnlineCameraPage() {
         }}
         onRetake={retakeLastPhoto}
         onContinue={async () => {
-          if (!sessionId) return;
           await persistCaptureSet();
           await loadFramesForSelectedLayout();
-          router.push(ROUTES.ONLINE.SELECT(sessionId));
+          router.push(getPhotoboothStepRoute("select", sessionId));
         }}
       />
     </PhotoboothLayout>

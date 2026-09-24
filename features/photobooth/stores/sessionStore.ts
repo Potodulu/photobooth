@@ -22,6 +22,7 @@ type SessionState = {
   setExperienceId: (id: string) => void;
   setStep: (step: OnlineStep) => void;
   setSession: (session: SessionDto) => void;
+  setSessionId: (id: string | null) => void;
   initOnlineSession: () => Promise<string | null>;
   resetSession: () => void;
 };
@@ -44,6 +45,7 @@ export const useSessionStore = create<SessionState>()(
           sessionId: session.id,
           sessionCode: session.short_code,
         }),
+      setSessionId: (sessionId: string | null) => set({ sessionId }),
       initOnlineSession: async () => {
         const { sessionId, isInitializing } = get();
         if (sessionId) {

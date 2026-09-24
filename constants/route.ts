@@ -3,6 +3,13 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   MAINTENANCE: "/maintenance",
+  GUEST: {
+    ROOT: "/guest",
+    LAYOUT: "/guest/layout",
+    CAMERA: "/guest/camera",
+    SELECT: "/guest/select",
+    PREVIEW: "/guest/preview",
+  },
   ONLINE: {
     ROOT: "/online",
     LAYOUT: (sessionId: string) => `/online/${sessionId}/layout` as const,
@@ -32,6 +39,7 @@ export type AppRoute =
   | typeof ROUTES.LOGIN
   | typeof ROUTES.REGISTER
   | typeof ROUTES.MAINTENANCE
+  | (typeof ROUTES.GUEST)[keyof typeof ROUTES.GUEST]
   | typeof ROUTES.ONLINE.ROOT
   | ReturnType<typeof ROUTES.ONLINE.LAYOUT>
   | ReturnType<typeof ROUTES.ONLINE.CAMERA>
@@ -46,3 +54,48 @@ export type AppRoute =
   | typeof ROUTES.DASHBOARD.PROFILE
   | typeof ROUTES.DASHBOARD.USER_ACCESS
   | typeof ROUTES.DASHBOARD.ROLES;
+
+export type PhotoboothStep =
+  | "warning"
+  | "layout"
+  | "camera"
+  | "select"
+  | "preview"
+  | "gallery";
+
+export function getPhotoboothStepRoute(
+  step: PhotoboothStep,
+  sessionId?: string | null,
+): string {
+  if (sessionId) {
+    switch (step) {
+      case "warning":
+        return ROUTES.ONLINE.ROOT;
+      case "layout":
+        return ROUTES.ONLINE.LAYOUT(sessionId);
+      case "camera":
+        return ROUTES.ONLINE.CAMERA(sessionId);
+      case "select":
+        return ROUTES.ONLINE.SELECT(sessionId);
+      case "preview":
+        return ROUTES.ONLINE.PREVIEW(sessionId);
+      case "gallery":
+        return ROUTES.ONLINE.GALLERY(sessionId);
+    }
+  }
+
+  switch (step) {
+    case "warning":
+      return ROUTES.GUEST.ROOT;
+    case "layout":
+      return ROUTES.GUEST.LAYOUT;
+    case "camera":
+      return ROUTES.GUEST.CAMERA;
+    case "select":
+      return ROUTES.GUEST.SELECT;
+    case "preview":
+      return ROUTES.GUEST.PREVIEW;
+    case "gallery":
+      return ROUTES.GUEST.PREVIEW;
+  }
+}

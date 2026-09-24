@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Camera,
@@ -13,7 +14,7 @@ import {
   Wand2,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { MarketingLayout } from "@/components/layout/MarketingLayout";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
@@ -27,6 +28,7 @@ import {
 } from "@/components/ui/Card";
 import { cn } from "@/libs/cn";
 import { ROUTES } from "@/constants/route";
+import { tokenStorage } from "@/libs/api";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -40,6 +42,19 @@ export function HomePage() {
   const tFeatures = useTranslations("Features");
   const tExperience = useTranslations("Experience");
   const tCta = useTranslations("Cta");
+  const router = useRouter();
+  const [photoboothHref, setPhotoboothHref] = useState<string>(ROUTES.GUEST.ROOT);
+
+  useEffect(() => {
+    const token = tokenStorage.get()?.accessToken;
+    setPhotoboothHref(token ? ROUTES.ONLINE.ROOT : ROUTES.GUEST.ROOT);
+  }, []);
+
+  const handleStartSession = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const token = tokenStorage.get()?.accessToken;
+    router.push(token ? ROUTES.ONLINE.ROOT : ROUTES.GUEST.ROOT);
+  };
 
   const heroBadges = ["online", "browser", "noAccount", "instant"] as const;
 
@@ -57,7 +72,7 @@ export function HomePage() {
       icon: Globe,
       color: "primary" as const,
       status: "available" as const,
-      href: ROUTES.ONLINE.ROOT,
+      href: photoboothHref,
     },
     {
       key: "offline" as const,
@@ -75,7 +90,7 @@ export function HomePage() {
 
   return (
     <MarketingLayout>
-      <SiteHeader ctaLabel={tNav("cta")} ctaHref={ROUTES.ONLINE.ROOT} />
+      <SiteHeader ctaLabel={tNav("cta")} ctaHref={photoboothHref} />
 
       <main>
         <section className="border-border relative overflow-hidden border-b-2">
@@ -140,7 +155,9 @@ export function HomePage() {
                   radius="xl"
                   elevation="lg"
                 >
-                  <Link href={ROUTES.ONLINE.ROOT}>{tHero("primaryCta")}</Link>
+                  <Link href={photoboothHref} onClick={handleStartSession}>
+                    {tHero("primaryCta")}
+                  </Link>
                 </Button>
                 <Button
                   asChild
@@ -313,7 +330,7 @@ export function HomePage() {
                           elevation="md"
                           className="mt-auto w-full sm:w-auto"
                         >
-                          <Link href={rest.href}>
+                          <Link href={rest.href} onClick={handleStartSession}>
                             {tExperience("startSession")}
                           </Link>
                         </Button>
@@ -361,7 +378,9 @@ export function HomePage() {
                   radius="xl"
                   elevation="lg"
                 >
-                  <Link href={ROUTES.ONLINE.ROOT}>{tCta("button")}</Link>
+                  <Link href={photoboothHref} onClick={handleStartSession}>
+                    {tCta("button")}
+                  </Link>
                 </Button>
               </motion.div>
             </div>

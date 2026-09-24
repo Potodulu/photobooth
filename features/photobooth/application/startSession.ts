@@ -9,6 +9,7 @@ export async function startGuestSession() {
   }
 
   const store = useSessionStore.getState();
+  store.setSessionId(null);
   store.setExperienceId(experience.id);
   store.acceptStorageWarning();
   return experience;

@@ -6,7 +6,7 @@ import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { LayoutPicker } from "@/components/module/photobooth/LayoutPicker";
 import { Button } from "@/components/ui/Button";
-import { ROUTES } from "@/constants/route";
+import { getPhotoboothStepRoute } from "@/constants/route";
 import {
   usePhotoboothActions,
   useOnlineFlowGuard,
@@ -30,9 +30,9 @@ export function OnlineLayoutPage() {
   }, [loadLayouts]);
 
   const handleContinue = () => {
-    if (!selectedLayoutId || !sessionId) return;
+    if (!selectedLayoutId) return;
     selectLayout(selectedLayoutId);
-    router.push(ROUTES.ONLINE.CAMERA(sessionId));
+    router.push(getPhotoboothStepRoute("camera", sessionId));
   };
 
   return (

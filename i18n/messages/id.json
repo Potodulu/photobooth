@@ -88,7 +88,13 @@
     "errorTitle": "Gagal Membuat Sesi",
     "errorDescription": "Terjadi masalah saat menghubungi server photobooth. Pastikan jaringan terhubung lalu coba lagi.",
     "retry": "Coba Lagi",
-    "backHome": "Ke Halaman Utama"
+    "backHome": "Ke Halaman Utama",
+    "gateTitle": "Login Diperlukan",
+    "gateDescription": "Sesi online lengkap memerlukan login untuk menyimpan foto ke cloud dan membuat QR code galeri. Ingin lanjut menggunakan sesi Guest (tanpa login)?",
+    "continueGuest": "Lanjut Sesi Guest",
+    "login": "Login Sekarang",
+    "sessionErrorTitle": "Sesi Tidak Valid",
+    "sessionErrorDescription": "Token autentikasi tidak valid atau sudah kedaluwarsa. Silakan login kembali atau lanjutkan dengan sesi Guest."
   },
   "OnlineLayout": {
     "title": "Pilih layout",

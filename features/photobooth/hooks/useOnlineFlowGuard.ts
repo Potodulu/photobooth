@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
-import { ROUTES } from "@/constants/route";
+import { getPhotoboothStepRoute, ROUTES } from "@/constants/route";
 import { useSessionStore } from "@/features/photobooth/stores";
 import type { OnlineStep } from "@/features/photobooth/stores/sessionStore";
 
@@ -15,19 +15,15 @@ export function useOnlineFlowGuard(requiredStep: OnlineStep) {
   useEffect(() => {
     if (requiredStep === "warning") return;
 
-    if (!accepted || !sessionId) {
-      router.replace(ROUTES.ONLINE.ROOT);
+    if (!accepted) {
+      router.replace(sessionId ? ROUTES.ONLINE.ROOT : ROUTES.GUEST.ROOT);
       return;
     }
 
-    const stepPathMap: Record<OnlineStep, string> = {
-      warning: ROUTES.ONLINE.ROOT,
-      layout: ROUTES.ONLINE.LAYOUT(sessionId),
-      camera: ROUTES.ONLINE.CAMERA(sessionId),
-      select: ROUTES.ONLINE.SELECT(sessionId),
-      preview: ROUTES.ONLINE.PREVIEW(sessionId),
-      gallery: ROUTES.ONLINE.GALLERY(sessionId),
-    };
+    if (requiredStep === "gallery" && !sessionId) {
+      router.replace(ROUTES.GUEST.PREVIEW);
+      return;
+    }
 
     const stepOrderMap: OnlineStep[] = [
       "warning",
@@ -40,8 +36,8 @@ export function useOnlineFlowGuard(requiredStep: OnlineStep) {
 
     const requiredIndex = stepOrderMap.indexOf(requiredStep);
     const currentIndex = stepOrderMap.indexOf(step);
-    if (currentIndex < requiredIndex && stepPathMap[step]) {
-      router.replace(stepPathMap[step]);
+    if (currentIndex < requiredIndex) {
+      router.replace(getPhotoboothStepRoute(step, sessionId));
     }
   }, [accepted, requiredStep, router, sessionId, step]);
 }

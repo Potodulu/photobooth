@@ -105,7 +105,7 @@ export function OnlinePreviewPage() {
           downloadAsset(asset.blob, asset.fileName);
         }}
         onRestart={() => {
-          router.push(ROUTES.ONLINE.ROOT);
+          router.push(sessionId ? ROUTES.ONLINE.ROOT : ROUTES.GUEST.ROOT);
         }}
       />
     </PhotoboothLayout>

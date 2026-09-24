@@ -88,7 +88,13 @@
     "errorTitle": "Failed to Create Session",
     "errorDescription": "There was an issue reaching the photobooth server. Please check your internet connection and try again.",
     "retry": "Try Again",
-    "backHome": "Back to Home"
+    "backHome": "Back to Home",
+    "gateTitle": "Login Required",
+    "gateDescription": "Full online sessions require an account to save cloud galleries and QR codes. Would you like to continue as a Guest instead?",
+    "continueGuest": "Continue as Guest",
+    "login": "Login Now",
+    "sessionErrorTitle": "Invalid Session",
+    "sessionErrorDescription": "Your authentication token is invalid or has expired. Please login again or continue with a Guest session."
   },
   "OnlineLayout": {
     "title": "Select layout",
