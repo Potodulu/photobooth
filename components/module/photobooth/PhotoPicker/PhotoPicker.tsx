@@ -193,7 +193,7 @@ export function PhotoPicker({
 
         {DRAG_ASSIGN_ENABLED ? (
           <div className="grid gap-3 sm:grid-cols-2">
-            {layout.slots.map((slot) => {
+            {layout.slots.map((slot, index) => {
               const assignment = assignments.find(
                 (item) => item.slotId === slot.id,
               );
@@ -238,7 +238,7 @@ export function PhotoPicker({
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <span className="font-display text-sm font-bold">
-                      {slot.id}
+                      {t("slotLabel", { index: index + 1 })}
                     </span>
                     {assignment ? (
                       <Button
@@ -269,6 +269,7 @@ export function PhotoPicker({
           assignments={assignments}
           filterId={filterId}
           activeSlotId={activeSlotIdResolved}
+          emptySlotLabel={t("emptySlot")}
           onSelectSlot={setActiveSlotId}
           onPanChange={onPanChange}
           onClearSlot={onClear}

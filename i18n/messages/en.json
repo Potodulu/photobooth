@@ -147,6 +147,7 @@
     "reset": "Reset",
     "clear": "Clear",
     "emptySlot": "Empty",
+    "slotLabel": "Slot {index}",
     "pickHint": "Tap a photo to fill the selected slot.",
     "repositionHint": "Tap a slot, then drag the photo to adjust the crop.",
     "frames": "Frame",

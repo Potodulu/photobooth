@@ -21,6 +21,7 @@ type FrameLayoutPreviewProps = {
   onSelectSlot: (slotId: string) => void;
   onPanChange: (slotId: string, panX: number, panY: number) => void;
   onClearSlot?: (slotId: string) => void;
+  emptySlotLabel: string;
 };
 
 export function FrameLayoutPreview({
@@ -33,6 +34,7 @@ export function FrameLayoutPreview({
   onSelectSlot,
   onPanChange,
   onClearSlot,
+  emptySlotLabel,
 }: FrameLayoutPreviewProps) {
   const { width: outputWidth, height: outputHeight } = layout.outputSize;
   const filterCss = getFilterCss(filterId);
@@ -170,7 +172,7 @@ export function FrameLayoutPreview({
               />
             ) : (
               <div className="bg-muted/40 text-muted-foreground flex size-full items-center justify-center text-xs">
-                {slot.id}
+                {emptySlotLabel}
               </div>
             )}
             {assignment && onClearSlot && isActive ? (

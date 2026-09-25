@@ -147,6 +147,7 @@
     "reset": "Reset",
     "clear": "Hapus",
     "emptySlot": "Kosong",
+    "slotLabel": "Slot {index}",
     "pickHint": "Ketuk foto untuk mengisi slot yang aktif.",
     "repositionHint": "Ketuk slot lalu geser foto untuk menyesuaikan crop.",
     "frames": "Frame",
