@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
+import { PhotoboothSectionLoading } from "@/components/shared/PhotoboothSectionLoading";
 import { PhotoPicker } from "@/components/module/photobooth/PhotoPicker";
 import { getPhotoboothStepRoute } from "@/constants/route";
 import {
@@ -34,6 +35,7 @@ export function OnlineSelectPage() {
   } = usePhotoboothActions();
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const layouts = useLayoutStore((s) => s.layouts);
+  const layoutsLoading = useLayoutStore((s) => s.isLoading);
   const layout = layouts.find((item) => item.id === selectedLayoutId);
   const captures = useCaptureStore((s) => s.captures);
   const objectUrls = useCaptureStore((s) => s.objectUrls);
@@ -41,6 +43,7 @@ export function OnlineSelectPage() {
   const setFilterId = useCaptureStore((s) => s.setFilterId);
   const assignments = useGeneratorStore((s) => s.slotAssignments);
   const frames = useFrameStore((s) => s.frames);
+  const framesLoading = useFrameStore((s) => s.isLoading);
   const selectedFrameId = useFrameStore((s) => s.selectedFrameId);
   const sessionId = useSessionStore((s) => s.sessionId);
 
@@ -51,16 +54,28 @@ export function OnlineSelectPage() {
     void loadFramesForSelectedLayout();
   }, [loadFramesForSelectedLayout]);
 
+  const layoutPending =
+    layoutsLoading || (Boolean(selectedLayoutId) && layouts.length === 0);
+
   if (!layout) {
     return (
       <PhotoboothLayout title={t("title")}>
-        <p className="text-muted-foreground">{t("missingLayout")}</p>
+        {layoutPending ? (
+          <PhotoboothSectionLoading message={t("loading")} />
+        ) : (
+          <p className="text-muted-foreground">{t("missingLayout")}</p>
+        )}
       </PhotoboothLayout>
     );
   }
 
+  const showFramesLoading = framesLoading && frames.length === 0;
+
   return (
     <PhotoboothLayout>
+      {showFramesLoading ? (
+        <PhotoboothSectionLoading message={t("loading")} />
+      ) : (
       <PhotoPicker
         title={t("title")}
         subtitle={t("subtitle")}
@@ -83,6 +98,7 @@ export function OnlineSelectPage() {
           router.push(getPhotoboothStepRoute("preview", sessionId));
         }}
       />
+      )}
     </PhotoboothLayout>
   );
 }

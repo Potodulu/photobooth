@@ -103,7 +103,8 @@
     "typeDigital": "Digital",
     "typePaper": "Paper",
     "paperSize": "{width}×{height} in",
-    "emptyType": "No layouts in this category."
+    "emptyType": "No layouts in this category.",
+    "loading": "Loading layouts…"
   },
   "OnlineCamera": {
     "title": "Capture",
@@ -151,6 +152,7 @@
     "frames": "Frame",
     "slotOccupied": "Clear the slot before dropping another photo.",
     "missingLayout": "Layout missing. Go back and select one.",
+    "loading": "Loading frames…",
     "filters": "Photo filter (PNG only)",
     "filtersHint": "One filter for every photo in the final photobooth still.",
     "filter": {

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
+import { PhotoboothSectionLoading } from "@/components/shared/PhotoboothSectionLoading";
 import { LayoutPicker } from "@/components/module/photobooth/LayoutPicker";
 import { Button } from "@/components/ui/Button";
 import { getPhotoboothStepRoute } from "@/constants/route";
@@ -19,6 +20,7 @@ export function OnlineLayoutPage() {
   const router = useRouter();
   const { loadLayouts, selectLayout, busy } = usePhotoboothActions();
   const layouts = useLayoutStore((s) => s.layouts);
+  const layoutsLoading = useLayoutStore((s) => s.isLoading);
   const selectedLayoutId = useLayoutStore((s) => s.selectedLayoutId);
   const sessionId = useSessionStore((s) => s.sessionId);
 
@@ -35,8 +37,14 @@ export function OnlineLayoutPage() {
     router.push(getPhotoboothStepRoute("camera", sessionId));
   };
 
+  const showLayoutsLoading = layoutsLoading && layouts.length === 0;
+
   return (
     <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
+      {showLayoutsLoading ? (
+        <PhotoboothSectionLoading message={t("loading")} />
+      ) : (
+        <>
       <LayoutPicker
         layouts={layouts}
         selectedId={selectedLayoutId}
@@ -53,6 +61,8 @@ export function OnlineLayoutPage() {
           {t("continue")}
         </Button>
       </div>
+        </>
+      )}
     </PhotoboothLayout>
   );
 }

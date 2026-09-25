@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
 import { ResultPreview } from "@/components/module/photobooth/ResultPreview";
 import { galleryService } from "@/services/gallery";
-import { Spinner } from "@/components/ui/Spinner";
+import { PhotoboothSectionLoading } from "@/components/shared/PhotoboothSectionLoading";
 import type { PreviewAsset } from "@/features/photobooth/application/generateOutput";
 
 type OnlineGalleryPageProps = {
@@ -62,10 +62,7 @@ export function OnlineGalleryPage({ sessionId }: OnlineGalleryPageProps) {
   return (
     <PhotoboothLayout title={t("title")} subtitle={t("subtitle")}>
       {isLoading ? (
-        <div className="flex min-h-80 flex-col items-center justify-center gap-3">
-          <Spinner />
-          <p className="text-muted-foreground text-sm">{t("assetsLoading")}</p>
-        </div>
+        <PhotoboothSectionLoading message={t("assetsLoading")} />
       ) : isError ? (
         <div className="flex min-h-80 items-center justify-center p-8 text-center">
           <p className="text-destructive max-w-md text-sm">

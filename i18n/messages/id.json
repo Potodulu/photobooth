@@ -103,7 +103,8 @@
     "typeDigital": "Digital",
     "typePaper": "Kertas",
     "paperSize": "{width}×{height} in",
-    "emptyType": "Belum ada layout di kategori ini."
+    "emptyType": "Belum ada layout di kategori ini.",
+    "loading": "Memuat layout…"
   },
   "OnlineCamera": {
     "title": "Capture",
@@ -151,6 +152,7 @@
     "frames": "Frame",
     "slotOccupied": "Kosongkan slot dulu sebelum drop foto lain.",
     "missingLayout": "Layout belum dipilih. Kembali dan pilih dulu.",
+    "loading": "Memuat frame…",
     "filters": "Filter foto (hanya PNG)",
     "filtersHint": "Satu filter untuk semua foto di hasil photobooth still.",
     "filter": {
