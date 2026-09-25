@@ -5,6 +5,7 @@ import {
   type ListParams,
   type PaginatedResponse,
 } from "@/libs/api";
+import { getApiV1BaseUrl } from "@/libs/config/env";
 import type { CreateFramePayload, FrameDto, UpdateFramePayload } from "@/types";
 
 function normalizeList(
@@ -65,7 +66,7 @@ export const frameService = {
   },
 
   downloadOverlayPath(id: string, sessionId?: string): string {
-    const path = API_ROUTES.FRAMES.downloadOverlay(id);
+    const path = `${getApiV1BaseUrl()}${API_ROUTES.FRAMES.downloadOverlay(id)}`;
     if (!sessionId) return path;
     const search = new URLSearchParams({ session_id: sessionId });
     return `${path}?${search.toString()}`;

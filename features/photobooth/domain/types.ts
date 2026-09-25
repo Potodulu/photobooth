@@ -46,6 +46,7 @@ export type Layout = {
   compatibleFrameIds: string[];
   paperSize?: PaperSize;
   dpi?: number;
+  previewAssetId?: string;
 };
 
 export type Frame = {

@@ -2,7 +2,12 @@ import { layoutService as backendLayoutService } from "@/services/layout";
 import { browserLayoutRepository } from "@/features/photobooth/adapters/browser";
 import type { Layout, LayoutSlot } from "@/features/photobooth/domain";
 import type { LayoutDto } from "@/types";
-import { API_ROUTES } from "@/constants/apiRoute";
+
+function localPreviewKey(slotCount: number): string {
+  if (slotCount === 2) return "layouts/photostrip-2-slot.svg";
+  if (slotCount === 3) return "layouts/photostrip-3-slot.svg";
+  return "layouts/photostrip-4-slot.svg";
+}
 
 function mapDtoToLayout(dto: LayoutDto): Layout {
   const slots: LayoutSlot[] = (dto.slots || []).map((slot, index) => ({
@@ -20,13 +25,8 @@ function mapDtoToLayout(dto: LayoutDto): Layout {
       ? dto.paper_size
       : dto.paperSize || undefined;
 
-  let previewUrl = "/assets/photobooth/layouts/strip-4.svg";
-  if (dto.preview_asset_id || dto.previewAssetId) {
-    const assetId = dto.preview_asset_id || dto.previewAssetId;
-    if (assetId) {
-      previewUrl = API_ROUTES.ASSETS.download(assetId);
-    }
-  }
+  const previewAssetId = dto.preview_asset_id || dto.previewAssetId || undefined;
+  const previewUrl = localPreviewKey(slots.length);
 
   const padding = typeof dto.padding === "number" ? dto.padding : (dto.padding?.top ?? 20);
   const background = typeof dto.background === "string" ? dto.background : (dto.background?.color ?? "#ffffff");
@@ -45,6 +45,7 @@ function mapDtoToLayout(dto: LayoutDto): Layout {
     compatibleFrameIds: dto.compatible_frame_ids || dto.compatibleFrameIds || [],
     paperSize,
     dpi: dto.dpi,
+    previewAssetId,
   };
 }
 

@@ -1,12 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import type { Layout, LayoutType } from "@/features/photobooth/domain";
 import { resolvePhotoboothAsset } from "@/features/photobooth/assets";
+import { tokenStorage } from "@/libs/api";
 import { cn } from "@/libs/cn";
+import { assetService } from "@/services/asset";
 import { Badge } from "@/components/ui/Badge";
+
+async function resolveAssetUrl(assetId: string): Promise<string> {
+  const asset = await assetService.get(assetId);
+  if (asset.url) return asset.url;
+  return assetService.getObjectUrl(assetId);
+}
+
+function LayoutPreviewImage({ layout }: { layout: Layout }) {
+  const fallbackSrc = resolvePhotoboothAsset(layout.preview);
+  const assetId = layout.previewAssetId;
+  const hasToken = Boolean(tokenStorage.get()?.accessToken);
+
+  const query = useQuery({
+    queryKey: ["layout-preview", assetId],
+    queryFn: () => resolveAssetUrl(assetId!),
+    enabled: Boolean(assetId) && hasToken,
+    staleTime: 60_000,
+    retry: false,
+  });
+
+  useEffect(() => {
+    const url = query.data;
+    if (!url || url.startsWith("http") || url.startsWith("data:")) return;
+    return () => URL.revokeObjectURL(url);
+  }, [query.data]);
+
+  if (query.data) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={query.data}
+        alt={layout.name}
+        className="absolute inset-0 size-full object-contain p-3"
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={fallbackSrc}
+      alt={layout.name}
+      fill
+      className="object-contain p-3"
+      unoptimized
+    />
+  );
+}
 
 type LayoutPickerProps = {
   layouts: Layout[];
@@ -50,7 +100,6 @@ export function LayoutPicker({
       <div className="grid gap-4 sm:grid-cols-3">
         {filtered.map((layout) => {
           const selected = layout.id === selectedId;
-          const previewSrc = resolvePhotoboothAsset(layout.preview);
           return (
             <button
               key={layout.id}
@@ -63,13 +112,7 @@ export function LayoutPicker({
               )}
             >
               <div className="border-border relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-md)] border-2 bg-white">
-                <Image
-                  src={previewSrc}
-                  alt={layout.name}
-                  fill
-                  className="object-contain p-3"
-                  unoptimized
-                />
+                <LayoutPreviewImage layout={layout} />
               </div>
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 flex-col">
