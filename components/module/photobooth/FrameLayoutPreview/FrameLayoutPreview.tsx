@@ -148,7 +148,7 @@ export function FrameLayoutPreview({
             onPointerCancel={handlePointerUp}
             className={cn(
               "absolute touch-none overflow-hidden",
-              isActive && "ring-foreground z-10 ring-2 ring-offset-1",
+              isActive && "ring-foreground z-10 ring-2 ring-inset",
               assignment && isActive && "cursor-grab active:cursor-grabbing",
             )}
             style={{
