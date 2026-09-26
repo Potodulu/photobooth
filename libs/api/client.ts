@@ -219,15 +219,23 @@ export const apiClient = {
     return request<T>(path, { ...options, method: "DELETE" });
   },
 
-  async download(path: string): Promise<Blob> {
-    await ensureFreshToken();
-    const stored = tokenStorage.get();
+  async download(
+    path: string,
+    options?: { auth?: boolean },
+  ): Promise<Blob> {
+    const useAuth = options?.auth !== false;
+    if (useAuth) {
+      await ensureFreshToken();
+    }
     const headers: Record<string, string> = {
       Accept: "*/*",
       "X-Request-ID": createRequestId(),
     };
-    if (stored?.accessToken) {
-      headers.Authorization = `Bearer ${stored.accessToken}`;
+    if (useAuth) {
+      const stored = tokenStorage.get();
+      if (stored?.accessToken) {
+        headers.Authorization = `Bearer ${stored.accessToken}`;
+      }
     }
 
     const response = await fetch(buildUrl(path), { headers });

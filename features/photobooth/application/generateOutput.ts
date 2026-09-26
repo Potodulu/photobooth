@@ -25,8 +25,11 @@ import {
   useLayoutStore,
   useSessionStore,
 } from "@/features/photobooth/stores";
-import { apiClient } from "@/libs/api";
-import { getApiV1BaseUrl } from "@/libs/config/env";
+import {
+  apiClient,
+  isPublicCatalogApiPath,
+  resolveApiV1RelativePath,
+} from "@/libs/api";
 import { uploadService } from "@/services/upload";
 import { purgeAfterDownloadOrCancel } from "./retention";
 
@@ -35,19 +38,37 @@ type LoadedCanvasImage = {
   release?: () => void;
 };
 
-function apiPathFromAbsoluteUrl(url: string): string | null {
-  try {
-    const apiBase = getApiV1BaseUrl();
-    if (!url.startsWith(apiBase)) return null;
-    const path = url.slice(apiBase.length);
-    return path.startsWith("/") ? path : `/${path}`;
-  } catch {
-    return null;
-  }
-}
+let previewGenerationSeq = 0;
 
 function isSvgBlob(blob: Blob): boolean {
   return blob.type.includes("svg");
+}
+
+async function prepareSvgBlob(blob: Blob): Promise<Blob> {
+  let svg = await blob.text();
+  if (!svg.includes("xmlns=")) {
+    svg = svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  const rootTagMatch = svg.match(/<svg\b([^>]*)>/i);
+  if (rootTagMatch) {
+    const rootAttrs = rootTagMatch[1];
+    const hasWidth = /\bwidth\s*=/i.test(rootAttrs);
+    const hasHeight = /\bheight\s*=/i.test(rootAttrs);
+    if (!hasWidth || !hasHeight) {
+      const viewBoxMatch = rootAttrs.match(/\bviewBox\s*=\s*["']([^"']+)["']/i);
+      if (viewBoxMatch) {
+        const parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+        if (parts.length === 4) {
+          const [, , vbWidth, vbHeight] = parts;
+          let newAttrs = rootAttrs;
+          if (!hasWidth) newAttrs += ` width="${vbWidth}"`;
+          if (!hasHeight) newAttrs += ` height="${vbHeight}"`;
+          svg = svg.replace(rootTagMatch[0], `<svg${newAttrs}>`);
+        }
+      }
+    }
+  }
+  return new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
 }
 
 async function loadImageElement(
@@ -57,10 +78,26 @@ async function loadImageElement(
   return new Promise((resolve, reject) => {
     const image = new Image();
     if (crossOrigin) image.crossOrigin = crossOrigin;
-    image.onload = () => resolve(image);
+    image.onload = async () => {
+      try {
+        if ("decode" in image) {
+          await image.decode();
+        }
+      } catch {
+        // Ignore decode errors if image.onload has already resolved
+      }
+      resolve(image);
+    };
     image.onerror = () => reject(new Error("Failed to load image"));
     image.src = src;
   });
+}
+
+async function downloadApiImageBlob(apiPath: string): Promise<Blob> {
+  if (isPublicCatalogApiPath(apiPath)) {
+    return apiClient.download(apiPath, { auth: false });
+  }
+  return apiClient.download(apiPath);
 }
 
 /** Load images for canvas compose without tainting (CORS-safe). */
@@ -69,13 +106,16 @@ async function loadCanvasImage(url: string): Promise<LoadedCanvasImage> {
     return { image: await loadImageElement(url) };
   }
 
-  const apiPath = url.startsWith("http") ? apiPathFromAbsoluteUrl(url) : null;
+  const apiPath =
+    url.startsWith("http://") || url.startsWith("https://")
+      ? resolveApiV1RelativePath(url)
+      : url.startsWith("/")
+        ? url
+        : null;
   if (apiPath) {
-    const blob = await apiClient.download(apiPath);
-    if (isSvgBlob(blob)) {
-      throw new Error("SVG overlay is not supported for canvas export");
-    }
-    const objectUrl = URL.createObjectURL(blob);
+    const blob = await downloadApiImageBlob(apiPath);
+    const finalBlob = isSvgBlob(blob) ? await prepareSvgBlob(blob) : blob;
+    const objectUrl = URL.createObjectURL(finalBlob);
     try {
       const image = await loadImageElement(objectUrl);
       return { image, release: () => URL.revokeObjectURL(objectUrl) };
@@ -90,10 +130,8 @@ async function loadCanvasImage(url: string): Promise<LoadedCanvasImage> {
       const response = await fetch(url, { mode: "cors", credentials: "omit" });
       if (!response.ok) throw new Error("Failed to fetch image");
       const blob = await response.blob();
-      if (isSvgBlob(blob)) {
-        throw new Error("SVG overlay is not supported for canvas export");
-      }
-      const objectUrl = URL.createObjectURL(blob);
+      const finalBlob = isSvgBlob(blob) ? await prepareSvgBlob(blob) : blob;
+      const objectUrl = URL.createObjectURL(finalBlob);
       try {
         const image = await loadImageElement(objectUrl);
         return { image, release: () => URL.revokeObjectURL(objectUrl) };
@@ -122,11 +160,19 @@ async function loadVideo(url: string): Promise<HTMLVideoElement> {
   });
 }
 
+function isCurrentPreviewGeneration(runId: number) {
+  return runId === previewGenerationSeq;
+}
+
 export async function generatePreview() {
+  const generatorStore = useGeneratorStore.getState();
+  if (generatorStore.isGenerating) return;
+
+  const runId = ++previewGenerationSeq;
+
   const layoutStore = useLayoutStore.getState();
   const frameStore = useFrameStore.getState();
   const captureStore = useCaptureStore.getState();
-  const generatorStore = useGeneratorStore.getState();
 
   const layout = layoutStore.layouts.find(
     (item) => item.id === layoutStore.selectedLayoutId,
@@ -143,6 +189,24 @@ export async function generatePreview() {
   const releaseCanvasResources: Array<() => void> = [];
 
   try {
+    const overlayKey = frame?.overlay;
+    const overlayUrl = tryResolvePhotoboothAsset(overlayKey);
+    let overlayImage: HTMLImageElement | null = null;
+    if (overlayUrl) {
+      try {
+        const loaded = await loadCanvasImage(overlayUrl);
+        overlayImage = loaded.image;
+        if (loaded.release) releaseCanvasResources.push(loaded.release);
+      } catch (error) {
+        console.warn("Failed to load frame overlay for preview:", error);
+        generatorStore.setError(
+          error instanceof Error ? error.message : "Frame overlay failed to load",
+        );
+      }
+    }
+
+    if (!isCurrentPreviewGeneration(runId)) return;
+
     const slotImages = await Promise.all(
       generatorStore.slotAssignments.map(async (assignment) => {
         let url = captureStore.objectUrls[assignment.captureId];
@@ -199,19 +263,7 @@ export async function generatePreview() {
       }),
     );
 
-    const overlayKey = frame?.overlay;
-    const overlayUrl = tryResolvePhotoboothAsset(overlayKey);
-    // ponytail: SVG drawn onto canvas taints it in Chromium — overlay must be raster (PNG).
-    let overlayImage: HTMLImageElement | null = null;
-    if (overlayUrl) {
-      try {
-        const loaded = await loadCanvasImage(overlayUrl);
-        overlayImage = loaded.image;
-        if (loaded.release) releaseCanvasResources.push(loaded.release);
-      } catch {
-        overlayImage = null;
-      }
-    }
+    if (!isCurrentPreviewGeneration(runId)) return;
 
     const compositeBase = {
       layout,
@@ -254,6 +306,9 @@ export async function generatePreview() {
       version: PHOTOBOOTH_MANIFEST_VERSION,
     };
 
+    if (!isCurrentPreviewGeneration(runId)) return;
+
+    generatorStore.setError(null);
     await generatorService.saveResult(result, [png.blob, gif.blob, live.blob]);
     generatorStore.setResult(result);
     generatorStore.setOutputs({ png, gif, live });
@@ -341,7 +396,9 @@ export async function generatePreview() {
     for (const release of releaseCanvasResources) {
       release();
     }
-    generatorStore.setGenerating(false);
+    if (isCurrentPreviewGeneration(runId)) {
+      generatorStore.setGenerating(false);
+    }
   }
 }
 

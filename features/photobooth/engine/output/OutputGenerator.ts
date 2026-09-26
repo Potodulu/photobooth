@@ -75,6 +75,11 @@ export function drawFrameOverlay(
 ) {
   if (!frame) return;
 
+  if (overlayImage) {
+    ctx.drawImage(overlayImage, 0, 0, width, height);
+    return;
+  }
+
   const borderWidth = frame.borderWidth ?? 0;
   if (borderWidth > 0) {
     ctx.strokeStyle = frame.borderColor ?? "#1a1a1a";
@@ -85,10 +90,6 @@ export function drawFrameOverlay(
       width - borderWidth,
       height - borderWidth,
     );
-  }
-
-  if (overlayImage) {
-    ctx.drawImage(overlayImage, 0, 0, width, height);
   }
 }
 

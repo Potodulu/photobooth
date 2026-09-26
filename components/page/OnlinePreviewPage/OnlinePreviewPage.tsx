@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { PhotoboothLayout } from "@/components/layout/PhotoboothLayout";
@@ -59,10 +59,14 @@ export function OnlinePreviewPage() {
   const assets = assetsMatch ? loadedAssets.assets : [];
   const assetsLoading = outputsReady && !assetsMatch;
 
+  const autoGenerateStarted = useRef(false);
+
   useOnlineFlowGuard("preview");
   useOnlineStepSync("preview");
 
   useEffect(() => {
+    if (autoGenerateStarted.current) return;
+    autoGenerateStarted.current = true;
     if (!previewLiveUrl && !isGenerating) {
       void generatePreview();
     }
@@ -100,7 +104,9 @@ export function OnlinePreviewPage() {
         assets={assets}
         assetsLoading={assetsLoading}
         sessionId={sessionId ?? undefined}
-        onGenerate={() => void generatePreview()}
+        onGenerate={() => {
+          if (!isGenerating && !busy) void generatePreview();
+        }}
         onDownloadAsset={(asset) => {
           downloadAsset(asset.blob, asset.fileName);
         }}
